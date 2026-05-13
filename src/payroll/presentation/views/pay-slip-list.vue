@@ -69,24 +69,28 @@ const getStatusSeverity = (status) => {
 
     <pv-card class="mb-4">
       <template #content>
-        <div class="grid formgrid p-fluid align-items-end">
-          <div class="field col-12 md:col-3">
-            <label for="period">Periodo de planilla</label>
-            <pv-select id="period" v-model="selectedPeriod" :options="periods" optionLabel="name" placeholder="Seleccionar opción" />
-          </div>
-          <div class="field col-12 md:col-3">
-            <label for="status">Estado de pago</label>
-            <pv-select id="status" v-model="selectedStatus" :options="statuses" placeholder="Seleccionar opción" />
-          </div>
-          <div class="field col-12 md:col-4">
-            <label for="search">Buscar colaborador</label>
-            <pv-input-text id="search" v-model="searchQuery" placeholder="Nombre o Código" />
-          </div>
-          <div class="field col-12 md:col-2 flex align-items-end gap-2">
-            <pv-button label="Consultar" icon="pi pi-search" @click="applyFilters" />
-            <pv-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" outlined @click="clearFilters" />
-          </div>
+      <div class="formgrid grid align-items-end gap-0">
+        
+        <div class="field col-12 md:col-3">
+          <label class="block mb-2 font-medium text-700">Periodo de planilla</label>
+          <pv-select v-model="selectedPeriod" :options="periods" optionLabel="name" placeholder="Seleccionar opción" class="w-full" />
         </div>
+
+        <div class="field col-12 md:col-3">
+          <label class="block mb-2 font-medium text-700">Estado de pago</label>
+          <pv-select v-model="selectedStatus" :options="statuses" placeholder="Seleccionar opción" class="w-full" />
+        </div>
+
+        <div class="field col-12 md:col-3">
+          <label class="block mb-2 font-medium text-700">Buscar colaborador</label>
+          <pv-input-text v-model="searchQuery" placeholder="Nombre o Código" class="w-full" />
+        </div>
+        
+        <div class="field col-12 md:col-3 flex gap-2">
+          <pv-button label="Consultar" icon="pi pi-search" @click="applyFilters" class="w-full" />
+          <pv-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" outlined @click="clearFilters" class="w-full" />
+        </div>
+    </div>
       </template>
     </pv-card>
 

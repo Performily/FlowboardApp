@@ -1,22 +1,42 @@
 <script setup>
+import SidebarMenu from './components/sidebar-menu.vue';
+import ToolbarContent from './components/toolbar-content.vue';
 </script>
 
 <template>
-  <div class="layout-wrapper">
-    <header class="bg-primary text-white p-3 shadow-2 flex align-items-center">
-      <i class="pi pi-bars text-xl mr-3 cursor-pointer"></i>
-      <h2 class="m-0 text-xl font-semibold">Performily</h2>
-    </header>
+  <div class="flex h-screen w-screen overflow-hidden surface-ground">
+    
+    <SidebarMenu />
 
-    <main class="layout-main p-4">
-      <router-view />
-    </main>
+    <div class="flex flex-column flex-1 overflow-hidden">
+      
+      <ToolbarContent />
+
+      <main class="flex-1 overflow-auto p-4 md:p-5">
+        <router-view />
+      </main>
+
+    </div>
+
   </div>
 </template>
 
-<style scoped>
-.layout-wrapper {
-  min-height: 100vh;
+<style>
+/* 1. Atacamos directamente la variable raíz de PrimeVue v4 */
+:root {
+  --p-font-family: 'Inter', sans-serif !important;
+}
+
+/* 2. Limpiamos el fondo y aplicamos al resto de la página */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif !important;
   background-color: #f8f9fa; 
+}
+
+/* Opcional: Para asegurar que los títulos (h1, h2, etc.) también obedezcan */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif !important;
 }
 </style>

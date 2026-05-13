@@ -4,7 +4,26 @@ import App from './app.vue';
 import router from './routes';
 
 import PrimeVue from 'primevue/config';
-import Aura from '@primeuix/themes/aura'; 
+import Aura from '@primeuix/themes/aura';
+import { definePreset } from '@primeuix/themes';
+
+const BluePreset = definePreset(Aura, {
+    semantic: {
+        primary: {
+            50: '#eef2f6',
+            100: '#d9e2ec',
+            200: '#b6c8d9',
+            300: '#8ba6c1',
+            400: '#5c7fa6',
+            500: '#3F51B5', // <-- Tu azul exacto
+            600: '#32408f',
+            700: '#25306b',
+            800: '#1a224d',
+            900: '#101430',
+            950: '#080a18'
+        }
+    }
+});
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 
@@ -24,7 +43,15 @@ const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
-app.use(PrimeVue, { theme: { preset: Aura } });
+app.use(PrimeVue, { 
+    theme: { 
+        preset: BluePreset,
+        options: {
+            // Esto fuerza el modo claro (busca una clase que no existe)
+            darkModeSelector: '.app-dark-mode-off' 
+        }
+    } 
+});
 
 app.component('pv-button', Button);
 app.component('pv-card', Card);
