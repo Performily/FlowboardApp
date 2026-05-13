@@ -1,28 +1,39 @@
+// file: src/payroll/infrastructure/pay-slip-assembler.js
 import { PaySlip } from '../domain/pay-slip.entity.js';
 
-export const PaySlipAssembler = {
-  assemble(apiData) {
-    if (!apiData) return null;
+export class PaySlipAssembler {
+
+  static toEntityFromResource(resource) {
+    if (!resource) return null;
 
     return new PaySlip({
-      id: apiData.id,
-      collaboratorId: apiData.collaborator_id || apiData.collaboratorId,
-      collaboratorName: apiData.collaborator_name || apiData.collaboratorName,
-      collaboratorCode: apiData.collaborator_code || apiData.collaboratorCode,
-      area: apiData.area,
-      period: apiData.period,
-      paymentType: apiData.payment_type || apiData.paymentType,
-      grossIncome: apiData.gross_income || apiData.grossIncome,
-      deductions: apiData.deductions,
-      status: apiData.status,
-      issueDate: apiData.issue_date || apiData.issueDate,
-      paymentDate: apiData.payment_date || apiData.paymentDate
+      id: resource.id,
+      collaboratorId: resource.collaboratorId || resource.collaborator_id,
+      collaboratorName: resource.collaboratorName || resource.collaborator_name,
+      collaboratorCode: resource.collaboratorCode || resource.collaborator_code,
+      area: resource.area,
+      period: resource.period,
+      paymentType: resource.paymentType || resource.payment_type,
+      grossIncome: resource.grossIncome || resource.gross_income,
+      deductions: resource.deductions,
+      status: resource.status,
+      issueDate: resource.issueDate || resource.issue_date,
+      paymentDate: resource.paymentDate || resource.payment_date
     });
-  },
-
-  assembleCollection(apiDataList) {
-    if (!Array.isArray(apiDataList)) return [];
-    
-    return apiDataList.map(item => this.assemble(item));
   }
-};
+
+  static toEntitiesFromResponse(response) {
+
+    if (response.status !== 200) {
+      console.error(`${response.status}, ${response.statusText}`);
+      return [];
+    }
+
+
+    let resources = response.data instanceof Array ? response.data : response.data['paySlips'];
+
+    if (!resources) return [];
+
+    return resources.map(resource => this.toEntityFromResource(resource));
+  }
+}

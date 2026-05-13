@@ -1,0 +1,15 @@
+{
+  "paySlips": [
+    {
+      "id": 1,
+      "collaboratorName": "Juan Pérez",
+      "collaboratorCode": "COL-001",
+      "area": "Desarrollo",
+      "period": "Enero 2026",
+      "grossIncome": 5000,
+      "deductions": 600,
+      "status": "Pagado",
+      "issueDate": "2026-01-25T10:00:00Z"
+    }
+  ]
+}
