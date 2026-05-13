@@ -1,21 +1,25 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
 import payrollRoutes from './payroll/presentation/payroll-routes.js';
-
+import PayrollDashboard from './payroll/presentation/views/payroll-dashboard.vue';
+import PaySlipList from './payroll/presentation/views/pay-slip-list.vue';
 const routes = [
-    { 
-        path: '/payroll', 
+    {
+        path: '/payroll',
         name: 'payroll', 
-        children: payrollRoutes 
+        component: PayrollDashboard,
+        meta: { title: 'Pagos' }
     },
     
-    { 
-        path: '/', 
-        redirect: '/payroll/slips' 
-    }
+    {
+        path: '/payroll/slips',
+        name: 'pay-slip-list', 
+        component: PaySlipList,
+        meta: { title: 'Estado de Pagos' }
+    },
 ];
 
-// 3. Crear la instancia del router
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: routes,

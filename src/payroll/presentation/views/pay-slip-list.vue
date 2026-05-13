@@ -65,7 +65,10 @@ const getStatusSeverity = (status) => {
 
 <template>
   <div class="p-4">
-    <h1 class="text-3xl font-bold text-primary mb-4"><i class="pi pi-credit-card mr-2"></i>Pagos</h1>
+    <div class="flex align-items-center gap-3 mb-4">
+      <i class="pi pi-credit-card text-3xl text-primary"></i>
+      <h1 class="m-0 text-3xl font-bold text-primary">Pagos</h1>
+    </div>
 
     <pv-card class="mb-4">
       <template #content>
