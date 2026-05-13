@@ -21,7 +21,7 @@ const goToFeature = (feature) => {
 
     <div class="grid gap-4 md:gap-5 m-0">
       
-      <div 
+      <!-- <div 
         class="col-12 md:col flex flex-column align-items-center bg-white border-round-2xl p-5 cursor-pointer shadow-1 hover:shadow-4 transition-all transition-duration-200"
         @click="goToFeature('Boletas')"
       >
@@ -29,9 +29,9 @@ const goToFeature = (feature) => {
           <i class="pi pi-file text-white text-5xl"></i>
         </div>
         <span class="text-900 font-bold text-lg text-center">Boletas de pago</span>
-      </div>
+      </div> -->
 
-      <div 
+      <!-- <div 
         class="col-12 md:col flex flex-column align-items-center bg-white border-round-2xl p-5 cursor-pointer shadow-1 hover:shadow-4 transition-all transition-duration-200"
         @click="goToFeature('Periodo')"
       >
@@ -39,7 +39,7 @@ const goToFeature = (feature) => {
           <i class="pi pi-calendar text-white text-5xl"></i>
         </div>
         <span class="text-900 font-bold text-lg text-center">Boletas de pago por periodo</span>
-      </div>
+      </div> -->
 
       <div 
         class="col-12 md:col flex flex-column align-items-center bg-white border-round-2xl p-5 cursor-pointer shadow-1 hover:shadow-4 transition-all transition-duration-200"
