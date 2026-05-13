@@ -25,21 +25,11 @@ onMounted(() => {
   }
 });
 
-
 const applyFilters = () => {
   const filters = {};
-
-  if (selectedPeriod.value) {
-    filters.period = selectedPeriod.value.code;
-  }
-
-  if (selectedStatus.value) {
-    filters.status = selectedStatus.value;
-  }
-
-  if (searchQuery.value) {
-    filters.q = searchQuery.value; 
-  }
+  if (selectedPeriod.value) filters.period = selectedPeriod.value.code;
+  if (selectedStatus.value) filters.status = selectedStatus.value;
+  if (searchQuery.value) filters.q = searchQuery.value; 
 
   fetchPaySlips(filters);
 };
@@ -52,14 +42,42 @@ const clearFilters = () => {
   fetchPaySlips();
 };
 
-const navigateToDetail = (id) => {
-  router.push({ name: 'payroll-slip-detail', params: { id } });
-};
-
 const getStatusSeverity = (status) => {
   if (status === 'Pagado') return 'success';
   if (status === 'Con observación') return 'danger';
   return 'secondary'; 
+};
+
+const navigateToDetail = (id) => {
+  router.push({ name: 'payroll-slip-detail', params: { id } });
+};
+
+const displayPdfDialog = ref(false);
+const selectedPaySlip = ref(null);
+const zoomLevel = ref(100); 
+
+const openPdfViewer = (paySlip) => {
+  selectedPaySlip.value = paySlip;
+  zoomLevel.value = 100; 
+  displayPdfDialog.value = true;
+};
+
+const closePdfViewer = () => {
+  displayPdfDialog.value = false;
+  selectedPaySlip.value = null; 
+};
+
+const increaseZoom = () => {
+  if (zoomLevel.value < 200) zoomLevel.value += 25;
+};
+
+const decreaseZoom = () => {
+  if (zoomLevel.value > 50) zoomLevel.value -= 25;
+};
+
+const downloadPdf = () => {
+  if (!selectedPaySlip.value) return;
+  alert(`Descargando boleta de ${selectedPaySlip.value.collaboratorName} (${selectedPaySlip.value.period})`);
 };
 </script>
 
@@ -137,7 +155,7 @@ const getStatusSeverity = (status) => {
           
           <pv-column header="Acción">
             <template #body="slotProps">
-              <pv-button label="Ver Detalle" outlined size="small" @click="navigateToDetail(slotProps.data.id)" />
+              <pv-button label="Ver Detalle" outlined @click="openPdfViewer(slotProps.data)" />
             </template>
           </pv-column>
 
@@ -148,6 +166,75 @@ const getStatusSeverity = (status) => {
       </template>
     </pv-card>
   </div>
+
+  <pv-dialog 
+      v-model:visible="displayPdfDialog" 
+      modal 
+      :showHeader="false" 
+      :maximized="true"  
+      contentClass="p-0 border-round-none overflow-hidden"
+      append-to="body"
+    >
+      <div v-if="selectedPaySlip" class="flex flex-column h-screen border-none">
+        
+        <div class="bg-primary flex justify-content-between align-items-center p-3 text-white border-none">
+          <span class="font-bold">Boleta {{ selectedPaySlip.collaboratorCode }} - {{ selectedPaySlip.period }}</span>
+          <i class="pi pi-times cursor-pointer text-xl hover:text-gray-300 transition-colors" @click="closePdfViewer"></i>
+        </div>
+
+        <div class="surface-900 text-white flex justify-content-center align-items-center px-4 py-2 text-sm relative border-none">
+          
+          <div class="flex align-items-center gap-3">
+            <span>1 / 1</span>
+            <div class="border-left-1 border-gray-600 h-1rem"></div>
+            <i class="pi pi-minus cursor-pointer hover:text-gray-400" @click="decreaseZoom"></i>
+            <span class="surface-700 px-2 py-1 border-round w-4rem text-center">{{ zoomLevel }}%</span>
+            <i class="pi pi-plus cursor-pointer hover:text-gray-400" @click="increaseZoom"></i>
+          </div>
+
+          <div class="absolute right-0 pr-4 flex align-items-center gap-3">
+            <div class="border-left-1 border-gray-600 h-1rem"></div>
+            <i class="pi pi-download cursor-pointer hover:text-primary transition-colors text-lg" title="Descargar PDF" @click="downloadPdf"></i>
+          </div>
+        </div>
+
+        <div class="surface-ground flex-1 overflow-auto p-4 md:p-6 flex justify-content-center">
+          
+          <div 
+            class="bg-white shadow-6 p-5 w-full origin-top" 
+            :style="{ 
+                maxWidth: '794px', 
+                minHeight: '1123px',
+                transform: `scale(${zoomLevel / 100})`,
+                marginBottom: `${(zoomLevel - 100) * 8}px` 
+            }"
+          >
+            <div class="text-center mb-5 border-bottom-1 surface-border pb-3">
+              <h2 class="m-0 text-primary">Boleta de Pago</h2>
+              <p class="text-600 m-0 mt-2">{{ selectedPaySlip.period }}</p>
+            </div>
+            
+            <div class="grid">
+              <div class="col-6"><span class="font-bold">Colaborador:</span> {{ selectedPaySlip.collaboratorName }}</div>
+              <div class="col-6"><span class="font-bold">Código:</span> {{ selectedPaySlip.collaboratorCode }}</div>
+              <div class="col-6"><span class="font-bold">Área:</span> {{ selectedPaySlip.area }}</div>
+              <div class="col-6"><span class="font-bold">Estado:</span> {{ selectedPaySlip.status }}</div>
+            </div>
+            
+            <div class="mt-5 p-3 surface-100 border-round">
+              <div class="flex justify-content-between mb-2"><span>Ingreso Bruto (Sueldo Completo):</span> <span>S/ {{ selectedPaySlip.grossIncome }}</span></div>
+              <div class="flex justify-content-between mb-2"><span>Deducciones (Descuentos):</span> <span class="text-red-500">- S/ {{ selectedPaySlip.deductions }}</span></div>
+              <div class="flex justify-content-between font-bold border-top-1 surface-border pt-2 mt-2 text-lg">
+                <span>Monto Neto (A depositar):</span> 
+                <span class="text-primary">S/ {{ selectedPaySlip.grossIncome - selectedPaySlip.deductions }}</span>
+              </div>
+            </div>
+             
+          </div>
+        </div>
+
+      </div>
+    </pv-dialog>
 </template>
 
 <style scoped>
