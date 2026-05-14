@@ -5,19 +5,23 @@ import PayrollDashboard from './payroll/presentation/views/payroll-dashboard.vue
 import PaySlipList from './payroll/presentation/views/pay-slip-list.vue';
 import HomeView from './home/presentation/views/home-view.vue';
 import AttendanceList from './attendance/presentation/views/attendance-list.vue';
-
 import RequestList from './requests/presentation/request-list.vue';
+import iamRoutes from './iam/presentation/iam-routes.js';
+import { authenticationGuard } from './iam/infrastructure/authentication.guard.js';
 
 const routes = [
+
+    ...iamRoutes,
+
     {
         path: '/',
-        redirect: '/home'
+        redirect: '/iam/sign-in'
     },
     {
-    path: '/home', 
-    name: 'home',
-    component: HomeView,
-    meta: { title: 'Inicio' }
+        path: '/home', 
+        name: 'home',
+        component: HomeView,
+        meta: { title: 'Inicio' }
     },
     {
         path: '/payroll',
@@ -40,16 +44,16 @@ const routes = [
         meta: { title: 'Control de Asistencia' }
     },
     {
-    path: '/requests',
-    name: 'requests', 
-    component: RequestList,
-    meta: { title: 'Solicitudes' }
+        path: '/requests',
+        name: 'requests', 
+        component: RequestList,
+        meta: { title: 'Solicitudes' }
     },
     {
-    path: '/requests/registration',
-    name: 'request-registration',
-    component: () =>
-    import('./requests/presentation/request-approval-manager.vue'),
+        path: '/requests/registration',
+        name: 'request-registration',
+        component: () =>
+        import('./requests/presentation/request-approval-manager.vue'),
     }
 ];
 
@@ -62,5 +66,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
     document.title = `Performily - ${to.meta.title || 'App'}`;
 });
+
+router.beforeEach(authenticationGuard);
 
 export default router;
