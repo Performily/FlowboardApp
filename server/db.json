@@ -11,5 +11,29 @@
       "status": "Pagado",
       "issueDate": "2026-01-25T10:00:00Z"
     }
+  ],
+  "attendance": [
+    {
+      "id": 1,
+      "employeeId": "EMP-001",
+      "employeeName": "Juan Perez",
+      "area": "IT",
+      "date": "2026-05-10",
+      "checkIn": "08:00",
+      "checkOut": "17:00",
+      "workedHours": 9,
+      "status": "attendance"
+    },
+    {
+      "id": 2,
+      "employeeId": "EMP-002",
+      "employeeName": "Maria Lopez",
+      "area": "HR",
+      "date": "2026-05-10",
+      "checkIn": "08:25",
+      "checkOut": "17:00",
+      "workedHours": 8,
+      "status": "late"
+    }
   ]
 }
