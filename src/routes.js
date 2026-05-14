@@ -4,6 +4,8 @@ import payrollRoutes from './payroll/presentation/payroll-routes.js';
 import PayrollDashboard from './payroll/presentation/views/payroll-dashboard.vue';
 import PaySlipList from './payroll/presentation/views/pay-slip-list.vue';
 import HomeView from './home/presentation/views/home-view.vue';
+import RequestList from './requests/presentation/request-list.vue';
+
 const routes = [
     {
     path: '/home', 
@@ -24,6 +26,18 @@ const routes = [
         component: PaySlipList,
         meta: { title: 'Estado de Pagos' }
     },
+    {
+    path: '/requests',
+    name: 'requests', 
+    component: RequestList,
+    meta: { title: 'Solicitudes' }
+    },
+    {
+  path: '/requests/registration',
+  name: 'request-registration',
+  component: () =>
+  import('./requests/presentation/request-approval-manager.vue'),
+  }
 ];
 
 

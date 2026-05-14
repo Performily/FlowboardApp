@@ -2,10 +2,23 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './app.vue';
 import router from './routes';
-import Dialog from 'primevue/dialog';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
+import 'primeflex/primeflex.css';
+import 'primeicons/primeicons.css';
+import {
+    Button,
+    Card,
+    DataTable,
+    Column,
+    Select,
+    DatePicker,
+    Dialog,
+    InputText,
+    Tag,
+    Textarea
+} from 'primevue';
 
 const BluePreset = definePreset(Aura, {
     semantic: {
@@ -15,7 +28,7 @@ const BluePreset = definePreset(Aura, {
             200: '#b6c8d9',
             300: '#8ba6c1',
             400: '#5c7fa6',
-            500: '#3F51B5', // <-- Tu azul exacto
+            500: '#3F51B5',
             600: '#32408f',
             700: '#25306b',
             800: '#1a224d',
@@ -24,41 +37,30 @@ const BluePreset = definePreset(Aura, {
         }
     }
 });
-import 'primeflex/primeflex.css';
-import 'primeicons/primeicons.css';
-
-
-import { 
-    Button, 
-    Card, 
-    DataTable, 
-    Column, 
-    Select, 
-    InputText, 
-    Tag 
-} from 'primevue';
 
 const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
-app.use(PrimeVue, { 
-    theme: { 
+app.use(PrimeVue, {
+    theme: {
         preset: BluePreset,
         options: {
-            // Esto fuerza el modo claro (busca una clase que no existe)
-            darkModeSelector: '.app-dark-mode-off' 
+            darkModeSelector: '.app-dark-mode-off'
         }
-    } 
+    }
 });
-app.component('pv-dialog', Dialog);
-app.component('pv-button', Button);
-app.component('pv-card', Card);
-app.component('pv-data-table', DataTable);
-app.component('pv-column', Column);
-app.component('pv-select', Select);
-app.component('pv-input-text', InputText);
-app.component('pv-tag', Tag);
+
+app.component('pv-dialog',      Dialog);
+app.component('pv-button',      Button);
+app.component('pv-card',        Card);
+app.component('pv-data-table',  DataTable);
+app.component('pv-column',      Column);
+app.component('pv-select',      Select);
+app.component('pv-date-picker', DatePicker);
+app.component('pv-input-text',  InputText);
+app.component('pv-tag',         Tag);
+app.component('pv-textarea',    Textarea);
 
 app.mount('#app');
