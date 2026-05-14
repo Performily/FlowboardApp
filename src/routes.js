@@ -58,7 +58,7 @@ const routes = [
     component: () =>
     import('./requests/presentation/request-approval-manager.vue'),
     },
-    {
+{
         path: '/management',
         name: 'management',
         component: ManagementDashboard,
@@ -68,14 +68,14 @@ const routes = [
         path: '/management/register',
         name: 'employee-registration',
         component: EmployeeRegistration,
-        meta: { title: 'Registrar Colaborador' },
+        meta: { title: 'Registrar Colaborador' }
+    },
+    {
         path: '/requests/registration',
         name: 'request-registration',
-        component: () =>
-        import('./requests/presentation/request-approval-manager.vue'),
+        component: () => import('./requests/presentation/request-approval-manager.vue'),
     }
 ];
-
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
