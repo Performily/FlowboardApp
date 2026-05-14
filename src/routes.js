@@ -3,7 +3,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 import payrollRoutes from './payroll/presentation/payroll-routes.js';
 import PayrollDashboard from './payroll/presentation/views/payroll-dashboard.vue';
 import PaySlipList from './payroll/presentation/views/pay-slip-list.vue';
+import HomeView from './home/presentation/views/home-view.vue';
 const routes = [
+    {
+    path: '/home', 
+    name: 'home',
+    component: HomeView,
+    meta: { title: 'Inicio' }
+    },
     {
         path: '/payroll',
         name: 'payroll', 
