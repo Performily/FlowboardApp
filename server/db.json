@@ -23,6 +23,12 @@
       "name": "Ana Salas",
       "code": "COL-004",
       "area": "Recursos Humanos"
+    },
+    {
+      "name": "Dario Avila",
+      "code": "COL-005",
+      "area": "Recursos Humanos",
+      "id": 5
     }
   ],
   "requests": [
