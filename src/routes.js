@@ -3,6 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import payrollRoutes from './payroll/presentation/payroll-routes.js';
 import PayrollDashboard from './payroll/presentation/views/payroll-dashboard.vue';
 import PaySlipList from './payroll/presentation/views/pay-slip-list.vue';
+import AttendanceList from './attendance/presentation/views/attendance-list.vue';
+
+
 const routes = [
     {
         path: '/payroll',
@@ -17,6 +20,14 @@ const routes = [
         component: PaySlipList,
         meta: { title: 'Estado de Pagos' }
     },
+
+     {
+        path: '/attendance',
+        name: 'attendance', 
+        component: AttendanceList,
+        meta: { title: 'Control de Asistencia' }
+    }
+
 ];
 
 
