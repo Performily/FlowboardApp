@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './app.vue';
 import router from './routes';
-
+import Dialog from 'primevue/dialog';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
@@ -52,7 +52,7 @@ app.use(PrimeVue, {
         }
     } 
 });
-
+app.component('pv-dialog', Dialog);
 app.component('pv-button', Button);
 app.component('pv-card', Card);
 app.component('pv-data-table', DataTable);
