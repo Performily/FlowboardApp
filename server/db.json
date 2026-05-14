@@ -1,34 +1,66 @@
 {
   "employees": [
-    { "id": 1, "name": "Juan Pérez", "code": "COL-001", "area": "Desarrollo" },
-    { "id": 2, "name": "María Gómez", "code": "COL-002", "area": "Diseño" },
-    { "id": 3, "name": "Carlos Ruiz", "code": "COL-003", "area": "Ventas" },
-    { "id": 4, "name": "Ana Salas", "code": "COL-004", "area": "Recursos Humanos" }
+    {
+      "id": 1,
+      "name": "Juan Pérez",
+      "code": "COL-001",
+      "area": "Desarrollo"
+    },
+    {
+      "id": 2,
+      "name": "María Gómez",
+      "code": "COL-002",
+      "area": "Diseño"
+    },
+    {
+      "id": 3,
+      "name": "Carlos Ruiz",
+      "code": "COL-003",
+      "area": "Ventas"
+    },
+    {
+      "id": 4,
+      "name": "Ana Salas",
+      "code": "COL-004",
+      "area": "Recursos Humanos"
+    }
   ],
   "requests": [
     {
       "id": 101,
       "employeeId": 2,
       "type": "Vacaciones",
+      "title": "Vacaciones de verano",
       "startDate": "01 Jun 2026",
       "endDate": "15 Jun 2026",
-      "status": "Pendiente"
+      "status": "Aprobado",
+      "collaboratorComments": "",
+      "otherDetails": "",
+      "rejectionReason": null
     },
     {
       "id": 102,
       "employeeId": 3,
       "type": "Permiso Médico",
+      "title": "Consulta médica urgente",
       "startDate": "14 May 2026",
       "endDate": "14 May 2026",
-      "status": "Pendiente"
+      "status": "Pendiente",
+      "collaboratorComments": null,
+      "otherDetails": null,
+      "rejectionReason": null
     },
     {
       "id": 103,
       "employeeId": 4,
       "type": "Licencia por Paternidad",
+      "title": "Nacimiento de hijo",
       "startDate": "20 May 2026",
       "endDate": "25 May 2026",
-      "status": "Aprobado"
+      "status": "Rechazado",
+      "collaboratorComments": null,
+      "otherDetails": null,
+      "rejectionReason": null
     }
   ],
   "paySlips": [
