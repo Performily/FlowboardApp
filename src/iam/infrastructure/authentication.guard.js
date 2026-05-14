@@ -1,6 +1,6 @@
 import useIamStore from "../application/iam.store.js";
 
-export const authenticationGuard = (to, from, next) => {
+export const authenticationGuard = (to) => {
 
     const store = useIamStore();
 
@@ -10,23 +10,25 @@ export const authenticationGuard = (to, from, next) => {
         '/iam/reset-password'
     ];
 
-    const isPublicRoute = publicRoutes.includes(to.path);
+    const isPublicRoute =
+        publicRoutes.includes(to.path);
 
-    // NO autenticado
+    // Si NO está autenticado y quiere entrar
+    // a una ruta privada -> redirigir login
     if (!store.isSignedIn && !isPublicRoute) {
 
-        return next({
+        return {
             name: 'iam-sign-in'
-        });
+        };
     }
 
-    // YA autenticado
+    // Si YA inició sesión y quiere ir al login
     if (store.isSignedIn && isPublicRoute) {
 
-        return next({
+        return {
             name: 'home'
-        });
-    
+        };
+    }
 
-    next();
-}}
+    return true;
+};

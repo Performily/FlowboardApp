@@ -11,12 +11,13 @@ import { authenticationGuard } from './iam/infrastructure/authentication.guard.j
 
 const routes = [
 
-    ...iamRoutes,
-
     {
         path: '/',
         redirect: '/iam/sign-in'
     },
+
+        ...iamRoutes,
+
     {
         path: '/home', 
         name: 'home',
@@ -63,10 +64,11 @@ const router = createRouter({
     routes: routes,
 });
 
+router.beforeEach(authenticationGuard);
+
 router.beforeEach((to, from) => {
     document.title = `Performily - ${to.meta.title || 'App'}`;
 });
 
-router.beforeEach(authenticationGuard);
 
 export default router;

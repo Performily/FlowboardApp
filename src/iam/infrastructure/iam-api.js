@@ -1,42 +1,42 @@
-import {BaseApi} from "../../shared/infrastructure/base-api.js";
-import {BaseEndpoint} from "../../shared/infrastructure/base-endpoint.js";
+import axios from 'axios';
 
-const signInEndpointPath = import.meta.env.VITE_SIGN_IN_ENDPOINT;
-const forgotPasswordEndpointPath = import.meta.env.VITE_FORGOT_PASSWORD_ENDPOINT;
-const resetPasswordEndpointPath = import.meta.env.VITE_RESET_PASSWORD_ENDPOINT;
+const API_BASE_URL = 'http://localhost:3000';
 
-export class IamApi extends BaseApi {
-
-    #signInEndpoint;
-    #forgotPasswordEndpoint;
-    #resetPasswordEndpoint;
-
-    constructor() {
-
-        super();
-
-        this.#signInEndpoint = new BaseEndpoint(this, signInEndpointPath);
-
-        this.#forgotPasswordEndpoint = new BaseEndpoint(
-            this,
-            forgotPasswordEndpointPath
-        );
-
-        this.#resetPasswordEndpoint = new BaseEndpoint(
-            this,
-            resetPasswordEndpointPath
-        );
-    }
+export class IamApi {
 
     signIn(signInCommand) {
-        return this.#signInEndpoint.create(signInCommand);
+
+        // MOCK TEMPORAL TB1
+        return Promise.resolve({
+            status: 200,
+            data: {
+                id: 1,
+                fullName: 'Administrador',
+                email: signInCommand.email,
+                role: 'RRHH',
+                token: 'jwt-demo-token',
+                temporaryPassword: false
+            }
+        });
     }
 
     forgotPassword(forgotPasswordCommand) {
-        return this.#forgotPasswordEndpoint.create(forgotPasswordCommand);
+
+        return Promise.resolve({
+            status: 200,
+            data: {
+                message: 'Correo enviado correctamente'
+            }
+        });
     }
 
     resetPassword(resetPasswordCommand) {
-        return this.#resetPasswordEndpoint.create(resetPasswordCommand);
+
+        return Promise.resolve({
+            status: 200,
+            data: {
+                message: 'Contraseña actualizada'
+            }
+        });
     }
 }
