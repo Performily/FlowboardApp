@@ -14,7 +14,7 @@ const useIamStore = defineStore('iam', () => {
     const currentUser = ref(null);
 
     const isSignedIn = ref(
-        !!localStorage.getItem('token')
+        !!(localStorage.getItem('token') || sessionStorage.getItem('token'))
     );
 
     const isAuthenticated = computed(() => {
@@ -26,10 +26,10 @@ const useIamStore = defineStore('iam', () => {
     const errors = ref([]);
 
     const currentToken = computed(() => {
-        return localStorage.getItem('token');
+        return ( localStorage.getItem('token') || sessionStorage.getItem('token'));
     });
 
-    async function signIn(signInCommand, router) {
+    async function signIn(signInCommand, router, staySignedIn = false) {
 
         loading.value = true;
 
@@ -55,7 +55,20 @@ const useIamStore = defineStore('iam', () => {
 
             currentUser.value = user;
 
-            localStorage.setItem('token', user.token);
+            if (staySignedIn) {
+
+                localStorage.setItem(
+                    'token',
+                    user.token
+                );
+
+            } else {
+
+                sessionStorage.setItem(
+                    'token',
+                    user.token
+                );
+            }
 
             isSignedIn.value = true;
 
@@ -159,6 +172,7 @@ const useIamStore = defineStore('iam', () => {
         isSignedIn.value = false;
 
         localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
 
         errors.value = [];
 

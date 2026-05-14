@@ -7,7 +7,7 @@ import { SignInCommand } from "../../domain/sign-in.command.js";
 const router = useRouter();
 const store = useIamStore();
 
-const staySignedIn = ref(true);
+const staySignedIn = ref(false);
 
 const form = reactive({
   email: '',
@@ -15,8 +15,14 @@ const form = reactive({
 });
 
 function performSignIn() {
+
   const signInCommand = new SignInCommand(form);
-  store.signIn(signInCommand, router);
+
+  store.signIn(
+      signInCommand,
+      router,
+      staySignedIn.value
+  );
 }
 </script>
 
