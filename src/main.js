@@ -17,7 +17,9 @@ import {
     Dialog,
     InputText,
     Tag,
-    Textarea
+    Textarea,
+    Password,
+    Checkbox
 } from 'primevue';
 
 const BluePreset = definePreset(Aura, {
@@ -62,5 +64,7 @@ app.component('pv-date-picker', DatePicker);
 app.component('pv-input-text',  InputText);
 app.component('pv-tag',         Tag);
 app.component('pv-textarea',    Textarea);
+app.component('pv-password', Password);
+app.component('pv-checkbox', Checkbox)
 
 app.mount('#app');
