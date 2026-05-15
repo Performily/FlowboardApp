@@ -11,7 +11,9 @@ import RequestList from './requests/presentation/request-list.vue';
 import iamRoutes from './iam/presentation/iam-routes.js';
 import { authenticationGuard } from './iam/infrastructure/authentication.guard.js';
 import EmployeeUpdate from './management/presentation/views/employee-update.vue';
-
+import EmployeeProfileMenu from './management/presentation/views/employee-profile-menu.vue'; 
+import EmployeeSelection from './management/presentation/views/employee-selection.vue';
+import EmployeePersonalProfile from './management/presentation/views/employee-personal-profile.vue';
 const routes = [
 
     {
@@ -81,6 +83,24 @@ const routes = [
         path: '/requests/registration',
         name: 'request-registration',
         component: () => import('./requests/presentation/request-approval-manager.vue'),
+    },
+    {
+        path: '/management/info',
+        name: 'info', 
+        component: EmployeeProfileMenu,
+        meta: { title: 'Información Laboral' }
+    },
+    {
+        path: '/management/info/selection',
+        name: 'employee-selection',
+        component: EmployeeSelection,
+        meta: { title: 'Seleccionar Colaborador' }
+    },
+    {
+        path: '/management/info/profile/:id',
+        name: 'employee-personal-profile',
+        component: EmployeePersonalProfile,
+        meta: { title: 'Perfil Personal' }
     }
 ];
 
