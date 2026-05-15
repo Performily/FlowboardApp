@@ -35,7 +35,7 @@ const goTo = (routeName) => {
       </div>
 
       <div class="col-12 md:col-6 lg:col-4 p-3">
-        <div class="bg-white border-round-2xl p-5 h-full flex flex-column align-items-center justify-content-center cursor-pointer shadow-1 hover:shadow-4 transition-all transition-duration-200" @click="goTo('')">
+        <div class="bg-white border-round-2xl p-5 h-full flex flex-column align-items-center justify-content-center cursor-pointer shadow-1 hover:shadow-4 transition-all transition-duration-200" @click="goTo('employee-update')">
           <div class="w-7rem h-7rem border-circle bg-primary flex justify-content-center align-items-center mb-4">
             <i class="pi pi-sync text-white text-5xl"></i>
           </div>

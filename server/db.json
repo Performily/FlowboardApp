@@ -2,11 +2,9 @@
   "employees": [
     {
       "id": 1,
-      "name": "Juan Pérez",
       "code": "COL-001",
-      "area": "Desarrollo",
-      "availableDays": 15,
-      "civilStatus": "SINGLE",
+      "name": "Juan Pérez",
+      "civilStatus": "MARRIED",
       "documentNumber": "12345678",
       "age": 30,
       "personalEmail": "juan.perez@email.com",
@@ -16,7 +14,9 @@
       "workEmail": "jperez@empresa.com",
       "hireDate": "2023-01-15",
       "contractType": "FULL_TIME",
+      "area": "Desarrollo",
       "jobPosition": "Desarrollador Frontend",
+      "status": "ACTIVE",
       "educationLevel": "Bachiller"
     },
     {
