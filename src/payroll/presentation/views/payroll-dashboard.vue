@@ -1,6 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 
 const goToPaySlips = () => {
@@ -16,7 +18,7 @@ const goToFeature = (feature) => {
   <div class="p-4">
     <div class="flex align-items-center gap-2 mb-5">
       <i class="pi pi-credit-card text-primary text-3xl font-bold"></i>
-      <h1 class="m-0 text-primary font-bold text-3xl">Pagos</h1>
+      <h1 class="m-0 text-primary font-bold text-3xl">  {{ t('payroll.dashboard.title') }}</h1>
     </div>
 
     <div class="grid gap-4 md:gap-5 m-0">
@@ -48,7 +50,7 @@ const goToFeature = (feature) => {
         <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center mb-4">
           <i class="pi pi-money-bill text-white text-5xl"></i>
         </div>
-        <span class="text-900 font-bold text-lg text-center">Estado de pagos</span>
+        <span class="text-900 font-bold text-lg text-center">{{ t('payroll.dashboard.paymentStatus') }}</span>
       </div>
 
     </div>

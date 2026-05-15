@@ -5,43 +5,43 @@
       <i class="pi pi-arrow-left text-xl cursor-pointer text-500 hover:text-700 transition-colors" @click="cancel"></i>
       <div class="flex align-items-center gap-2 text-primary">
         <i class="pi pi-calendar-plus text-4xl"></i>
-        <h1 class="m-0 text-3xl font-bold">Asignar vacaciones</h1>
+        <h1 class="m-0 text-3xl font-bold">{{ t('vacations.creation.title') }}</h1>
       </div>
     </div>
 
     <div class="surface-card p-5 border-round border-1 border-300 shadow-1 w-full max-w-4xl">
       <div class="formgrid grid">
         <div class="field col-12 md:col-6 flex flex-column gap-2">
-          <label for="colaborador" class="font-medium text-700">Colaborador</label>
-          <pv-select id="colaborador" v-model="form.employee" :options="store.employeesList" optionLabel="name" placeholder="Seleccionar colaborador" class="w-full" @change="onEmployeeSelect" />
+          <label for="colaborador" class="font-medium text-700">{{ t('vacations.creation.collaborator') }}</label>
+          <pv-select id="colaborador" v-model="form.employee" :options="store.employeesList" optionLabel="name" :placeholder="t('vacations.creation.selectCollaborator')" class="w-full" @change="onEmployeeSelect" />
         </div>
         <div class="field col-12 md:col-6 flex flex-column gap-2">
-          <label for="area" class="font-medium text-700">Área</label>
-          <pv-select id="area" v-model="form.area" :options="areaOptions" placeholder="Seleccionar área" class="w-full" />
+          <label for="area" class="font-medium text-700">{{ t('vacations.creation.area') }}</label>
+          <pv-select id="area" v-model="form.area" :options="areaOptions" :placeholder="t('vacations.creation.selectArea')" class="w-full" />
         </div>
 
         <div class="field col-12 md:col-5 flex flex-column gap-2">
-          <label for="fecha-inicio" class="font-medium text-700">Fecha inicio</label>
-          <pv-date-picker id="fecha-inicio" v-model="form.startDate" placeholder="dd/mm/aaaa" showIcon class="w-full" />
+          <label for="fecha-inicio" class="font-medium text-700">{{ t('vacations.creation.startDate') }}</label>
+          <pv-date-picker id="fecha-inicio" v-model="form.startDate" :placeholder="t('vacations.creation.datePlaceholder')" showIcon class="w-full" />
         </div>
         <div class="field col-12 md:col-5 flex flex-column gap-2">
-          <label for="fecha-fin" class="font-medium text-700">Fecha fin</label>
-          <pv-date-picker id="fecha-fin" v-model="form.endDate" placeholder="dd/mm/aaaa" showIcon class="w-full" />
+          <label for="fecha-fin" class="font-medium text-700">{{ t('vacations.creation.endDate') }}</label>
+          <pv-date-picker id="fecha-fin" v-model="form.endDate" :placeholder="t('vacations.creation.datePlaceholder')" showIcon class="w-full" />
         </div>
         <div class="field col-12 md:col-2 flex flex-column gap-2">
-          <label for="dias" class="font-medium text-700">Días</label>
+          <label for="dias" class="font-medium text-700">{{ t('vacations.creation.days') }}</label>
           <pv-input-text id="dias" :value="calculatedDays" readonly placeholder="xx" class="w-full bg-gray-100 text-center" />
         </div>
 
         <div class="field col-12 flex flex-column gap-2 mt-2">
-          <label for="observacion" class="font-medium text-700">Observación (Opcional)</label>
-          <pv-textarea id="observacion" v-model="form.observation" rows="4" placeholder="Escribe una observación (opcional)" class="w-full" />
+          <label for="observacion" class="font-medium text-700">{{ t('vacations.creation.observation') }}</label>
+          <pv-textarea id="observacion" v-model="form.observation" rows="4" :placeholder="t('vacations.creation.observationPlaceholder')" class="w-full" />
         </div>
       </div>
 
       <div class="flex gap-3 mt-4 w-full md:w-6">
-        <pv-button label="Guardar asignación" icon="pi pi-check" class="flex-1 bg-indigo-600 border-indigo-600" :loading="isSaving" @click="save" />
-        <pv-button label="Cancelar" outlined severity="secondary" class="flex-1" @click="cancel" />
+        <pv-button :label="t('vacations.creation.saveAssignment')" icon="pi pi-check" class="flex-1 bg-indigo-600 border-indigo-600" :loading="isSaving" @click="save" />
+        <pv-button :label="t('common.cancel')" outlined severity="secondary" class="flex-1" @click="cancel" />
       </div>
     </div>
   </div>
@@ -51,7 +51,9 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useVacationsStore } from '../application/vacations.store.js';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const store = useVacationsStore();
 const router = useRouter();
 
@@ -84,7 +86,7 @@ const calculatedDays = computed(() => {
 // Lógica real de guardado
 const save = async () => {
   if (!form.value.employee || !form.value.startDate || !form.value.endDate) {
-    alert("Por favor completa los campos obligatorios.");
+    alert(t('vacations.creation.completeRequiredFields'));
     return;
   }
 
@@ -93,13 +95,13 @@ const save = async () => {
   // Armamos el objeto como lo espera tu Fake API
   const newRequest = {
     employeeId: form.value.employee.id,
-    type: "Vacaciones",
-    title: `Vacaciones asignadas a ${form.value.employee.name}`,
+    type: t('vacations.creation.vacationType'),
+    title: `${t('vacations.creation.assignedVacationTo')} ${form.value.employee.name}`,
     startDate: form.value.startDate.toISOString(),
     endDate: form.value.endDate.toISOString(),
-    status: "Aprobado", // Asumimos que si lo asigna el admin, se aprueba de una
+    status: t('vacations.status.approved'), // Asumimos que si lo asigna el admin, se aprueba de una
     collaboratorComments: form.value.observation,
-    otherDetails: `Días: ${calculatedDays.value}`,
+    otherDetails: `${t('vacations.creation.days')}: ${calculatedDays.value}`,
     rejectionReason: null
   };
 
@@ -108,7 +110,7 @@ const save = async () => {
     // Vuelve a la tabla de vacaciones tras guardar exitosamente
     router.push('/vacations'); 
   } catch (error) {
-    alert("Hubo un error al guardar");
+    alert(t('vacations.creation.saveError'));
   } finally {
     isSaving.value = false;
   }

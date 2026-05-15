@@ -2,7 +2,9 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import usePayrollStore from '../../application/payroll.store.js';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const store = usePayrollStore();
@@ -35,26 +37,26 @@ const getStatusSeverity = (status) => {
 
 <template>
   <div class="p-4" v-if="paySlip">
-    <pv-button icon="pi pi-arrow-left" label="Volver a la lista" text @click="navigateBack" class="mb-4" />
+    <pv-button icon="pi pi-arrow-left" :label="t('payroll.detail.back')" text @click="navigateBack" class="mb-4" />
 
     <pv-card>
       <template #title>
         <div class="flex justify-content-between align-items-center">
-          <span>Detalle de Remuneración: {{ paySlip.period }}</span>
+          <span>{{ t('payroll.detail.title') }} {{ paySlip.period }}</span>
           <pv-tag :value="paySlip.status" :severity="getStatusSeverity(paySlip.status)" />
         </div>
       </template>
       <template #content>
         <div class="grid mb-4">
           <div class="col-12 md:col-6">
-            <p><strong>Colaborador:</strong> {{ paySlip.collaboratorName }}</p>
-            <p><strong>Código:</strong> {{ paySlip.collaboratorCode }}</p>
-            <p><strong>Área:</strong> {{ paySlip.area }}</p>
+            <p><strong>{{ t('payroll.detail.collaborator') }}</strong> {{ paySlip.collaboratorName }}</p>
+            <p><strong>{{ t('payroll.detail.code') }}</strong> {{ paySlip.collaboratorCode }}</p>
+            <p><strong>{{ t('payroll.detail.area') }}</strong> {{ paySlip.area }}</p>
           </div>
           <div class="col-12 md:col-6 text-right">
-            <p><strong>Ingresos Brutos:</strong> {{ paySlip.formatCurrency(paySlip.grossIncome) }}</p>
-            <p><strong>Descuentos:</strong> {{ paySlip.formatCurrency(paySlip.deductions) }}</p>
-            <p class="text-xl font-bold text-primary"><strong>Monto Neto:</strong> {{ paySlip.formatCurrency(paySlip.netIncome) }}</p>
+            <p><strong>{{ t('payroll.detail.grossIncome') }}</strong> {{ paySlip.formatCurrency(paySlip.grossIncome) }}</p>
+            <p><strong>{{ t('payroll.detail.deductions') }}</strong> {{ paySlip.formatCurrency(paySlip.deductions) }}</p>
+            <p class="text-xl font-bold text-primary"><strong>{{ t('payroll.detail.netAmount') }}</strong> {{ paySlip.formatCurrency(paySlip.netIncome) }}</p>
           </div>
         </div>
 
@@ -62,13 +64,13 @@ const getStatusSeverity = (status) => {
           <span class="font-bold">Boleta {{ paySlip.id }} - {{ paySlip.paymentType }}</span>
           <div class="flex align-items-center">
             <span class="mr-4">1 / 1 | <i class="pi pi-minus mx-2 cursor-pointer"></i> 100% <i class="pi pi-plus mx-2 cursor-pointer"></i></span>
-            <pv-button icon="pi pi-download" label="Descargar Documento" @click="downloadPdf" severity="info" />
+            <pv-button icon="pi pi-download" :label="t('payroll.detail.downloadDocument')" @click="downloadPdf" severity="info" />
           </div>
         </div>
         
         <div class="border-1 surface-border border-round mt-2" style="height: 400px; background-color: #f8f9fa;">
            <div class="flex h-full align-items-center justify-content-center text-500">
-             Vista previa del documento PDF
+             {{ t('payroll.detail.pdfPreview') }}
            </div>
         </div>
       </template>
@@ -77,7 +79,7 @@ const getStatusSeverity = (status) => {
   
   <div v-else class="p-4 flex flex-column align-items-center justify-content-center" style="min-height: 50vh;">
     <i class="pi pi-spin pi-spinner text-4xl text-primary mb-3"></i>
-    <p>Cargando información de la boleta...</p>
+    <p>{{ t('payroll.detail.loading') }}</p>
   </div>
 </template>
 

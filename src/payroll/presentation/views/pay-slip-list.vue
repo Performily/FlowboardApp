@@ -1,8 +1,10 @@
 <script setup>
-import { onMounted, toRefs, ref } from 'vue';
+import { onMounted, toRefs, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import usePayrollStore from '../../application/payroll.store.js';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const store = usePayrollStore();
 
@@ -13,11 +15,22 @@ const selectedPeriod = ref(null);
 const selectedStatus = ref(null);
 const searchQuery = ref('');
 
-const periods = ref([
-  { name: 'Enero 2026', code: 'Enero 2026' }, 
-  { name: 'Febrero 2026', code: 'Febrero 2026' }
+const periods = computed(() => [
+  {
+    name: t('payroll.list.periods.january2026'),
+    code: t('payroll.list.periods.january2026')
+  },
+  {
+    name: t('payroll.list.periods.february2026'),
+    code: t('payroll.list.periods.february2026')
+  }
 ]);
-const statuses = ref(['Pagado', 'Pendiente', 'Con observación']);
+
+const statuses = computed(() => [
+  t('payroll.list.status.paid'),
+  t('payroll.list.status.pending'),
+  t('payroll.list.status.observation')
+]);
 
 onMounted(() => {
   if (!paySlipsLoaded.value) {
@@ -43,9 +56,11 @@ const clearFilters = () => {
 };
 
 const getStatusSeverity = (status) => {
-  if (status === 'Pagado') return 'success';
-  if (status === 'Con observación') return 'danger';
-  return 'secondary'; 
+  if (status === t('payroll.list.status.paid')) return 'success';
+
+  if (status === t('payroll.list.status.observation')) return 'danger';
+
+  return 'secondary';
 };
 
 const navigateToDetail = (id) => {
@@ -85,7 +100,7 @@ const downloadPdf = () => {
   <div class="p-4">
     <div class="flex align-items-center gap-3 mb-4">
       <i class="pi pi-credit-card text-3xl text-primary"></i>
-      <h1 class="m-0 text-3xl font-bold text-primary">Pagos</h1>
+      <h1 class="m-0 text-3xl font-bold text-primary">{{ t('payroll.list.title') }}</h1>
     </div>
 
     <pv-card class="mb-4">
@@ -93,34 +108,34 @@ const downloadPdf = () => {
       <div class="formgrid grid align-items-end gap-0">
         
         <div class="field col-12 md:col-3">
-          <label class="block mb-2 font-medium text-700">Periodo de planilla</label>
-          <pv-select v-model="selectedPeriod" :options="periods" optionLabel="name" placeholder="Seleccionar opción" class="w-full" />
+          <label class="block mb-2 font-medium text-700">{{ t('payroll.list.filters.period') }}</label>
+          <pv-select v-model="selectedPeriod" :options="periods" optionLabel="name" :placeholder="t('payroll.list.filters.selectOption')" class="w-full" />
         </div>
 
         <div class="field col-12 md:col-3">
-          <label class="block mb-2 font-medium text-700">Estado de pago</label>
-          <pv-select v-model="selectedStatus" :options="statuses" placeholder="Seleccionar opción" class="w-full" />
+          <label class="block mb-2 font-medium text-700">{{ t('payroll.list.filters.paymentStatus') }}</label>
+          <pv-select v-model="selectedStatus" :options="statuses" :placeholder="t('payroll.list.filters.selectOption')" class="w-full" />
         </div>
 
         <div class="field col-12 md:col-3">
-          <label class="block mb-2 font-medium text-700">Buscar colaborador</label>
-          <pv-input-text v-model="searchQuery" placeholder="Nombre o Código" class="w-full" />
+          <label class="block mb-2 font-medium text-700">{{ t('payroll.list.filters.searchCollaborator') }}</label>
+          <pv-input-text v-model="searchQuery" :placeholder="t('payroll.list.filters.searchPlaceholder')" class="w-full" />
         </div>
         
         <div class="field col-12 md:col-3 flex gap-2">
-          <pv-button label="Consultar" icon="pi pi-search" @click="applyFilters" class="w-full" />
-          <pv-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" outlined @click="clearFilters" class="w-full" />
+          <pv-button :label="t('payroll.list.filters.search')" icon="pi pi-search" @click="applyFilters" class="w-full" />
+          <pv-button :label="t('payroll.list.filters.clear')" icon="pi pi-filter-slash" severity="secondary" outlined @click="clearFilters" class="w-full" />
         </div>
     </div>
       </template>
     </pv-card>
 
     <div v-if="errors.length" class="text-red-500 mb-3">
-      <strong>Ocurrieron errores:</strong> {{ errors.map(e => e.message).join(', ') }}
+      <strong>{{ t('payroll.list.errors.title') }}</strong> {{ errors.map(e => e.message).join(', ') }}
     </div>
 
     <pv-card>
-      <template #title>Resultados de la planilla</template>
+      <template #title>{{ t('payroll.list.table.title') }}</template>
       <template #content>
         <pv-data-table 
           :value="paySlips" 
@@ -131,36 +146,36 @@ const downloadPdf = () => {
           :rows-per-page-options="[5, 10, 20]"
           responsiveLayout="scroll"
         >
-          <pv-column field="collaboratorName" header="Colaborador" sortable></pv-column>
-          <pv-column field="collaboratorCode" header="Código"></pv-column>
-          <pv-column field="area" header="Área"></pv-column>
+          <pv-column field="collaboratorName" :header="t('payroll.list.table.collaborator')" sortable></pv-column>
+          <pv-column field="collaboratorCode" :header="t('payroll.list.table.code')"></pv-column>
+          <pv-column field="area" :header="t('payroll.list.table.area')"></pv-column>
           
-          <pv-column header="Monto neto">
+          <pv-column :header="t('payroll.list.table.netAmount')">
             <template #body="slotProps">
               {{ slotProps.data.formatCurrency(slotProps.data.netIncome) }}
             </template>
           </pv-column>
           
-          <pv-column header="Estado">
+          <pv-column :header="t('payroll.list.table.status')">
             <template #body="slotProps">
               <pv-tag :value="slotProps.data.status" :severity="getStatusSeverity(slotProps.data.status)" />
             </template>
           </pv-column>
           
-          <pv-column field="issueDate" header="Fecha">
+          <pv-column field="issueDate" :header="t('payroll.list.table.date')">
             <template #body="slotProps">
               {{ new Date(slotProps.data.issueDate).toLocaleDateString('es-PE') }}
             </template>
           </pv-column>
           
-          <pv-column header="Acción">
+          <pv-column :header="t('payroll.list.table.action')">
             <template #body="slotProps">
-              <pv-button label="Ver Detalle" outlined @click="openPdfViewer(slotProps.data)" />
+              <pv-button :label="t('payroll.list.table.viewDetail')" outlined @click="openPdfViewer(slotProps.data)" />
             </template>
           </pv-column>
 
           <template #empty>
-            <div class="text-center p-4">No hay boletas de pago disponibles.</div>
+            <div class="text-center p-4">{{ t('payroll.list.table.empty') }}</div>
           </template>
         </pv-data-table>
       </template>

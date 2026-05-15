@@ -268,7 +268,233 @@
         "checkOut": "Salida",
         "hours": "Horas",
         "noRecords": "No se encontraron registros de asistencia."
+    },
+    "summary": {
+      "title": "Resumen por Colaborador",
+      "employee": "Colaborador",
+      "employeePlaceholder": "Escribe el nombre o ID...",
+      "from": "Desde",
+      "to": "Hasta",
+      "status": "Estado",
+      "all": "Todos",
+      "filter": "Filtrar",
+      "errorLoading": "Error al cargar datos:",
+      "regularAttendance": "Asistencias Regulares",
+      "totalLates": "Total Tardanzas",
+      "totalAbsences": "Total Faltas",
+      "accumulatedHours": "Horas Acumuladas",
+      "recordHistory": "Historial de Registros",
+      "date": "Fecha",
+      "checkIn": "Entrada",
+      "checkOut": "Salida",
+      "hours": "Horas", 
+      "searchEmployee": "Busca un colaborador",
+      "searchEmployeeDescription": "Escribe un nombre y presiona Filtrar para ver sus métricas.",
+      "noRecordsFound": "No se encontraron registros para esta búsqueda."
+    }
+  },
+
+  "payroll": {
+    "dashboard": {
+      "title": "Pagos",
+      "paymentStatus": "Estado de pagos"
+    },
+
+    "list": {
+      "title": "Pagos",
+      "filters": {
+        "period": "Periodo de planilla",
+        "paymentStatus": "Estado de pago",
+        "searchCollaborator": "Buscar colaborador",
+        "searchPlaceholder": "Nombre o Código",
+        "selectOption": "Seleccionar opción",
+        "search": "Consultar",
+        "clear": "Limpiar"
+      },
+      "periods": {
+        "january2026": "Enero 2026",
+        "february2026": "Febrero 2026"
+      },
+
+      "table": {
+        "title": "Resultados de la planilla",
+        "collaborator": "Colaborador",
+        "code": "Código",
+        "area": "Área",
+        "netAmount": "Monto neto",
+        "status": "Estado",
+        "date": "Fecha",
+        "action": "Acción",
+        "viewDetail": "Ver Detalle",
+        "empty": "No hay boletas de pago disponibles."
+      },
+      "errors": {
+        "title": "Ocurrieron errores:"
+      },
+
+      "status": {
+        "paid": "Pagado",
+        "pending": "Pendiente",
+        "observation": "Con observación"
+      },
+
+      "pdfViewer": {
+        "paySlip": "Boleta",
+        "downloadPdf": "Descargar PDF",
+        "paymentSlip": "Boleta de Pago",
+        "grossIncome": "Ingreso Bruto (Sueldo Completo):",
+        "deductions": "Deducciones (Descuentos):",
+        "netAmount": "Monto Neto (A depositar):"
+      }
+    },
+    "detail": {
+      "back": "Volver a la lista",
+      "title": "Detalle de Remuneración",
+      "collaborator": "Colaborador",
+      "code": "Código",
+      "area": "Área",
+      "grossIncome": "Ingresos Brutos",
+      "deductions": "Descuentos",
+      "netAmount": "Monto Neto",
+      "pdfPreview": "Vista previa del documento PDF",
+      "downloadDocument": "Descargar Documento",
+      "loading": "Cargando información de la boleta..."
+    }
+  },
+  "requests": {
+  "dashboard": {
+    "title": "Solicitudes",
+    "requestRegistration": "Registro de Solicitudes"
+  },
+
+  "creation": {
+    "title": "Nueva Solicitud",
+    "requestType": "Tipo de solicitud",
+    "selectType": "Selecciona un tipo",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "cancel": "Cancelar",
+    "submit": "Enviar solicitud",
+
+    "types": {
+      "vacation": "Vacaciones",
+      "medicalLeave": "Permiso Médico",
+      "paternityLeave": "Licencia por Paternidad"
+    }
+  },
+
+  "approval": {
+    "title": "Solicitudes",
+    "mainList": "Lista principal",
+    "cancel": "Cancelar",
+
+    "table": {
+      "status": "Estado",
+      "requestType": "Tipo de solicitud",
+      "title": "Título",
+      "employee": "Colaborador",
+      "requestDate": "Fecha de solicitud"
+    },
+
+    "fields": {
+      "title": "Título",
+      "requestType": "Tipo de solicitud",
+      "requestDate": "Fecha de solicitud",
+      "reason": "Motivo",
+      "collaboratorComments": "Comentarios de colaborador",
+      "otherDetails": "Otros detalles"
+    },
+
+    "approveDialog": {
+      "title": "Confirmar Aprobación",
+      "confirmMessage": "¿Desea confirmar la aprobación de esta solicitud?",
+      "confirm": "Confirmar Aprobación"
+    },
+
+    "rejectDialog": {
+      "title": "Confirmar Rechazo",
+      "reason": "Indique el motivo del rechazo: *",
+      "placeholder": "Debe ingresar un motivo para rechazar la solicitud",
+      "confirm": "Confirmar Rechazo"
     }
   }
-  
+},
+"common": {
+    "cancel": "Cancelar"
+  },
+  "vacations": {
+    "status": {
+      "approved": "Aprobado",
+      "pending": "Pendiente",
+      "rejected": "Rechazado",
+      "available": "Disponible"
+    },
+    "approval": {
+      "selectedRequestEvaluation": "Evaluación de la solicitud seleccionada",
+      "collaborator": "Colaborador",
+      "requestedPeriod": "Periodo solicitado",
+      "status": "Estado",
+      "selectCollaborator": "Seleccione un colaborador",
+      "availabilityResult": "Resultado de disponibilidad",
+      "requestedDays": "Días solicitados:",
+      "availableDays": "Días disponibles:",
+      "days": "días",
+      "noVacationRequest": "El colaborador no tiene una solicitud de vacaciones en curso.",
+      "waitingSelection": "Esperando selección...",
+      "periodAvailabilitySummary": "Resumen de disponibilidad en el periodo",
+      "availableCollaborators": "Colaboradores disponibles",
+      "scheduledVacations": "Colaboradores con vacaciones programadas",
+      "pendingRequests": "Colaboradores con solicitudes pendientes",
+      "totalEmployees": "Total colaboradores en el área",
+      "enoughBalance": "Cuenta con saldo vacacional suficiente.",
+      "insufficientDays": "Días insuficientes. Faltan"
+    },
+    "creationDialog": {
+      "title": "Asignar Vacaciones",
+      "collaborator": "Colaborador",
+      "selectCollaborator": "Seleccionar colaborador",
+      "startDate": "Fecha Inicio",
+      "endDate": "Fecha Fin",
+      "saveAssignment": "Guardar Asignación"
+    },
+    "creation": {
+      "title": "Asignar vacaciones",
+      "collaborator": "Colaborador",
+      "selectCollaborator": "Seleccionar colaborador",
+      "area": "Área",
+      "selectArea": "Seleccionar área",
+      "startDate": "Fecha inicio",
+      "endDate": "Fecha fin",
+      "datePlaceholder": "dd/mm/aaaa",
+      "days": "Días",
+      "observation": "Observación (Opcional)",
+      "observationPlaceholder": "Escribe una observación (opcional)",
+      "saveAssignment": "Guardar asignación",
+      "completeRequiredFields": "Por favor completa los campos obligatorios.",
+      "vacationType": "Vacaciones",
+      "assignedVacationTo": "Vacaciones asignadas a",
+      "saveError": "Hubo un error al guardar"
+    },
+    "list": {
+      "title": "Vacaciones",
+      "area": "Área",
+      "selectArea": "Seleccionar área",
+      "startDate": "Fecha inicio",
+      "endDate": "Fecha fin",
+      "employeeStatus": "Estado de colaboradores",
+      "all": "Todos",
+      "assignVacations": "Asignar Vacaciones",
+      "clearFilters": "Limpiar Filtros",
+      "totalEmployees": "Total de colaboradores",
+      "available": "Disponibles",
+      "scheduledVacations": "Con vacaciones programadas",
+      "pendingRequests": "Solicitudes pendientes",
+      "selectedAreaEmployees": "Colaboradores del área seleccionada",
+      "noEmployeesFound": "No se encontraron colaboradores.",
+      "collaborator": "Colaborador",
+      "position": "Cargo",
+      "periodStatus": "Estado en el periodo",
+      "availableDays": "Días Disponibles"
+    }
+  }
 }

@@ -1,8 +1,20 @@
+<script setup>
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+const router = useRouter();
+
+function goToRegistration() {
+  router.push({ name: 'request-registration' });
+}
+</script>
+
 <template>
   <div class="p-4">
     <div class="flex align-items-center gap-2 mb-4">
       <i class="pi pi-file-edit text-2xl" style="color: #3b4cb8"></i>
-      <h1 class="text-3xl font-bold m-0" style="color: #3b4cb8">Solicitudes</h1>
+      <h1 class="text-3xl font-bold m-0" style="color: #3b4cb8">{{ t('requests.dashboard.title') }}</h1>
     </div>
 
     <div class="grid">
@@ -19,7 +31,7 @@
             <i class="pi pi-plus-circle text-3xl text-white"></i>
           </div>
           <span class="text-sm font-medium text-center text-700">
-            Registro de Solicitudes
+            {{ t('requests.dashboard.requestRegistration') }}
           </span>
         </div>
       </div>
@@ -27,15 +39,7 @@
   </div>
 </template>
 
-<script setup>
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
-
-function goToRegistration() {
-  router.push({ name: 'request-registration' });
-}
-</script>
 
 <style scoped>
 .request-card {

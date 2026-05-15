@@ -245,6 +245,7 @@
     "attendanceRecords": "Attendance Records",
     "employeeSummary": "Employee Summary"
     },
+    
     "list": {
         "title": "Attendance Control",
         "totalRecords": "Total Records",
@@ -267,6 +268,234 @@
         "checkOut": "Check Out", 
         "hours": "Hours",
         "noRecords": "No attendance records found."
+    },
+    "summary": {
+      "title": "Employee Summary",
+      "employee": "Employee",
+      "employeePlaceholder": "Type the name or ID...",
+      "from": "From",
+      "to": "To",
+      "status": "Status",
+      "all": "All",
+      "filter": "Filter",
+      "errorLoading": "Error loading data:",
+      "regularAttendance": "Regular Attendance",
+      "totalLates": "Total Late Arrivals",
+      "totalAbsences": "Total Absences",
+      "accumulatedHours": "Accumulated Hours",
+      "recordHistory": "Record History",
+      "date": "Date",
+      "checkIn": "Check In",
+      "checkOut": "Check Out",
+      "hours": "Hours",
+      "searchEmployee": "Search for an employee",
+      "searchEmployeeDescription": "Type a name and press Filter to view metrics.",
+      "noRecordsFound": "No records found for this search."
+    }
+  },
+  "payroll": {
+  "dashboard": {
+    "title": "Payments",
+    "paymentStatus": "Payment Status"
+  },
+
+  "list": {
+    "title": "Payments",
+    "filters": {
+      "period": "Payroll Period",
+      "paymentStatus": "Payment Status",
+      "searchCollaborator": "Search Collaborator",
+      "searchPlaceholder": "Name or Code",
+      "selectOption": "Select option",
+      "search": "Search",
+      "clear": "Clear"
+    },
+    "periods": {
+      "january2026": "January 2026",
+      "february2026": "February 2026"
+    },
+
+    "table": {
+      "title": "Payroll Results",
+      "collaborator": "Collaborator",
+      "code": "Code",
+      "area": "Area",
+      "netAmount": "Net Amount",
+      "status": "Status",
+      "date": "Date",
+      "action": "Action",
+      "viewDetail": "View Detail",
+      "empty": "No payment slips available."
+    },
+
+    "errors": {
+      "title": "Errors occurred:"
+    },
+
+    "status": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "observation": "With Observation"
+    },
+
+    "pdfViewer": {
+      "paySlip": "Slip",
+      "downloadPdf": "Download PDF",
+      "paymentSlip": "Payment Slip",
+      "grossIncome": "Gross Income (Full Salary):",
+      "deductions": "Deductions:",
+      "netAmount": "Net Amount (To Deposit):"
+    }
+  },
+
+  "detail": {
+    "back": "Back to list",
+    "title": "Payroll Detail",
+    "collaborator": "Collaborator",
+    "code": "Code",
+    "area": "Area",
+    "grossIncome": "Gross Income",
+    "deductions": "Deductions",
+    "netAmount": "Net Amount",
+    "pdfPreview": "PDF document preview",
+    "downloadDocument": "Download Document",
+    "loading": "Loading payroll information..."
+  }
+},
+"requests": {
+  "dashboard": {
+    "title": "Requests",
+    "requestRegistration": "Request Registration"
+  },
+
+  "creation": {
+    "title": "New Request",
+    "requestType": "Request Type",
+    "selectType": "Select a type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "cancel": "Cancel",
+    "submit": "Submit Request",
+
+    "types": {
+      "vacation": "Vacation",
+      "medicalLeave": "Medical Leave",
+      "paternityLeave": "Paternity Leave"
+    }
+  },
+
+  "approval": {
+    "title": "Requests",
+    "mainList": "Main List",
+    "cancel": "Cancel",
+
+    "table": {
+      "status": "Status",
+      "requestType": "Request Type",
+      "title": "Title",
+      "employee": "Employee",
+      "requestDate": "Request Date"
+    },
+
+    "fields": {
+      "title": "Title",
+      "requestType": "Request Type",
+      "requestDate": "Request Date",
+      "reason": "Reason",
+      "collaboratorComments": "Employee Comments",
+      "otherDetails": "Other Details"
+    },
+
+    "approveDialog": {
+      "title": "Confirm Approval",
+      "confirmMessage": "Do you want to confirm the approval of this request?",
+      "confirm": "Confirm Approval"
+    },
+
+    "rejectDialog": {
+      "title": "Confirm Rejection",
+      "reason": "Specify the reason for rejection: *",
+      "placeholder": "You must enter a reason to reject the request",
+      "confirm": "Confirm Rejection"
+    }
+  }
+},
+"common": {
+    "cancel": "Cancel"
+  },
+  "vacations": {
+    "status": {
+      "approved": "Approved",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "available": "Available"
+    },
+    "approval": {
+      "selectedRequestEvaluation": "Selected request evaluation",
+      "collaborator": "Collaborator",
+      "requestedPeriod": "Requested period",
+      "status": "Status",
+      "selectCollaborator": "Select a collaborator",
+      "availabilityResult": "Availability result",
+      "requestedDays": "Requested days:",
+      "availableDays": "Available days:",
+      "days": "days",
+      "noVacationRequest": "The collaborator does not have an active vacation request.",
+      "waitingSelection": "Waiting for selection...",
+      "periodAvailabilitySummary": "Availability summary for the period",
+      "availableCollaborators": "Available collaborators",
+      "scheduledVacations": "Collaborators with scheduled vacations",
+      "pendingRequests": "Collaborators with pending requests",
+      "totalEmployees": "Total collaborators in the area",
+      "enoughBalance": "Has sufficient vacation balance.",
+      "insufficientDays": "Insufficient days. Missing"
+    },
+    "creationDialog": {
+      "title": "Assign Vacations",
+      "collaborator": "Collaborator",
+      "selectCollaborator": "Select collaborator",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "saveAssignment": "Save Assignment"
+    },
+    "creation": {
+      "title": "Assign vacations",
+      "collaborator": "Collaborator",
+      "selectCollaborator": "Select collaborator",
+      "area": "Area",
+      "selectArea": "Select area",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "datePlaceholder": "dd/mm/yyyy",
+      "days": "Days",
+      "observation": "Observation (Optional)",
+      "observationPlaceholder": "Write an observation (optional)",
+      "saveAssignment": "Save assignment",
+      "completeRequiredFields": "Please complete the required fields.",
+      "vacationType": "Vacations",
+      "assignedVacationTo": "Vacations assigned to",
+      "saveError": "An error occurred while saving"
+    },
+    "list": {
+      "title": "Vacations",
+      "area": "Area",
+      "selectArea": "Select area",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "employeeStatus": "Collaborator status",
+      "all": "All",
+      "assignVacations": "Assign Vacations",
+      "clearFilters": "Clear Filters",
+      "totalEmployees": "Total collaborators",
+      "available": "Available",
+      "scheduledVacations": "Scheduled vacations",
+      "pendingRequests": "Pending requests",
+      "selectedAreaEmployees": "Collaborators in the selected area",
+      "noEmployeesFound": "No collaborators found.",
+      "collaborator": "Collaborator",
+      "position": "Position",
+      "periodStatus": "Period status",
+      "availableDays": "Available Days"
     }
   }
 }
