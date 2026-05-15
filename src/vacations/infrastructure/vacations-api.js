@@ -10,7 +10,10 @@ export const vacationsApi = {
 
   async getVacationRequests() {
     const { data } = await http.get('/requests');
-    // Filtramos solo las que son de tipo "Vacaciones" directamente aquí
     return data.filter(req => req.type === 'Vacaciones');
+  },
+  async createVacation(payload) {
+    const { data } = await http.post('/requests', payload);
+    return data;
   }
 };

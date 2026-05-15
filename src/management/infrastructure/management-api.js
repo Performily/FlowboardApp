@@ -7,7 +7,10 @@ export class ManagementApi {
     const response = await axios.get(API_URL);
     return response.data;
   }
-
+  static async getEmployeeById(id) {
+    const response = await axios.get(`${API_URL}/${id}`);
+    return response.data;
+  }
   static async createEmployee(employeeData) {
     const response = await axios.post(API_URL, employeeData);
     return response.data;

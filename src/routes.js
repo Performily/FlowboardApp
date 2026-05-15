@@ -17,7 +17,7 @@ import EmployeeSelection from './management/presentation/views/employee-selectio
 import EmployeePersonalProfile from './management/presentation/views/employee-personal-profile.vue';
 import EmployeeTermination from './management/presentation/views/employee-termination.vue';
 import EmployeeReactivation from './management/presentation/views/employee-reactivation.vue';
-
+import VacationCreation from './vacations/presentation/vacation-creation.vue';
 
 const routes = [
 
@@ -125,7 +125,13 @@ const routes = [
         name: 'employee-personal-profile',
         component: EmployeePersonalProfile,
         meta: { title: 'Perfil Personal' }
-    }
+    },
+    {
+    path: '/vacations/creation',
+    name: 'vacation-creation',
+    component: VacationCreation,
+    meta: { title: 'Asignar Vacaciones' }
+    },
 ];
 
 const router = createRouter({

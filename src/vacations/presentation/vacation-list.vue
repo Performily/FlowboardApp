@@ -38,6 +38,7 @@
         />
       </div>
       <div class="flex gap-2">
+        <pv-button label="Asignar Vacaciones" icon="pi pi-plus" @click="$router.push({ name: 'vacation-creation' })" />
         <pv-button label="Limpiar Filtros" severity="secondary" outlined @click="clearFilters" />
       </div>
     </div>

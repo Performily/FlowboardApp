@@ -68,4 +68,17 @@ app.component('pv-textarea',    Textarea);
 app.component('pv-password', Password);
 app.component('pv-checkbox', Checkbox);
 app.component('pv-message',     Message);
+
+// Error handler global para capturar errores no controlados
+app.config.errorHandler = (err, instance, info) => {
+    console.error('Error global:', err, info);
+};
+
+// Handler para promesas rechazadas no capturadas
+window.addEventListener('unhandledrejection', (event) => {
+    console.error('Promesa rechazada no capturada:', event.reason);
+    // Prevenir que el navegador maneje el error por defecto
+    event.preventDefault();
+});
+
 app.mount('#app');

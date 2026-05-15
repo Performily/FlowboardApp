@@ -39,6 +39,16 @@ export const useVacationsStore = defineStore('vacations', {
     },
     selectEmployee(employee) {
       this.selectedEmployee = employee;
+    },
+    async createVacationRequest(vacationData) {
+      try {
+        await vacationsApi.createVacation(vacationData);
+        // Opcional: Volver a cargar los datos para que la tabla se actualice
+        await this.fetchDashboardData(); 
+      } catch (error) {
+        console.error("Error al guardar la vacación", error);
+        throw error;
+      }
     }
   }
 });
