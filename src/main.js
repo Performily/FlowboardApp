@@ -7,6 +7,8 @@ import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
+
+
 import {
     Button,
     Card,
@@ -19,7 +21,8 @@ import {
     Tag,
     Textarea,
     Password,
-    Checkbox
+    Checkbox,
+    Message
 } from 'primevue';
 
 const BluePreset = definePreset(Aura, {
@@ -65,6 +68,19 @@ app.component('pv-input-text',  InputText);
 app.component('pv-tag',         Tag);
 app.component('pv-textarea',    Textarea);
 app.component('pv-password', Password);
-app.component('pv-checkbox', Checkbox)
+app.component('pv-checkbox', Checkbox);
+app.component('pv-message',     Message);
+
+// Error handler global para capturar errores no controlados
+app.config.errorHandler = (err, instance, info) => {
+    console.error('Error global:', err, info);
+};
+
+// Handler para promesas rechazadas no capturadas
+window.addEventListener('unhandledrejection', (event) => {
+    console.error('Promesa rechazada no capturada:', event.reason);
+    // Prevenir que el navegador maneje el error por defecto
+    event.preventDefault();
+});
 
 app.mount('#app');

@@ -4,10 +4,20 @@ import payrollRoutes from './payroll/presentation/payroll-routes.js';
 import PayrollDashboard from './payroll/presentation/views/payroll-dashboard.vue';
 import PaySlipList from './payroll/presentation/views/pay-slip-list.vue';
 import HomeView from './home/presentation/views/home-view.vue';
-import AttendanceList from './attendance/presentation/views/attendance-list.vue';
+import attendanceRoutes from './attendance/presentation/attendance-routes.js';
+import ManagementDashboard from './management/presentation/views/management-dashboard.vue';
+import EmployeeRegistration from './management/presentation/views/employee-registration.vue';
 import RequestList from './requests/presentation/request-list.vue';
 import iamRoutes from './iam/presentation/iam-routes.js';
 import { authenticationGuard } from './iam/infrastructure/authentication.guard.js';
+import EmployeeUpdate from './management/presentation/views/employee-update.vue';
+import VacationList from './vacations/presentation/vacation-list.vue';
+import EmployeeProfileMenu from './management/presentation/views/employee-profile-menu.vue'; 
+import EmployeeSelection from './management/presentation/views/employee-selection.vue';
+import EmployeePersonalProfile from './management/presentation/views/employee-personal-profile.vue';
+import EmployeeTermination from './management/presentation/views/employee-termination.vue';
+import EmployeeReactivation from './management/presentation/views/employee-reactivation.vue';
+import VacationCreation from './vacations/presentation/vacation-creation.vue';
 
 const routes = [
 
@@ -24,6 +34,7 @@ const routes = [
         component: HomeView,
         meta: { title: 'Inicio' }
     },
+    
     {
         path: '/payroll',
         name: 'payroll', 
@@ -38,12 +49,12 @@ const routes = [
         meta: { title: 'Estado de Pagos' }
     },
 
-     {
+    {
         path: '/attendance',
         name: 'attendance', 
-        component: AttendanceList,
-        meta: { title: 'Control de Asistencia' }
+        
     },
+        ...attendanceRoutes,
     {
         path: '/requests',
         name: 'requests', 
@@ -51,13 +62,77 @@ const routes = [
         meta: { title: 'Solicitudes' }
     },
     {
+    path: '/requests/registration',
+    name: 'request-registration',
+    component: () =>
+    import('./requests/presentation/request-approval-manager.vue'),
+    },
+{
+        path: '/management',
+        name: 'management',
+        component: ManagementDashboard,
+        meta: { title: 'Gestión' }
+    },
+    {
+        path: '/management/register',
+        name: 'employee-registration',
+        component: EmployeeRegistration,
+        meta: { title: 'Registrar Colaborador' }
+    },
+    {
+        path: '/management/update',
+        name: 'employee-update',
+        component: EmployeeUpdate,
+        meta: { title: 'Actualizar Colaborador' }
+    },
+    {
+        path: '/management/termination',
+        name: 'employee-termination',
+        component: EmployeeTermination,
+        meta: { title: 'Dar de baja a colaborador' }
+    },
+    {
+        path: '/management/reactivation',
+        name: 'employee-reactivation',
+        component: EmployeeReactivation,
+        meta: { title: 'Reactivar colaborador' }
+    },
+    {
         path: '/requests/registration',
         name: 'request-registration',
-        component: () =>
-        import('./requests/presentation/request-approval-manager.vue'),
-    }
+        component: () => import('./requests/presentation/request-approval-manager.vue'),
+    },
+    {
+    path: '/vacations',
+    name: 'vacations',
+    component: VacationList,
+    meta: { title: 'Vacaciones' }
+    },
+    {
+        path: '/management/info',
+        name: 'info', 
+        component: EmployeeProfileMenu,
+        meta: { title: 'Información Laboral' }
+    },
+    {
+        path: '/management/info/selection',
+        name: 'employee-selection',
+        component: EmployeeSelection,
+        meta: { title: 'Seleccionar Colaborador' }
+    },
+    {
+        path: '/management/info/profile/:id',
+        name: 'employee-personal-profile',
+        component: EmployeePersonalProfile,
+        meta: { title: 'Perfil Personal' }
+    },
+    {
+    path: '/vacations/creation',
+    name: 'vacation-creation',
+    component: VacationCreation,
+    meta: { title: 'Asignar Vacaciones' }
+    },
 ];
-
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
