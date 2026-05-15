@@ -1,12 +1,13 @@
 <template>
   <div class="p-4 bg-gray-50 min-h-screen">
     
-    <div class="flex justify-content-between align-items-center mb-4">
-      <div class="flex align-items-center gap-2">
-        <i class="pi pi-sun text-4xl text-primary"></i>
-        <h1 class="m-0 text-3xl font-bold text-primary">Vacaciones</h1>
+    <div class="flex align-items-center gap-3 mb-4">
+      <i class="pi pi-arrow-left text-xl cursor-pointer text-500 hover:text-700 transition-colors" @click="goBack"></i>
+      <div class="flex align-items-center gap-2 text-primary">
+        <i class="pi pi-sun text-4xl"></i>
+        <h1 class="m-0 text-3xl font-bold">Vacaciones</h1>
       </div>
-      </div>
+    </div>
 
     <div class="surface-card p-3 border-round flex flex-wrap gap-3 align-items-end mb-4 border-1 border-200">
       <div class="flex flex-column gap-1 flex-1 min-w-min">
@@ -114,12 +115,16 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useVacationsStore } from '../application/vacations.store.js';
 import VacationApprovalManager from './vacation-approval-manager.vue';
-// Eliminada la importación del Dialog
 
+const router = useRouter();
 const store = useVacationsStore();
-// Eliminada la variable showDialog
+
+const goBack = () => {
+  router.back();
+};
 
 const filters = ref({
   area: null,

@@ -80,7 +80,7 @@ const routes = [
         meta: { title: 'Registrar Colaborador' }
     },
     {
-        path: '/management/update/:id',
+        path: '/management/update',
         name: 'employee-update',
         component: EmployeeUpdate,
         meta: { title: 'Actualizar Colaborador' }
