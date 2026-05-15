@@ -1,0 +1,12 @@
+{
+  "name": "flowboard-fake-api",
+  "version": "1.0.0",
+  "description": "Fake API para Flowboard",
+  "main": "db.json",
+  "scripts": {
+    "start": "json-server --watch db.json --port $PORT --host 0.0.0.0 --routes routes.json"
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-beta.0"
+  }
+}
