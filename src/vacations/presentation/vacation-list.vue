@@ -1,0 +1,171 @@
+<template>
+  <div class="p-4 bg-gray-50 min-h-screen">
+    
+    <div class="flex justify-content-between align-items-center mb-4">
+      <div class="flex align-items-center gap-2">
+        <i class="pi pi-sun text-4xl text-primary"></i>
+        <h1 class="m-0 text-3xl font-bold text-primary">Vacaciones</h1>
+      </div>
+      </div>
+
+    <div class="surface-card p-3 border-round flex flex-wrap gap-3 align-items-end mb-4 border-1 border-200">
+      <div class="flex flex-column gap-1 flex-1 min-w-min">
+        <label class="text-sm font-medium text-600">Área</label>
+        <pv-select 
+          v-model="filters.area" 
+          :options="areaOptions" 
+          placeholder="Seleccionar área" 
+          class="w-full" 
+          showClear 
+        />
+      </div>
+      <div class="flex flex-column gap-1 flex-1 min-w-min">
+        <label class="text-sm font-medium text-600">Fecha inicio</label>
+        <pv-date-picker v-model="filters.startDate" placeholder="dd/mm/aaaa" showIcon class="w-full" />
+      </div>
+      <div class="flex flex-column gap-1 flex-1 min-w-min">
+        <label class="text-sm font-medium text-600">Fecha fin</label>
+        <pv-date-picker v-model="filters.endDate" placeholder="dd/mm/aaaa" showIcon class="w-full" />
+      </div>
+      <div class="flex flex-column gap-1 flex-1 min-w-min">
+        <label class="text-sm font-medium text-600">Estado de colaboradores</label>
+        <pv-select 
+          v-model="filters.status" 
+          :options="statusOptions" 
+          placeholder="Todos" 
+          class="w-full" 
+        />
+      </div>
+      <div class="flex gap-2">
+        <pv-button label="Limpiar Filtros" severity="secondary" outlined @click="clearFilters" />
+      </div>
+    </div>
+
+    <div class="grid mb-4">
+      <div class="col-12 md:col-3">
+        <div class="surface-card p-3 border-round flex align-items-center gap-3 border-1 border-200">
+          <div class="bg-primary border-circle w-3rem h-3rem flex align-items-center justify-content-center"></div>
+          <div>
+            <span class="block text-500 font-medium mb-1 text-sm">Total de colaboradores</span>
+            <div class="text-900 font-bold text-xl">{{ store.totalEmployees }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 md:col-3">
+        <div class="surface-card p-3 border-round flex align-items-center gap-3 border-1 border-200">
+          <div class="bg-blue-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center"></div>
+          <div>
+            <span class="block text-500 font-medium mb-1 text-sm">Disponibles</span>
+            <div class="text-900 font-bold text-xl">{{ store.availableEmployees }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 md:col-3">
+        <div class="surface-card p-3 border-round flex align-items-center gap-3 border-1 border-200">
+          <div class="bg-indigo-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center"><i class="pi pi-calendar text-white"></i></div>
+          <div>
+            <span class="block text-500 font-medium mb-1 text-sm">Con vacaciones programadas</span>
+            <div class="text-900 font-bold text-xl">{{ store.scheduledVacations }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 md:col-3">
+        <div class="surface-card p-3 border-round flex align-items-center gap-3 border-1 border-200">
+          <div class="bg-purple-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center"><i class="pi pi-clock text-white"></i></div>
+          <div>
+            <span class="block text-500 font-medium mb-1 text-sm">Solicitudes pendientes</span>
+            <div class="text-900 font-bold text-xl">{{ store.pendingRequests }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 md:col-8">
+        <div class="surface-card p-4 border-round border-1 border-200 h-full">
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h2 class="text-xl font-bold m-0">Colaboradores del área seleccionada</h2>
+            <div class="flex gap-3 text-sm">
+              <span class="flex align-items-center gap-1"><div class="border-circle w-1rem h-1rem bg-blue-300"></div> Disponible</span>
+              <span class="flex align-items-center gap-1"><div class="border-circle w-1rem h-1rem bg-indigo-500"></div> Vacaciones programadas</span>
+            </div>
+          </div>
+
+          <pv-data-table :value="filteredEmployees" :loading="store.loading" selectionMode="single" 
+                        @rowSelect="onRowSelect" class="p-datatable-sm w-full" emptyMessage="No se encontraron colaboradores.">
+            <pv-column field="name" header="Colaborador"></pv-column>
+            <pv-column field="jobPosition" header="Cargo"></pv-column>
+            <pv-column field="status" header="Estado en el periodo">
+              <template #body="slotProps">
+                <pv-tag :value="slotProps.data.status" :severity="getSeverity(slotProps.data.status)" />
+              </template>
+            </pv-column>
+            <pv-column field="availableDays" header="Días Disponibles"></pv-column>
+          </pv-data-table>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4">
+        <vacation-approval-manager />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useVacationsStore } from '../application/vacations.store.js';
+import VacationApprovalManager from './vacation-approval-manager.vue';
+// Eliminada la importación del Dialog
+
+const store = useVacationsStore();
+// Eliminada la variable showDialog
+
+const filters = ref({
+  area: null,
+  startDate: null,
+  endDate: null,
+  status: 'Todos'
+});
+
+const areaOptions = computed(() => {
+  const areas = store.employeesList.map(emp => emp.area).filter(Boolean);
+  return [...new Set(areas)]; 
+});
+
+const statusOptions = ref(['Todos', 'Disponible', 'Aprobado', 'Pendiente', 'Rechazado']);
+
+const filteredEmployees = computed(() => {
+  return store.employeesList.filter(emp => {
+    const matchArea = !filters.value.area || emp.area === filters.value.area;
+    const matchStatus = filters.value.status === 'Todos' || emp.status === filters.value.status;
+    return matchArea && matchStatus;
+  });
+});
+
+const clearFilters = () => {
+  filters.value = { area: null, startDate: null, endDate: null, status: 'Todos' };
+};
+
+onMounted(() => {
+  store.fetchDashboardData();
+});
+
+const onRowSelect = (event) => {
+  store.selectEmployee(event.data);
+};
+
+const getSeverity = (status) => {
+  if (status === 'Aprobado') return 'success';
+  if (status === 'Pendiente') return 'warn';
+  if (status === 'Rechazado') return 'danger';
+  return 'info';
+};
+</script>
+
+<style scoped>
+:deep(.p-datatable .p-datatable-thead > tr > th) {
+  background-color: #d8dcee;
+  color: #333;
+}
+</style>

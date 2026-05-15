@@ -11,6 +11,7 @@ import RequestList from './requests/presentation/request-list.vue';
 import iamRoutes from './iam/presentation/iam-routes.js';
 import { authenticationGuard } from './iam/infrastructure/authentication.guard.js';
 import EmployeeUpdate from './management/presentation/views/employee-update.vue';
+import VacationList from './vacations/presentation/vacation-list.vue';
 
 const routes = [
 
@@ -27,6 +28,7 @@ const routes = [
         component: HomeView,
         meta: { title: 'Inicio' }
     },
+    
     {
         path: '/payroll',
         name: 'payroll', 
@@ -41,7 +43,7 @@ const routes = [
         meta: { title: 'Estado de Pagos' }
     },
 
-     {
+    {
         path: '/attendance',
         name: 'attendance', 
         component: AttendanceList,
@@ -81,6 +83,12 @@ const routes = [
         path: '/requests/registration',
         name: 'request-registration',
         component: () => import('./requests/presentation/request-approval-manager.vue'),
+    },
+    {
+    path: '/vacations',
+    name: 'vacations',
+    component: VacationList,
+    meta: { title: 'Vacaciones' }
     }
 ];
 
