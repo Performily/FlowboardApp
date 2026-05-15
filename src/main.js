@@ -66,5 +66,4 @@ app.component('pv-tag',         Tag);
 app.component('pv-textarea',    Textarea);
 app.component('pv-password', Password);
 app.component('pv-checkbox', Checkbox)
-
 app.mount('#app');

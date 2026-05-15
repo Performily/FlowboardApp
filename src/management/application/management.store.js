@@ -19,9 +19,8 @@ export const useManagementStore = defineStore('management', {
         const newCode = `COL-${String(nextNumber).padStart(3, '0')}`;
 
         const newEmployee = {
-          name: employeeData.name,
-          code: newCode,
-          area: employeeData.area
+          ...employeeData, 
+          code: newCode 
         };
 
         await ManagementApi.createEmployee(newEmployee);
@@ -34,6 +33,3 @@ export const useManagementStore = defineStore('management', {
     }
   }
 });
-
-
-export default useManagementStore;
