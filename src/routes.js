@@ -12,6 +12,12 @@ import iamRoutes from './iam/presentation/iam-routes.js';
 import { authenticationGuard } from './iam/infrastructure/authentication.guard.js';
 import EmployeeUpdate from './management/presentation/views/employee-update.vue';
 import VacationList from './vacations/presentation/vacation-list.vue';
+import EmployeeProfileMenu from './management/presentation/views/employee-profile-menu.vue'; 
+import EmployeeSelection from './management/presentation/views/employee-selection.vue';
+import EmployeePersonalProfile from './management/presentation/views/employee-personal-profile.vue';
+import EmployeeTermination from './management/presentation/views/employee-termination.vue';
+import EmployeeReactivation from './management/presentation/views/employee-reactivation.vue';
+
 
 const routes = [
 
@@ -80,6 +86,18 @@ const routes = [
         meta: { title: 'Actualizar Colaborador' }
     },
     {
+        path: '/management/termination',
+        name: 'employee-termination',
+        component: EmployeeTermination,
+        meta: { title: 'Dar de baja a colaborador' }
+    },
+    {
+        path: '/management/reactivation',
+        name: 'employee-reactivation',
+        component: EmployeeReactivation,
+        meta: { title: 'Reactivar colaborador' }
+    },
+    {
         path: '/requests/registration',
         name: 'request-registration',
         component: () => import('./requests/presentation/request-approval-manager.vue'),
@@ -89,6 +107,24 @@ const routes = [
     name: 'vacations',
     component: VacationList,
     meta: { title: 'Vacaciones' }
+    },
+    {
+        path: '/management/info',
+        name: 'info', 
+        component: EmployeeProfileMenu,
+        meta: { title: 'Información Laboral' }
+    },
+    {
+        path: '/management/info/selection',
+        name: 'employee-selection',
+        component: EmployeeSelection,
+        meta: { title: 'Seleccionar Colaborador' }
+    },
+    {
+        path: '/management/info/profile/:id',
+        name: 'employee-personal-profile',
+        component: EmployeePersonalProfile,
+        meta: { title: 'Perfil Personal' }
     }
 ];
 
