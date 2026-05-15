@@ -15,10 +15,15 @@
       "contractType": "FULL_TIME",
       "area": "Desarrollo",
       "jobPosition": "Desarrollador Frontend",
-      "status": "ACTIVE",
+      "status": "Cesado",
       "educationLevel": "Bachiller",
       "availableDays": 0,
-      "id": 1
+      "id": 1,
+      "terminationReason": "por feo",
+      "terminationObservation": "GG",
+      "terminationDocuments": "fue bb ",
+      "terminationDate": "2026-05-15",
+      "terminatedAt": "2026-05-15T02:08:53.144Z"
     },
     {
       "id": 2,

@@ -1,18 +1,15 @@
-// file: src/management/application/management.store.js
 import { defineStore } from 'pinia';
 import { ManagementApi } from '../infrastructure/management-api.js';
-import { employeeAssembler } from '../infrastructure/employee.assembler.js';
 
 export const useManagementStore = defineStore('management', {
   state: () => ({
-    employees: [] 
+    employees: []
   }),
 
   actions: {
     async fetchEmployees() {
       try {
-        const rawEmployees = await ManagementApi.getAllEmployees();
-        this.employees = employeeAssembler.toDomainList(rawEmployees);
+        this.employees = await ManagementApi.getAllEmployees();
       } catch (error) {
         console.error('Error al obtener colaboradores:', error);
         throw error;
@@ -21,29 +18,28 @@ export const useManagementStore = defineStore('management', {
 
     async registerEmployee(employeeData) {
       try {
-        const rawEmployees = await ManagementApi.getAllEmployees();
+        const employees = await ManagementApi.getAllEmployees();
 
         let nextNumber = 1;
 
-        if (rawEmployees.length > 0) {
-          const numbers = rawEmployees.map(emp => {
+        if (employees.length > 0) {
+          const numbers = employees.map(emp => {
             const parts = emp.code?.split('-');
             return parts?.length === 2 ? parseInt(parts[1]) : 0;
           });
+
           nextNumber = Math.max(...numbers) + 1;
         }
 
         const newCode = `COL-${String(nextNumber).padStart(3, '0')}`;
 
-        const rawToSave = employeeAssembler.toApi({
+        const newEmployee = {
           ...employeeData,
-          code: newCode
-        });
+          code: newCode,
+          status: employeeData.status || 'Activo'
+        };
 
-        const savedRaw = await ManagementApi.createEmployee(rawToSave);
-
-
-        this.employees.push(employeeAssembler.toDomain(savedRaw));
+        await ManagementApi.createEmployee(newEmployee);
 
         return true;
       } catch (error) {
@@ -54,23 +50,59 @@ export const useManagementStore = defineStore('management', {
 
     async updateEmployee(id, employeeData) {
       try {
-  
-        const rawToUpdate = employeeAssembler.toApi(employeeData);
-        
-        const updatedRaw = await ManagementApi.updateEmployee(id, rawToUpdate);
+        const updatedEmployee = await ManagementApi.updateEmployee(id, employeeData);
 
+        const index = this.employees.findIndex(employee => {
+          return String(employee.id) === String(id);
+        });
 
-        const updatedEntity = employeeAssembler.toDomain(updatedRaw);
-
-    
-        const index = this.employees.findIndex(employee => employee.id === id);
         if (index !== -1) {
-          this.employees[index] = updatedEntity;
+          this.employees[index] = updatedEmployee;
         }
 
-        return updatedEntity;
+        return updatedEmployee;
       } catch (error) {
         console.error('Error al actualizar colaborador:', error);
+        throw error;
+      }
+    },
+
+    async terminateEmployee(id, terminationForm) {
+      try {
+        const employee = this.employees.find(employee => {
+          return String(employee.id) === String(id);
+        });
+
+        if (!employee) {
+          throw new Error('Colaborador no encontrado.');
+        }
+
+        if (employee.status === 'Cesado' || employee.status === 'TERMINATED') {
+          throw new Error('El colaborador ya se encuentra dado de baja.');
+        }
+
+        const terminationData = {
+          status: 'Cesado',
+          terminationReason: terminationForm.terminationReason,
+          terminationObservation: terminationForm.terminationObservation,
+          terminationDocuments: terminationForm.terminationDocuments,
+          terminationDate: new Date().toISOString().split('T')[0],
+          terminatedAt: new Date().toISOString()
+        };
+
+        const updatedEmployee = await ManagementApi.terminateEmployee(id, terminationData);
+
+        const index = this.employees.findIndex(employee => {
+          return String(employee.id) === String(id);
+        });
+
+        if (index !== -1) {
+          this.employees[index] = updatedEmployee;
+        }
+
+        return updatedEmployee;
+      } catch (error) {
+        console.error('Error al dar de baja al colaborador:', error);
         throw error;
       }
     }

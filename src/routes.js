@@ -14,6 +14,9 @@ import EmployeeUpdate from './management/presentation/views/employee-update.vue'
 import EmployeeProfileMenu from './management/presentation/views/employee-profile-menu.vue'; 
 import EmployeeSelection from './management/presentation/views/employee-selection.vue';
 import EmployeePersonalProfile from './management/presentation/views/employee-personal-profile.vue';
+import EmployeeTermination from './management/presentation/views/employee-termination.vue';
+
+
 const routes = [
 
     {
@@ -78,6 +81,12 @@ const routes = [
         name: 'employee-update',
         component: EmployeeUpdate,
         meta: { title: 'Actualizar Colaborador' }
+    },
+    {
+        path: '/management/termination',
+        name: 'employee-termination',
+        component: EmployeeTermination,
+        meta: { title: 'Dar de baja a colaborador' }
     },
     {
         path: '/requests/registration',
