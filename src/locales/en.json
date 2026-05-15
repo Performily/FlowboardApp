@@ -1,7 +1,17 @@
 {
   "toolbar": {
-    "position": "Position"
-  },
+  "searchPlaceholder": "Search here",
+  "user": "User",
+  "position": "Collaborator"
+},
+"sidebar": {
+  "home": "Home",
+  "workInfo": "Work Information",
+  "requests": "Requests",
+  "attendance": "Attendance",
+  "management": "Management",
+  "payments": "Payments"
+},
   
   "iam": {
     "signIn": {
@@ -247,7 +257,7 @@
     },
     
     "list": {
-        "title": "Attendance Control",
+        "title": "Attendance Records",
         "totalRecords": "Total Records",
         "workedHours": "Worked Hours",
         "lates": "Late Arrivals",

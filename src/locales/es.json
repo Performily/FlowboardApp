@@ -1,7 +1,17 @@
 {
   "toolbar": {
-    "position": "Puesto"
-  },
+  "searchPlaceholder": "Buscar aquí",
+  "user": "Usuario",
+  "position": "Colaborador"
+},
+"sidebar": {
+  "home": "Inicio",
+  "workInfo": "Información Laboral",
+  "requests": "Solicitudes",
+  "attendance": "Asistencia",
+  "management": "Gestión",
+  "payments": "Pagos"
+},
 
   "iam": {
     "signIn": {
@@ -247,7 +257,7 @@
     "employeeSummary": "Resumen por colaborador"
     },
     "list": {
-        "title": "Control de Asistencia",
+        "title": "Registro de asistencias",
         "totalRecords": "Total Registros",
         "workedHours": "Horas Trabajadas",
         "lates": "Tardanzas",

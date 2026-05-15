@@ -1,17 +1,19 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const menuItems = ref([
-  { label: 'Inicio', icon: 'pi pi-home', routeName: 'home' }, 
-  { label: 'Información Laboral', icon: 'pi pi-id-card', routeName: 'info' },
-  { label: 'Solicitudes', icon: 'pi pi-file-edit', routeName: 'requests' },
-  { label: 'Asistencia', icon: 'pi pi-calendar-times', routeName: 'attendance' },
-  { label: 'Gestión', icon: 'pi pi-chart-line', routeName: 'management' },
-  { label: 'Pagos', icon: 'pi pi-credit-card', routeName: 'payroll' } 
+const menuItems = computed(() => [
+  { label: t('sidebar.home'), icon: 'pi pi-home', routeName: 'home' },
+  { label: t('sidebar.workInfo'), icon: 'pi pi-id-card', routeName: 'info' },
+  { label: t('sidebar.requests'), icon: 'pi pi-file-edit', routeName: 'requests' },
+  { label: t('sidebar.attendance'), icon: 'pi pi-calendar-times', routeName: 'attendance' },
+  { label: t('sidebar.management'), icon: 'pi pi-chart-line', routeName: 'management' },
+  { label: t('sidebar.payments'), icon: 'pi pi-credit-card', routeName: 'payroll' }
 ]);
 
 const navigate = (routeName) => {

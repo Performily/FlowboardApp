@@ -3,7 +3,9 @@
   import useIamStore from '../../../iam/application/iam.store.js';
 
   import LanguageSwitcher from './language-switcher.vue';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
 
   const iamStore = useIamStore();
 
@@ -17,7 +19,7 @@
 
     <div class="relative w-20rem">
       <i class="pi pi-search absolute text-500" style="top: 50%; left: 1rem; transform: translateY(-50%); z-index: 1;"></i>
-      <pv-input-text placeholder="Buscar aquí" class="w-full border-round-2xl surface-100 border-none" style="padding-left: 2.8rem; padding-top: 0.75rem; padding-bottom: 0.75rem;" />
+      <pv-input-text :placeholder="t('toolbar.searchPlaceholder')" class="w-full border-round-2xl surface-100 border-none" style="padding-left: 2.8rem; padding-top: 0.75rem; padding-bottom: 0.75rem;" />
     </div>
 
     <div class="flex align-items-center gap-4">
@@ -28,7 +30,7 @@
         <i class="pi pi-user text-3xl text-700"></i>
         <div class="flex flex-column text-sm">
           <span class="font-semibold text-700">
-            {{ currentUser?.fullName || 'Usuario' }}
+            {{ currentUser?.fullName || t('toolbar.user') }}
           </span>
           <span class="text-500">
             {{ $t('toolbar.position') }}
