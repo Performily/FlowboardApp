@@ -20,7 +20,8 @@ const { fetchAttendances } = store;
 // Variables para filtros
 const selectedArea = ref(null);
 const selectedStatus = ref(null);
-const searchQuery = ref('');
+const startDate = ref(null);
+const endDate = ref(null);
 
 // Opciones de filtros (mock de ejemplo, pueden venir de un catálogo)
 const areas = ref(['IT', 'Recursos Humanos', 'Ventas', 'Marketing', 'Operaciones']);
@@ -40,7 +41,8 @@ const applyFilters = () => {
   const filters = {};
   if (selectedArea.value) filters.area = selectedArea.value;
   if (selectedStatus.value) filters.status = selectedStatus.value.value;
-  if (searchQuery.value) filters.q = searchQuery.value; 
+  if (startDate.value) filters.startDate = startDate.value;
+  if (endDate.value) filters.endDate = endDate.value;
 
   fetchAttendances(filters);
 };
@@ -48,7 +50,8 @@ const applyFilters = () => {
 const clearFilters = () => {
   selectedArea.value = null;
   selectedStatus.value = null;
-  searchQuery.value = '';
+  startDate.value = null;
+  endDate.value = null;
   
   fetchAttendances();
 };
@@ -146,7 +149,18 @@ const getStatusLabel = (status) => {
     <!-- Filtros -->
     <pv-card class="mb-4">
       <template #content>
-        <div class="formgrid grid align-items-end gap-0">
+        <div class="formgrid grid align-items-end gap-2">
+          
+          <div class="field col-12 md:col-2">
+            <label class="block mb-2 font-medium text-700">Desde</label>
+            <pv-date-picker label="Desde" v-model="startDate" dateFormat="dd/mm/yy" showIcon class="w-full" />
+          </div>
+          
+          <div class="field col-12 md:col-2">
+            <label class="block mb-2 font-medium text-700">Hasta</label>
+            <pv-date-picker label="Hasta" v-model="endDate" dateFormat="dd/mm/yy" showIcon class="w-full" />
+          </div>
+
           <div class="field col-12 md:col-3">
             <label class="block mb-2 font-medium text-700">Área</label>
             <pv-select v-model="selectedArea" :options="areas" placeholder="Todas las áreas" class="w-full" />
@@ -156,16 +170,12 @@ const getStatusLabel = (status) => {
             <label class="block mb-2 font-medium text-700">Estado</label>
             <pv-select v-model="selectedStatus" :options="statuses" optionLabel="label" placeholder="Cualquier estado" class="w-full" />
           </div>
-
-          <div class="field col-12 md:col-3">
-            <label class="block mb-2 font-medium text-700">Colaborador</label>
-            <pv-input-text v-model="searchQuery" placeholder="Nombre del empleado" class="w-full" />
-          </div>
           
-          <div class="field col-12 md:col-3 flex gap-2">
+          <div class="field col-12 md:col-2 flex gap-2">
             <pv-button label="Filtrar" icon="pi pi-search" @click="applyFilters" class="w-full" />
             <pv-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" outlined @click="clearFilters" class="w-full" />
           </div>
+
         </div>
       </template>
     </pv-card>
