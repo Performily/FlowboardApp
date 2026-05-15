@@ -16,13 +16,13 @@ const form = reactive({
 
 function performSignIn() {
 
+  if (!form.email.trim() || !form.password.trim()) {
+    return;
+  }
+
   const signInCommand = new SignInCommand(form);
 
-  store.signIn(
-      signInCommand,
-      router,
-      staySignedIn.value
-  );
+  store.signIn(signInCommand, router);
 }
 </script>
 
@@ -34,7 +34,8 @@ function performSignIn() {
       <i class="pi pi-user input-icon"></i>
 
       <pv-input-text
-          v-model="form.email"
+          v-model="form.email" 
+          required
           placeholder="Usuario"
           class="custom-input"
       />
@@ -46,6 +47,7 @@ function performSignIn() {
 
       <pv-input-text
           v-model="form.password"
+          required
           type="password"
           placeholder="Contraseña"
           class="custom-input"

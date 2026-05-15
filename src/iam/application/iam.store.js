@@ -11,7 +11,9 @@ const iamApi = new IamApi();
 
 const useIamStore = defineStore('iam', () => {
 
-    const currentUser = ref(null);
+    const currentUser = ref(
+        JSON.parse(localStorage.getItem('user')) || null
+    );
 
     const isSignedIn = ref(
         !!(localStorage.getItem('token') || sessionStorage.getItem('token'))
@@ -38,6 +40,8 @@ const useIamStore = defineStore('iam', () => {
             const response =
                 await iamApi.signIn(signInCommand);
 
+            console.log(response.data);
+
             const signInResource =
                 SignInAssembler.toResourceFromResponse(response);
 
@@ -51,7 +55,10 @@ const useIamStore = defineStore('iam', () => {
             }
 
             const user =
-                SignInAssembler.toEntityFromResource(signInResource);
+                SignInAssembler.toEntityFromResource({
+                     ...signInResource,
+                    fullName: signInCommand.email
+                 });
 
             currentUser.value = user;
 
@@ -60,6 +67,11 @@ const useIamStore = defineStore('iam', () => {
                 localStorage.setItem(
                     'token',
                     user.token
+                );
+
+                localStorage.setItem(
+                    'user',
+                    JSON.stringify(user)
                 );
 
             } else {
@@ -173,7 +185,7 @@ const useIamStore = defineStore('iam', () => {
 
         localStorage.removeItem('token');
         sessionStorage.removeItem('token');
-
+        localStorage.removeItem('user');
         errors.value = [];
 
         router.push({
