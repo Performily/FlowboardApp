@@ -1,15 +1,20 @@
 <script setup>
 import SignInForm from "../components/sign-in-form.vue";
+import LanguageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
 </script>
 
 <template>
   <div class="flex flex-column align-items-center justify-content-center min-h-screen bg-white relative font-inter">
 
+    <div class="absolute top-0 right-0 m-4">
+      <LanguageSwitcher />
+    </div>
+
     <div class="w-full flex flex-column align-items-center" style="max-width: 450px; padding: 2rem;">
 
       <div class="flex align-items-center justify-content-center gap-3 mb-6">
         <h1 class="text-6xl font-bold m-0" style="color: #4B59B6;">
-          Performily
+          {{ $t('iam.signIn.title') }}
         </h1>
       </div>
 

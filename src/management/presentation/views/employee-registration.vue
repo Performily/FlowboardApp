@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useManagementStore } from '../../application/management.store.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter();
 const store = useManagementStore();
@@ -24,40 +27,40 @@ const employee = ref({
 });
 
 const civilStatusOptions = [
-  { label: 'Soltero', value: 'SINGLE' },
-  { label: 'Casado', value: 'MARRIED' },
-  { label: 'Divorciado', value: 'DIVORCED' },
-  { label: 'Viudo', value: 'WIDOWED' }
+  { label: t('management.registration.single'), value: 'SINGLE' },
+  { label: t('management.registration.married'), value: 'MARRIED' },
+  { label: t('management.registration.divorced'), value: 'DIVORCED' },
+  { label: t('management.registration.widowed'), value: 'WIDOWED' }
 ];
 
 const genderOptions = [
-  { label: 'Masculino', value: 'MALE' },
-  { label: 'Femenino', value: 'FEMALE' },
-  { label: 'Otro', value: 'OTHER' }
+  { label: t('management.registration.male'), value: 'MALE' },
+  { label: t('management.registration.female'), value: 'FEMALE' },
+  { label: t('management.registration.other'), value: 'OTHER' }
 ];
 
 const contractTypeOptions = [
-  { label: 'Tiempo completo', value: 'FULL_TIME' },
-  { label: 'Medio tiempo', value: 'PART_TIME' },
-  { label: 'Por horas', value: 'HOURLY' },
-  { label: 'Prácticas', value: 'INTERNSHIP' }
+  { label: t('management.registration.fullTime'), value: 'FULL_TIME' },
+  { label: t('management.registration.partTime'), value: 'PART_TIME' },
+  { label: t('management.registration.hourly'), value: 'HOURLY' },
+  { label: t('management.registration.internship'), value: 'INTERNSHIP' }
 ];
 
 const isSaving = ref(false);
 
 const saveEmployee = async () => {
   if (!employee.value.name || !employee.value.documentNumber || !employee.value.area) {
-    alert("Por favor, completa al menos el Nombre, Número de documento y Área asignada.");
+    alert(t('management.registration.requiredValidation'));
     return;
   }
 
   isSaving.value = true;
   try {
     await store.registerEmployee(employee.value);
-    alert("¡Colaborador registrado con éxito!");
+    alert(t('management.registration.successMessage'));
     router.push({ name: 'management' }); 
   } catch (error) {
-    alert("Ocurrió un error. Revisa que json-server esté encendido.");
+    alert(t('management.registration.errorMessage'));
   } finally {
     isSaving.value = false;
   }
@@ -74,7 +77,7 @@ const goBack = () => {
     <div class="flex align-items-center gap-3 mb-5">
       <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="goBack" />
       <i class="pi pi-user-plus text-primary text-4xl"></i>
-      <h1 class="m-0 text-primary font-bold text-3xl">Registrar nuevo colaborador</h1>
+      <h1 class="m-0 text-primary font-bold text-3xl"> {{ t('management.registration.title') }}</h1>
     </div>
 
     <div class="surface-card shadow-1 border-round-2xl p-5 w-full">
@@ -84,37 +87,37 @@ const goBack = () => {
         <div class="col-12 md:col-6">
           
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Nombre completo</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.fullName') }}</label>
             <pv-input-text v-model="employee.name" placeholder="Ej. Juan Pérez" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Número de documento</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.documentNumber') }}</label>
             <pv-input-text v-model="employee.documentNumber" placeholder="Ej. 12345678" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Correo electrónico personal</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.personalEmail') }}</label>
             <pv-input-text v-model="employee.personalEmail" placeholder="ejemplo@correo.com" type="email" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Dirección de domicilio</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.address') }}</label>
             <pv-input-text v-model="employee.address" placeholder="Av. Principal 123" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Correo de trabajo</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.workEmail') }}</label>
             <pv-input-text v-model="employee.workEmail" placeholder="usuario@empresa.com" type="email" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Tipo de contrato</label>
-            <pv-select v-model="employee.contractType" :options="contractTypeOptions" optionLabel="label" optionValue="value" placeholder="Seleccione el tipo" class="w-full" />
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.contractType') }}</label>
+            <pv-select v-model="employee.contractType" :options="contractTypeOptions" optionLabel="label" optionValue="value" :placeholder="t('management.registration.selectContractType')" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Puesto de trabajo</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.jobPosition') }}</label>
             <pv-input-text v-model="employee.jobPosition" placeholder="Ej. Analista Senior" class="w-full" />
           </div>
 
@@ -123,37 +126,37 @@ const goBack = () => {
         <div class="col-12 md:col-6">
           
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Estado civil</label>
-            <pv-select v-model="employee.civilStatus" :options="civilStatusOptions" optionLabel="label" optionValue="value" placeholder="Seleccione el estado civil" class="w-full" />
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.civilStatus') }}</label>
+            <pv-select v-model="employee.civilStatus" :options="civilStatusOptions" optionLabel="label" optionValue="value" :placeholder="t('management.registration.selectCivilStatus')" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Edad</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.age') }}</label>
             <pv-input-text v-model="employee.age" placeholder="Ej. 30" type="number" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Número de teléfono</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.phoneNumber') }}</label>
             <pv-input-text v-model="employee.phoneNumber" placeholder="987654321" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Género</label>
-            <pv-select v-model="employee.gender" :options="genderOptions" optionLabel="label" optionValue="value" placeholder="Seleccione el género" class="w-full" />
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.gender') }}</label>
+            <pv-select v-model="employee.gender" :options="genderOptions" optionLabel="label" optionValue="value" :placeholder="t('management.registration.selectGender')" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Fecha de contratación</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.hireDate') }}</label>
             <input type="date" class="p-inputtext p-component w-full" v-model="employee.hireDate" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Área asignada</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.assignedArea') }}</label>
             <pv-input-text v-model="employee.area" placeholder="Ej. Desarrollo" class="w-full" />
           </div>
 
           <div class="field mb-4">
-            <label class="font-medium text-700 block mb-2">Nivel de educación</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.registration.educationLevel') }}</label>
             <pv-input-text v-model="employee.educationLevel" placeholder="Ej. Bachiller" class="w-full" />
           </div>
 
@@ -164,12 +167,12 @@ const goBack = () => {
       <div class="flex justify-content-between align-items-center mt-5 pt-4 border-top-1 surface-border">
         <small class="text-500 flex align-items-center gap-2">
           <i class="pi pi-info-circle"></i> 
-          El código de colaborador se generará automáticamente.
+          {{ t('management.registration.employeeCodeInfo') }}
         </small>
         
         <div class="flex gap-3">
-          <pv-button label="Cancelar" outlined severity="secondary" @click="goBack" />
-          <pv-button label="Registrar Colaborador" icon="pi pi-save" :loading="isSaving" @click="saveEmployee" class="bg-primary border-none" />
+          <pv-button :label="t('management.registration.cancel')" outlined severity="secondary" @click="goBack" />
+          <pv-button :label="t('management.registration.registerEmployee')" icon="pi pi-save" :loading="isSaving" @click="saveEmployee" class="bg-primary border-none" />
         </div>
       </div>
       

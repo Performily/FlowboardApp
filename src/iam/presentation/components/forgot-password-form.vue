@@ -1,7 +1,11 @@
 <script setup>
 import { reactive, defineEmits } from "vue";
+import { useI18n } from "vue-i18n";
+
 import useIamStore from "../../application/iam.store.js";
 import { ForgotPasswordCommand } from "../../domain/forgot-password.command.js";
+
+const { t } = useI18n();
 
 const store = useIamStore();
 const emit = defineEmits(["success"]);
@@ -25,12 +29,12 @@ async function performForgotPassword() {
 <template>
   <form @submit.prevent="performForgotPassword" class="w-full text-left">
     <div class="flex flex-column gap-2 mb-5">
-      <label for="email" class="text-lg font-bold">Correo electrónico</label>
+      <label for="email" class="text-lg font-bold">{{ t('iam.forgotPassword.email') }}</label>
       <pv-input-text
           id="email"
           v-model="form.email"
           type="email"
-          placeholder="Correo electrónico"
+          :placeholder="t('iam.forgotPassword.email')"
           class="w-full py-3 px-3 border-round-md text-lg"
           style="background-color: #FFFFFF; border: 1px solid #CED4DA;"
           required
@@ -39,7 +43,7 @@ async function performForgotPassword() {
 
     <pv-button
         type="submit"
-        label="Recuperar contraseña"
+        :label="t('iam.forgotPassword.button')"
         class="w-full py-3 text-xl font-normal border-none shadow-1"
         style="background-color: #4355B9; color: white;"
         :loading="store.loading"

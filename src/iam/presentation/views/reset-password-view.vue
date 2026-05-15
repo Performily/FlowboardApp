@@ -23,12 +23,15 @@ const goToLogin = () => {
         <div class="flex flex-column align-items-center text-center">
 
           <h2 class="text-5xl font-bold mb-4" style="color: #4355B9;">
-            {{ isResetSuccessful ? 'Contraseña restablecida' : 'Restablecer contraseña' }}
+            {{ isResetSuccessful
+              ? $t('iam.resetPassword.successTitle')
+              : $t('iam.resetPassword.title')
+            }}
           </h2>
 
           <div v-if="!isResetSuccessful" class="w-full">
             <p class="text-lg mb-5 line-height-3" style="color: #4A4A4B;">
-              Crea una nueva contraseña para tu cuenta de Flowboard.
+              {{ $t('iam.resetPassword.description') }}
             </p>
 
             <reset-password-form @success="handleSuccess" />
@@ -36,11 +39,11 @@ const goToLogin = () => {
 
           <div v-else class="w-full">
             <p class="text-lg mb-6 line-height-3" style="color: #4A4A4B;">
-              Tu contraseña ha sido actualizada correctamente. Ya puedes iniciar sesión con tus nuevas credenciales.
+              {{ $t('iam.resetPassword.successMessage') }}
             </p>
 
             <pv-button
-                label="Ir al inicio de sesión"
+                label="$t('iam.resetPassword.backToLogin')"
                 class="w-full py-3 text-xl font-normal border-none shadow-1"
                 style="background-color: #4355B9; color: white;"
                 @click="goToLogin"

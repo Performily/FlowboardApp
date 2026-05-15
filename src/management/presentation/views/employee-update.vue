@@ -2,7 +2,9 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useManagementStore } from '../../application/management.store.js';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const store = useManagementStore();
 
@@ -36,29 +38,29 @@ const employee = ref({
 });
 
 const civilStatusOptions = [
-  { label: 'Soltero', value: 'SINGLE' },
-  { label: 'Casado', value: 'MARRIED' },
-  { label: 'Divorciado', value: 'DIVORCED' },
-  { label: 'Viudo', value: 'WIDOWED' }
+  { label: t('management.update.single'), value: 'SINGLE' },
+  { label: t('management.update.married'), value: 'MARRIED' },
+  { label: t('management.update.divorced'), value: 'DIVORCED' },
+  { label: t('management.update.widowed'), value: 'WIDOWED' }
 ];
 
 const genderOptions = [
-  { label: 'Masculino', value: 'MALE' },
-  { label: 'Femenino', value: 'FEMALE' },
-  { label: 'Otro', value: 'OTHER' }
+  { label: t('management.update.male'), value: 'MALE' },
+  { label: t('management.update.female'), value: 'FEMALE' },
+  { label: t('management.update.other'), value: 'OTHER' }
 ];
 
 const contractTypeOptions = [
-  { label: 'Tiempo completo', value: 'FULL_TIME' },
-  { label: 'Medio tiempo', value: 'PART_TIME' },
-  { label: 'Por horas', value: 'HOURLY' },
-  { label: 'Prácticas', value: 'INTERNSHIP' }
+  { label: t('management.update.fullTime'), value: 'FULL_TIME' },
+  { label: t('management.update.partTime'), value: 'PART_TIME' },
+  { label: t('management.update.hourly'), value: 'HOURLY' },
+  { label: t('management.update.internship'), value: 'INTERNSHIP' }
 ];
 
 const statusOptions = [
-  { label: 'Activo', value: 'ACTIVE' },
-  { label: 'Inactivo', value: 'INACTIVE' },
-  { label: 'Cesado', value: 'TERMINATED' }
+  { label: t('management.update.active'), value: 'ACTIVE' },
+  { label: t('management.update.inactive'), value: 'INACTIVE' },
+  { label: t('management.update.terminated'), value: 'TERMINATED' }
 ];
 
 // Opciones de filtros basadas en las Entidades del Store
@@ -119,7 +121,7 @@ const backToList = () => {
 
 const saveChanges = async () => {
   if (!employee.value.name || !employee.value.documentNumber || !employee.value.area) {
-    alert('Por favor, completa al menos el Nombre, Número de documento y Área asignada.');
+    alert(t('management.update.requiredValidation'));
     return;
   }
 
@@ -128,11 +130,11 @@ const saveChanges = async () => {
   try {
     // El Store llamará al Assembler.toApi para transformar estos datos antes de enviarlos
     await store.updateEmployee(employee.value.id, employee.value);
-    alert('¡Información del colaborador actualizada con éxito!');
+    alert(t('management.update.successMessage'));
     selectedEmployee.value = null;
     await store.fetchEmployees(); // Refrescamos la lista de entidades
   } catch (error) {
-    alert('Ocurrió un error al actualizar. Revisa que json-server esté encendido.');
+    alert(t('management.update.errorMessage'));
   } finally {
     isSaving.value = false;
   }
@@ -148,18 +150,18 @@ onMounted(async () => {
     <div class="flex align-items-center gap-3 mb-5">
       <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="selectedEmployee ? backToList() : goBack()" />
       <i class="pi pi-sync text-primary text-4xl"></i>
-      <h1 class="m-0 text-primary font-bold text-3xl">Actualizar información</h1>
+      <h1 class="m-0 text-primary font-bold text-3xl">  {{ t('management.update.title') }}</h1>
     </div>
 
     <div v-if="!selectedEmployee" class="surface-card shadow-1 border-round-2xl p-5 w-full">
       <div class="grid formgrid p-fluid mb-4">
         <div class="col-12 md:col-6">
           <div class="field">
-            <label class="font-medium text-700 block mb-2">Área</label>
+            <label class="font-medium text-700 block mb-2">{{ t('management.update.area') }}</label>
             <pv-select
               v-model="filters.area"
               :options="areaOptions"
-              placeholder="Selecciona área"
+              :placeholder="t('management.update.selectArea')"
               class="w-full"
             />
           </div>
@@ -167,11 +169,11 @@ onMounted(async () => {
 
         <div class="col-12 md:col-6">
           <div class="field">
-            <label class="font-medium text-700 block mb-2">Posición</label>
+            <label class="font-medium text-700 block mb-2">  {{ t('management.update.position') }}</label>
             <pv-select
               v-model="filters.jobPosition"
               :options="jobPositionOptions"
-              placeholder="Selecciona posición"
+              :placeholder="t('management.update.selectPosition')"
               class="w-full"
             />
           </div>
@@ -179,8 +181,8 @@ onMounted(async () => {
       </div>
 
       <div class="flex justify-content-between align-items-center mb-3">
-        <h2 class="text-900 font-bold text-base m-0">Listado de colaboradores</h2>
-        <pv-button label="Limpiar filtros" outlined severity="secondary" size="small" @click="clearFilters" />
+        <h2 class="text-900 font-bold text-base m-0">  {{ t('management.update.employeeList') }}</h2>
+        <pv-button :label="t('management.update.clearFilters')" outlined severity="secondary" size="small" @click="clearFilters" />
       </div>
 
       <div class="border-1 surface-border border-round p-3">
@@ -202,7 +204,7 @@ onMounted(async () => {
         </div>
 
         <p v-if="filteredEmployees.length === 0" class="text-center text-500">
-          No se encontraron colaboradores.
+          {{ t('management.update.empty') }}
         </p>
       </div>
     </div>
@@ -210,119 +212,119 @@ onMounted(async () => {
     <div v-else class="grid">
       <div class="col-12 lg:col-10">
         <div class="surface-card shadow-1 border-round-2xl p-5 w-full">
-          <h2 class="text-500 font-medium text-xl mb-4">Datos Personales</h2>
+          <h2 class="text-500 font-medium text-xl mb-4">{{ t('management.update.personalData') }}</h2>
 
           <div class="grid formgrid p-fluid">
             <div class="col-12 md:col-6">
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Nombre Completo*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.fullName') }}</label>
                 <pv-input-text v-model="employee.name" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">D.N.I*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.dni') }}</label>
                 <pv-input-text v-model="employee.documentNumber" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Correo Personal*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.personalEmail') }}</label>
                 <pv-input-text v-model="employee.personalEmail" type="email" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Domicilio*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.address') }}</label>
                 <pv-input-text v-model="employee.address" class="w-full" />
               </div>
             </div>
 
             <div class="col-12 md:col-6">
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Estado Civil*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.civilStatus') }}</label>
                 <pv-select
                   v-model="employee.civilStatus"
                   :options="civilStatusOptions"
                   optionLabel="label"
                   optionValue="value"
-                  placeholder="Seleccione el estado civil"
+                  :placeholder="t('management.update.selectCivilStatus')"
                   class="w-full"
                 />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Edad*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.age') }}</label>
                 <pv-input-text v-model="employee.age" type="number" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Número de Teléfono*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.phoneNumber') }}</label>
                 <pv-input-text v-model="employee.phoneNumber" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Género*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.gender') }}</label>
                 <pv-select
                   v-model="employee.gender"
                   :options="genderOptions"
                   optionLabel="label"
                   optionValue="value"
-                  placeholder="Seleccione el género"
+                  :placeholder="t('management.update.selectGender')"
                   class="w-full"
                 />
               </div>
             </div>
           </div>
 
-          <h2 class="text-500 font-medium text-xl mt-5 mb-4">Datos Laborales</h2>
+          <h2 class="text-500 font-medium text-xl mt-5 mb-4">{{ t('management.update.workData') }}</h2>
 
           <div class="grid formgrid p-fluid">
             <div class="col-12 md:col-6">
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Email de Trabajo*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.workEmail') }}</label>
                 <pv-input-text v-model="employee.workEmail" type="email" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Tipo de Contrato*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.contractType') }}</label>
                 <pv-select
                   v-model="employee.contractType"
                   :options="contractTypeOptions"
                   optionLabel="label"
                   optionValue="value"
-                  placeholder="Seleccione el tipo"
+                  :placeholder="t('management.update.selectContractType')"
                   class="w-full"
                 />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Puesto Laboral*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.jobPosition') }}</label>
                 <pv-input-text v-model="employee.jobPosition" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Grado de Instrucción*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.educationLevel') }}</label>
                 <pv-input-text v-model="employee.educationLevel" class="w-full" />
               </div>
             </div>
 
             <div class="col-12 md:col-6">
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Fecha de Ingreso*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.hireDate') }}</label>
                 <input type="date" class="p-inputtext p-component w-full" v-model="employee.hireDate" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Área Asignada*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.assignedArea') }}</label>
                 <pv-input-text v-model="employee.area" class="w-full" />
               </div>
 
               <div class="field mb-4">
-                <label class="font-medium text-700 block mb-2">Estado*</label>
+                <label class="font-medium text-700 block mb-2">{{ t('management.update.status') }}</label>
                 <pv-select
                   v-model="employee.status"
                   :options="statusOptions"
                   optionLabel="label"
                   optionValue="value"
-                  placeholder="Seleccione estado"
+                  :placeholder="t('management.update.selectStatus')"
                   class="w-full"
                 />
               </div>
@@ -330,9 +332,9 @@ onMounted(async () => {
           </div>
 
           <div class="flex justify-content-end gap-3 mt-5 pt-4 border-top-1 surface-border">
-            <pv-button label="Volver al listado" outlined severity="secondary" @click="backToList" />
+            <pv-button :label="t('management.update.backToList')" outlined severity="secondary" @click="backToList" />
             <pv-button
-              label="Guardar cambios"
+              :label="t('management.update.saveChanges')"
               icon="pi pi-save"
               :loading="isSaving"
               @click="saveChanges"
@@ -346,7 +348,7 @@ onMounted(async () => {
         <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center">
           <i class="pi pi-user text-white" style="font-size: 5rem;"></i>
         </div>
-        <pv-button label="Adjuntar foto" icon="pi pi-paperclip" size="small" class="bg-primary border-none" />
+        <pv-button :label="t('management.update.attachPhoto')" icon="pi pi-paperclip" size="small" class="bg-primary border-none" />
       </div>
     </div>
   </div>

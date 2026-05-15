@@ -7,7 +7,7 @@ import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
-
+import i18n from './i18n.js';
 
 import {
     Button,
@@ -22,7 +22,8 @@ import {
     Textarea,
     Password,
     Checkbox,
-    Message
+    Message,
+    SelectButton
 } from 'primevue';
 
 const BluePreset = definePreset(Aura, {
@@ -56,6 +57,7 @@ app.use(PrimeVue, {
         }
     }
 });
+app.use(i18n);
 
 app.component('pv-dialog',      Dialog);
 app.component('pv-button',      Button);
@@ -70,6 +72,7 @@ app.component('pv-textarea',    Textarea);
 app.component('pv-password', Password);
 app.component('pv-checkbox', Checkbox);
 app.component('pv-message',     Message);
+app.component('pv-select-button', SelectButton)
 
 // Error handler global para capturar errores no controlados
 app.config.errorHandler = (err, instance, info) => {

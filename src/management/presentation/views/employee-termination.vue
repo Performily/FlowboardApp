@@ -2,7 +2,9 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useManagementStore } from '../../application/management.store.js';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const store = useManagementStore();
 
@@ -103,7 +105,7 @@ const validateForm = () => {
   }
 
   if (!isValid) {
-    errorMessage.value = 'Complete los campos obligatorios';
+    errorMessage.value = t('management.termination.requiredFields');
   }
 
   return isValid;
@@ -130,7 +132,7 @@ const saveTermination = async () => {
       terminationDocuments: terminationForm.terminationDocuments
     });
 
-    alert('Colaborador dado de baja correctamente');
+    alert(t('management.termination.successMessage'));
 
     selectedEmployee.value = null;
 
@@ -138,7 +140,7 @@ const saveTermination = async () => {
 
     router.push({ name: 'management' });
   } catch (error) {
-    errorMessage.value = error.message || 'Ocurrió un error al dar de baja al colaborador';
+    errorMessage.value = error.message || t('management.termination.errorMessage');
   } finally {
     isSaving.value = false;
   }
@@ -163,7 +165,7 @@ onMounted(async () => {
       <i class="pi pi-user-minus text-primary text-2xl"></i>
 
       <h1 class="m-0 text-primary font-bold text-2xl">
-        Dar de baja
+        {{ t('management.termination.title') }}
       </h1>
     </div>
 
@@ -185,13 +187,13 @@ onMounted(async () => {
         <div class="col-12 md:col-6">
           <div class="field">
             <label class="font-medium text-700 block mb-2">
-              Área
+              {{ t('management.termination.area') }}
             </label>
 
             <pv-select
               v-model="filters.area"
               :options="areaOptions"
-              placeholder="Selecciona opción"
+              :placeholder="t('management.termination.selectOption')"
               class="w-full"
             />
           </div>
@@ -200,13 +202,13 @@ onMounted(async () => {
         <div class="col-12 md:col-6">
           <div class="field">
             <label class="font-medium text-700 block mb-2">
-              Posición
+              {{ t('management.termination.position') }}
             </label>
 
             <pv-select
               v-model="filters.jobPosition"
               :options="jobPositionOptions"
-              placeholder="Selecciona opción"
+              :placeholder="t('management.termination.selectOption')"
               class="w-full"
             />
           </div>
@@ -215,11 +217,11 @@ onMounted(async () => {
 
       <div class="flex justify-content-between align-items-center mb-3">
         <h2 class="text-900 font-bold text-base m-0">
-          Listado de colaboradores
+          {{ t('management.termination.employeeList') }}
         </h2>
 
         <pv-button
-          label="Limpiar filtros"
+          :label="t('management.termination.clearFilters')"
           outlined
           severity="secondary"
           size="small"
@@ -259,7 +261,7 @@ onMounted(async () => {
           v-if="filteredEmployees.length === 0"
           class="text-center text-500"
         >
-          No se encontraron colaboradores activos.
+          {{ t('management.termination.noActiveEmployees') }}
         </p>
       </div>
     </div>
@@ -288,23 +290,23 @@ onMounted(async () => {
 
           <div class="text-left employee-data">
             <p>
-              <strong>Estado:</strong>
-              <span>{{ selectedEmployee.status || 'Activo' }}</span>
+              <strong>{{ t('management.profile.status') }}:</strong>
+              <span>{{ selectedEmployee.status || t('management.profile.active') }}</span>
             </p>
 
             <p>
-              <strong>Email Personal:</strong>
-              <span>{{ selectedEmployee.personalEmail || 'No registrado' }}</span>
+              <strong>{{ t('management.termination.personalEmail') }}:</strong>
+              {{ selectedEmployee.personalEmail || t('management.termination.notRegistered') }}
             </p>
 
             <p>
-              <strong>Número de teléfono:</strong>
-              <span>{{ selectedEmployee.phoneNumber || 'No registrado' }}</span>
+              <strong>{{ t('management.termination.phoneNumber') }}:</strong>
+              <span>{{ selectedEmployee.phoneNumber || t('management.termination.notRegistered') }}</span>
             </p>
 
             <p>
-              <strong>DNI:</strong>
-              <span>{{ selectedEmployee.documentNumber || selectedEmployee.dni || 'No registrado' }}</span>
+              <strong>{{ t('management.profile.dni') }}:</strong>
+              <span>{{ selectedEmployee.documentNumber || selectedEmployee.dni || t('management.termination.notRegistered') }}</span>
             </p>
           </div>
         </div>
@@ -314,12 +316,12 @@ onMounted(async () => {
         <div class="surface-card shadow-1 border-round-2xl p-5">
           <div class="field mb-4">
             <label class="font-medium text-700 block mb-2">
-              Motivo de baja*
+              {{ t('management.termination.terminationReason') }}
             </label>
 
             <pv-input-text
               v-model="terminationForm.terminationReason"
-              placeholder="Completa los campos obligatorios"
+              :placeholder="t('management.termination.requiredFields')"
               class="w-full"
               :class="{ 'p-invalid': formErrors.terminationReason }"
             />
@@ -328,19 +330,19 @@ onMounted(async () => {
               v-if="formErrors.terminationReason"
               class="p-error"
             >
-              Complete los campos obligatorios
+              {{ t('management.termination.requiredFields') }}
             </small>
           </div>
 
           <div class="field mb-4">
             <label class="font-medium text-700 block mb-2">
-              Observaciones*
+              {{ t('management.termination.observations') }}
             </label>
 
             <textarea
               v-model="terminationForm.terminationObservation"
               rows="3"
-              placeholder="Completa los campos obligatorios"
+              :placeholder="t('management.termination.requiredFields')"
               class="p-inputtext p-component w-full"
               :class="{ 'p-invalid': formErrors.terminationObservation }"
             ></textarea>
@@ -349,19 +351,19 @@ onMounted(async () => {
               v-if="formErrors.terminationObservation"
               class="p-error"
             >
-              Complete los campos obligatorios
+              {{ t('management.termination.requiredFields') }}
             </small>
           </div>
 
           <div class="field mb-5">
             <label class="font-medium text-700 block mb-2">
-              Documentación presentada*
+              {{ t('management.termination.documents') }}
             </label>
 
             <textarea
               v-model="terminationForm.terminationDocuments"
               rows="3"
-              placeholder="Completa los campos obligatorios"
+              :placeholder="t('management.termination.requiredFields')"
               class="p-inputtext p-component w-full"
               :class="{ 'p-invalid': formErrors.terminationDocuments }"
             ></textarea>
@@ -370,20 +372,20 @@ onMounted(async () => {
               v-if="formErrors.terminationDocuments"
               class="p-error"
             >
-              Complete los campos obligatorios
+              {{ t('management.termination.requiredFields') }}
             </small>
           </div>
 
           <div class="flex justify-content-end gap-3">
             <pv-button
-              label="Volver"
+              :label="t('management.termination.back')"
               outlined
               severity="secondary"
               @click="backToList"
             />
 
             <pv-button
-              label="Guardar"
+              :label="t('management.termination.save')"
               icon="pi pi-save"
               :loading="isSaving"
               @click="saveTermination"

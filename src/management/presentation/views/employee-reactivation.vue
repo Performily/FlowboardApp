@@ -2,6 +2,9 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useManagementStore } from '../../application/management.store.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter();
 const store = useManagementStore();
@@ -112,7 +115,7 @@ const validateForm = () => {
   }
 
   if (!isValid) {
-    errorMessage.value = 'Complete los campos obligatorios';
+    errorMessage.value = t('management.reactivation.requiredFields');
   }
 
   return isValid;
@@ -140,7 +143,7 @@ const saveReactivation = async () => {
       contractType: reactivationForm.contractType
     });
 
-    alert('Colaborador reactivado correctamente');
+    alert(t('management.reactivation.successMessage'));
 
     selectedEmployee.value = null;
 
@@ -148,7 +151,7 @@ const saveReactivation = async () => {
 
     router.push({ name: 'management' });
   } catch (error) {
-    errorMessage.value = error.message || 'Ocurrió un error al reactivar colaborador';
+    errorMessage.value = error.message || t('management.reactivation.errorMessage');
   } finally {
     isSaving.value = false;
   }
@@ -173,7 +176,7 @@ onMounted(async () => {
       <i class="pi pi-user text-primary text-2xl"></i>
 
       <h1 class="m-0 text-primary font-bold text-2xl">
-        Reactivar colaborador
+        {{ t('management.reactivation.title') }}
       </h1>
     </div>
 
@@ -195,13 +198,13 @@ onMounted(async () => {
         <div class="col-12 md:col-6">
           <div class="field">
             <label class="font-medium text-700 block mb-2">
-              Área
+              {{ t('management.reactivation.area') }}
             </label>
 
             <pv-select
               v-model="filters.area"
               :options="areaOptions"
-              placeholder="Selecciona opción"
+              :placeholder="t('management.reactivation.selectOption')"
               class="w-full"
             />
           </div>
@@ -210,13 +213,13 @@ onMounted(async () => {
         <div class="col-12 md:col-6">
           <div class="field">
             <label class="font-medium text-700 block mb-2">
-              Posición
+              {{ t('management.reactivation.position') }}
             </label>
 
             <pv-select
               v-model="filters.jobPosition"
               :options="jobPositionOptions"
-              placeholder="Selecciona opción"
+              :placeholder="t('management.reactivation.selectOption')"
               class="w-full"
             />
           </div>
@@ -225,11 +228,11 @@ onMounted(async () => {
 
       <div class="flex justify-content-between align-items-center mb-3">
         <h2 class="text-900 font-bold text-base m-0">
-          Listado de colaboradores
+          {{ t('management.reactivation.employeeList') }}
         </h2>
 
         <pv-button
-          label="Limpiar filtros"
+          :label="t('management.reactivation.clearFilters')"
           outlined
           severity="secondary"
           size="small"
@@ -269,7 +272,7 @@ onMounted(async () => {
           v-if="filteredEmployees.length === 0"
           class="text-center text-500"
         >
-          No se encontraron colaboradores cesados.
+          {{ t('management.reactivation.noTerminatedEmployees') }}
         </p>
       </div>
     </div>
@@ -298,23 +301,23 @@ onMounted(async () => {
 
           <div class="text-left employee-data">
             <p>
-              <strong>Estado:</strong>
+              <strong>{{ t('management.reactivation.status') }}:</strong>
               <span>{{ selectedEmployee.status || 'Cesado' }}</span>
             </p>
 
             <p>
-              <strong>Email Personal:</strong>
-              <span>{{ selectedEmployee.personalEmail || 'No registrado' }}</span>
+              <strong>{{ t('management.reactivation.personalEmail') }}:</strong>
+              <span>{{ selectedEmployee.personalEmail ||  t('management.reactivation.notRegistered') }}</span>
             </p>
 
             <p>
-              <strong>Número de teléfono:</strong>
-              <span>{{ selectedEmployee.phoneNumber || 'No registrado' }}</span>
+              <strong>{{ t('management.reactivation.phoneNumber') }}:</strong>
+              <span>{{ selectedEmployee.phoneNumber ||  t('management.reactivation.notRegistered') }}</span>
             </p>
 
             <p>
-              <strong>DNI:</strong>
-              <span>{{ selectedEmployee.documentNumber || selectedEmployee.dni || 'No registrado' }}</span>
+              <strong>{{ t('management.reactivation.documentNumber') }}:</strong>
+              <span>{{ selectedEmployee.documentNumber || selectedEmployee.dni ||  t('management.reactivation.notRegistered') }}</span>
             </p>
           </div>
         </div>
@@ -324,7 +327,7 @@ onMounted(async () => {
         <div class="surface-card shadow-1 border-round-2xl p-5">
           <div class="field mb-4">
             <label class="font-medium text-700 block mb-2">
-              Fecha de reingreso*
+              {{ t('management.reactivation.reentryDate') }}*
             </label>
 
             <input
@@ -338,18 +341,18 @@ onMounted(async () => {
               v-if="formErrors.reentryDate"
               class="p-error"
             >
-              Complete los campos obligatorios
+              {{ t('management.reactivation.requiredFields') }}
             </small>
           </div>
 
           <div class="field mb-4">
             <label class="font-medium text-700 block mb-2">
-              Área*
+              {{ t('management.common.area') }}*
             </label>
 
             <pv-input-text
               v-model="reactivationForm.area"
-              placeholder="Completa los campos obligatorios"
+              :placeholder="t('management.reactivation.requiredFields')"
               class="w-full"
               :class="{ 'p-invalid': formErrors.area }"
             />
@@ -358,7 +361,7 @@ onMounted(async () => {
               v-if="formErrors.area"
               class="p-error"
             >
-              Complete los campos obligatorios
+              {{ t('management.reactivation.requiredFields') }}
             </small>
           </div>
 
@@ -369,7 +372,7 @@ onMounted(async () => {
 
             <pv-input-text
               v-model="reactivationForm.jobPosition"
-              placeholder="Completa los campos obligatorios"
+              :placeholder="t('management.reactivation.requiredFields')"
               class="w-full"
               :class="{ 'p-invalid': formErrors.jobPosition }"
             />
@@ -378,18 +381,18 @@ onMounted(async () => {
               v-if="formErrors.jobPosition"
               class="p-error"
             >
-              Complete los campos obligatorios
+              {{ t('management.reactivation.requiredFields') }}
             </small>
           </div>
 
           <div class="field mb-5">
             <label class="font-medium text-700 block mb-2">
-              Tipo de contrato*
+              {{ t('management.registration.contractType') }}*
             </label>
 
             <pv-input-text
               v-model="reactivationForm.contractType"
-              placeholder="Completa los campos obligatorios"
+              :placeholder="t('management.reactivation.requiredFields')"
               class="w-full"
               :class="{ 'p-invalid': formErrors.contractType }"
             />
@@ -398,20 +401,20 @@ onMounted(async () => {
               v-if="formErrors.contractType"
               class="p-error"
             >
-              Complete los campos obligatorios
+              {{ t('management.reactivation.requiredFields') }}
             </small>
           </div>
 
           <div class="flex justify-content-end gap-3">
             <pv-button
-              label="Volver"
+              :label="t('management.registration.back')"
               outlined
               severity="secondary"
               @click="backToList"
             />
 
             <pv-button
-              label="Guardar"
+              :label="t('management.registration.save')"
               icon="pi pi-save"
               :loading="isSaving"
               @click="saveReactivation"

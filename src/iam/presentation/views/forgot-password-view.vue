@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import ForgotPasswordForm from "../components/forgot-password-form.vue";
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 
@@ -15,6 +16,8 @@ const handleSuccess = () => {
 const goBack = () => {
   router.push("/iam/sign-in");
 };
+
+const { t } = useI18n();
 </script>
 
 <template>
@@ -25,19 +28,18 @@ const goBack = () => {
         <div class="flex flex-column align-items-center text-center">
 
           <h2 class="text-5xl font-bold mb-4" style="color: #4355B9;">
-            Recuperar contraseña
+            {{ $t('iam.forgotPassword.title') }}
           </h2>
 
           <div v-if="!isSent" class="w-full">
             <p class="text-lg mb-5 line-height-3" style="color: #4A4A4B;">
-              Si olvidaste tu contraseña, puedes iniciar un proceso de recuperación. <br/>
-              Te enviaremos todos los detalles a tu correo electrónico.
+              {{ $t('iam.forgotPassword.description') }}
             </p>
 
             <forgot-password-form @success="handleSuccess" />
 
             <pv-button
-                label="Regresar"
+                :label="$t('iam.forgotPassword.back')"
                 class="w-full py-3 mt-3 text-xl font-normal border-none"
                 style="background-color: #C5CAE9; color: #1D1D1B;"
                 @click="goBack"
@@ -46,11 +48,11 @@ const goBack = () => {
 
           <div v-else class="w-full">
             <p class="text-lg mb-6 line-height-3" style="color: #4A4A4B;">
-              Se enviaron instrucciones para restablecer tu contraseña.
+              {{ $t('iam.forgotPassword.successMessage') }}
             </p>
 
             <pv-button
-                label="Regresar"
+                :label="$t('iam.forgotPassword.back')"
                 class="w-full py-3 text-xl font-normal border-none"
                 style="background-color: #C5CAE9; color: #1D1D1B;"
                 @click="goBack"

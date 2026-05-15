@@ -1,6 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 
 // Navegar a la lista general
@@ -24,7 +26,7 @@ const goToFeature = (feature) => {
     <!-- Cabecera idéntica a la de payroll -->
     <div class="flex align-items-center gap-2 mb-5">
       <i class="pi pi-calendar-times text-primary text-3xl font-bold"></i>
-      <h1 class="m-0 text-primary font-bold text-3xl">Asistencia</h1>
+      <h1 class="m-0 text-primary font-bold text-3xl">{{ t('attendance.dashboard.title') }}</h1>
     </div>
 
     <div class="grid gap-4 md:gap-5 m-0">
@@ -37,7 +39,7 @@ const goToFeature = (feature) => {
         <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center mb-4">
           <i class="pi pi-list text-white text-5xl"></i>
         </div>
-        <span class="text-900 font-bold text-lg text-center">Registro de asistencias</span>
+        <span class="text-900 font-bold text-lg text-center">{{ t('attendance.dashboard.attendanceRecords') }}</span>
       </div>
 
       <!-- Opción 2: Resumen por empleado -->
@@ -48,7 +50,7 @@ const goToFeature = (feature) => {
         <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center mb-4">
           <i class="pi pi-id-card text-white text-5xl"></i>
         </div>
-        <span class="text-900 font-bold text-lg text-center">Resumen por colaborador</span>
+        <span class="text-900 font-bold text-lg text-center">{{ t('attendance.dashboard.employeeSummary') }}</span>
       </div>
 
       <!-- Opción 3 (Futura): Justificaciones o Reportes -->

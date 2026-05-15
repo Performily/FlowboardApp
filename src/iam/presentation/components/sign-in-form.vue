@@ -3,6 +3,9 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import useIamStore from "../../application/iam.store.js";
 import { SignInCommand } from "../../domain/sign-in.command.js";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const router = useRouter();
 const store = useIamStore();
@@ -36,7 +39,7 @@ function performSignIn() {
       <pv-input-text
           v-model="form.email" 
           required
-          placeholder="Usuario"
+          :placeholder="t('iam.signIn.user')"
           class="custom-input"
       />
     </div>
@@ -49,7 +52,7 @@ function performSignIn() {
           v-model="form.password"
           required
           type="password"
-          placeholder="Contraseña"
+          :placeholder="t('iam.signIn.password')"
           class="custom-input"
       />
     </div>
@@ -66,14 +69,14 @@ function performSignIn() {
           for="staySignedIn"
           class="checkbox-label"
       >
-        No cerrar sesión
+        {{ t('iam.signIn.keepSession') }}
       </label>
     </div>
 
     <!-- Botón -->
     <pv-button
         type="submit"
-        label="Iniciar sesión"
+        :label="t('iam.signIn.button')"
         class="w-full login-button"
         :loading="store.loading"
     />
@@ -84,7 +87,7 @@ function performSignIn() {
           to="/iam/forgot-password"
           class="forgot-password"
       >
-        ¿Olvidaste tu contraseña?
+        {{ t('iam.signIn.forgotPassword') }}
       </router-link>
     </div>
 

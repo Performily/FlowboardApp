@@ -2,6 +2,9 @@
   import { computed } from 'vue';
   import useIamStore from '../../../iam/application/iam.store.js';
 
+  import LanguageSwitcher from './language-switcher.vue';
+
+
   const iamStore = useIamStore();
 
   const currentUser = computed(() => iamStore.currentUser);
@@ -10,6 +13,8 @@
 <template>
   <div class="flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom-1 surface-border">
     
+    <LanguageSwitcher />
+
     <div class="relative w-20rem">
       <i class="pi pi-search absolute text-500" style="top: 50%; left: 1rem; transform: translateY(-50%); z-index: 1;"></i>
       <pv-input-text placeholder="Buscar aquí" class="w-full border-round-2xl surface-100 border-none" style="padding-left: 2.8rem; padding-top: 0.75rem; padding-bottom: 0.75rem;" />
@@ -25,7 +30,9 @@
           <span class="font-semibold text-700">
             {{ currentUser?.fullName || 'Usuario' }}
           </span>
-          <span class="text-500">Puesto</span>
+          <span class="text-500">
+            {{ $t('toolbar.position') }}
+          </span>
         </div>
       </div>
     </div>

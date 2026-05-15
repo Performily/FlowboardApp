@@ -1,5 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const router = useRouter();
 
 const goTo = (routeName) => {
@@ -11,7 +14,7 @@ const goTo = (routeName) => {
   <div class="p-4 md:p-5">
     <div class="flex align-items-center gap-3 mb-5">
       <i class="pi pi-user text-primary text-4xl"></i>
-      <h1 class="m-0 text-primary font-bold text-3xl">Información Laboral</h1>
+      <h1 class="m-0 text-primary font-bold text-3xl">{{ t('management.profile.workInformation') }}</h1>
     </div>
 
     <div class="grid">
@@ -24,7 +27,7 @@ const goTo = (routeName) => {
           <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center mb-4">
             <i class="pi pi-id-card text-white text-6xl"></i>
           </div>
-          <span class="text-900 font-bold text-lg text-center">Ver Perfil Personal</span>
+          <span class="text-900 font-bold text-lg text-center">{{ t('management.profile.viewPersonalProfile') }}</span>
         </div>
       </div>
 

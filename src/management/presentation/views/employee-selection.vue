@@ -2,7 +2,9 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useManagementStore } from '../../application/management.store.js';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const store = useManagementStore();
 const searchQuery = ref('');
@@ -26,7 +28,7 @@ const viewProfile = (id) => {
     <div class="flex align-items-center gap-3 mb-5">
       <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="router.push({name:'info'})" />
       <i class="pi pi-users text-primary text-4xl"></i>
-      <h1 class="m-0 text-primary font-bold text-3xl">Directorio de Colaboradores</h1>
+      <h1 class="m-0 text-primary font-bold text-3xl">{{ t('management.selection.title') }}</h1>
     </div>
 
     <pv-card class="mb-4 shadow-1 border-round-xl">
@@ -36,7 +38,7 @@ const viewProfile = (id) => {
              style="top: 50%; left: 1rem; transform: translateY(-50%); z-index: 1;"></i>
           <pv-input-text 
             v-model="searchQuery" 
-            placeholder="Buscar por nombre o código..." 
+            :placeholder="t('management.selection.searchPlaceholder')" 
             class="w-full border-round-xl" 
             style="padding-left: 2.8rem; height: 3.5rem;" 
           />
@@ -46,13 +48,13 @@ const viewProfile = (id) => {
 
     <div class="surface-card shadow-1 border-round-2xl overflow-hidden">
       <pv-data-table :value="filteredEmployees" striped-rows paginator :rows="10" responsiveLayout="scroll">
-        <pv-column field="code" header="Código" sortable></pv-column>
-        <pv-column field="name" header="Nombre completo" sortable></pv-column>
-        <pv-column field="area" header="Área" sortable></pv-column>
-        <pv-column header="Acción">
+        <pv-column field="code" :header="t('management.selection.code')" sortable></pv-column>
+        <pv-column field="name" :header="t('management.selection.fullName')" sortable></pv-column>
+        <pv-column field="area" :header="t('management.selection.area')" sortable></pv-column>
+        <pv-column :header="t('management.selection.action')">
           <template #body="slotProps">
             <pv-button 
-              label="Ver información" 
+              :label="t('management.selection.viewInformation')" 
               icon="pi pi-eye" 
               outlined 
               size="small" 
@@ -61,7 +63,7 @@ const viewProfile = (id) => {
           </template>
         </pv-column>
         <template #empty>
-          <div class="text-center p-4 text-500">No se encontraron colaboradores.</div>
+          <div class="text-center p-4 text-500">{{ t('management.selection.empty') }}</div>
         </template>
       </pv-data-table>
     </div>

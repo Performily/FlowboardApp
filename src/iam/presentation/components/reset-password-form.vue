@@ -1,8 +1,12 @@
 <script setup>
 import { reactive, defineEmits } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
+
 import useIamStore from "../../application/iam.store.js";
 import { ResetPasswordCommand } from "../../domain/reset-password.command.js";
+
+const { t } = useI18n();
 
 const route = useRoute();
 const store = useIamStore();
@@ -37,13 +41,13 @@ async function performResetPassword() {
   <form @submit.prevent="performResetPassword" class="w-full text-left">
 
     <div class="flex flex-column gap-2 mb-4">
-      <label for="newPassword" class="text-lg font-bold">Nueva contraseña</label>
+      <label for="newPassword" class="text-lg font-bold">{{ t('iam.resetPassword.newPassword') }}</label>
       <pv-password
           id="newPassword"
           v-model="form.newPassword"
           toggle-mask
           :feedback="false"
-          placeholder="Escribe tu nueva contraseña"
+          :placeholder="t('iam.resetPassword.newPasswordPlaceholder')"
           class="w-full"
           input-class="w-full py-3 px-3 border-round-md text-lg"
           style="background-color: #FFFFFF;"
@@ -52,13 +56,13 @@ async function performResetPassword() {
     </div>
 
     <div class="flex flex-column gap-2 mb-5">
-      <label for="confirmPassword" class="text-lg font-bold">Confirmar contraseña</label>
+      <label for="confirmPassword" class="text-lg font-bold"> {{ t('iam.resetPassword.confirmPassword') }}</label>
       <pv-password
           id="confirmPassword"
           v-model="form.confirmPassword"
           toggle-mask
           :feedback="false"
-          placeholder="Repite tu nueva contraseña"
+          :placeholder="t('iam.resetPassword.confirmPasswordPlaceholder')"
           class="w-full"
           input-class="w-full py-3 px-3 border-round-md text-lg"
           style="background-color: #FFFFFF;"
@@ -68,7 +72,7 @@ async function performResetPassword() {
 
     <pv-button
         type="submit"
-        label="Restablecer contraseña"
+        :label="t('iam.resetPassword.button')"
         class="w-full py-3 text-xl font-normal border-none shadow-2"
         style="background-color: #4355B9; color: white;"
         :loading="store.loading"
