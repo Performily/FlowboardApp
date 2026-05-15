@@ -1,11 +1,10 @@
 {
   "employees": [
     {
-      "id": 1,
       "code": "COL-001",
       "name": "Juan Pérez",
       "civilStatus": "MARRIED",
-      "documentNumber": "12345678",
+      "documentNumber": "12345679",
       "age": 30,
       "personalEmail": "juan.perez@email.com",
       "phoneNumber": "987654321",
@@ -17,7 +16,9 @@
       "area": "Desarrollo",
       "jobPosition": "Desarrollador Frontend",
       "status": "ACTIVE",
-      "educationLevel": "Bachiller"
+      "educationLevel": "Bachiller",
+      "availableDays": 0,
+      "id": 1
     },
     {
       "id": 2,

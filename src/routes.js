@@ -11,6 +11,7 @@ import RequestList from './requests/presentation/request-list.vue';
 import iamRoutes from './iam/presentation/iam-routes.js';
 import { authenticationGuard } from './iam/infrastructure/authentication.guard.js';
 import EmployeeUpdate from './management/presentation/views/employee-update.vue';
+
 const routes = [
 
     {
@@ -71,10 +72,10 @@ const routes = [
         meta: { title: 'Registrar Colaborador' }
     },
     {
-    path: '/management/update',
-    name: 'employee-update',
-    component: EmployeeUpdate,
-    meta: { title: 'Actualizar Colaborador' }
+        path: '/management/update/:id',
+        name: 'employee-update',
+        component: EmployeeUpdate,
+        meta: { title: 'Actualizar Colaborador' }
     },
     {
         path: '/requests/registration',

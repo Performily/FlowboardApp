@@ -14,6 +14,7 @@ const filters = ref({
   jobPosition: ''
 });
 
+// Este es el "DTO" o comando que recolecta los datos del formulario
 const employee = ref({
   id: null,
   code: '',
@@ -60,6 +61,7 @@ const statusOptions = [
   { label: 'Cesado', value: 'TERMINATED' }
 ];
 
+// Opciones de filtros basadas en las Entidades del Store
 const areaOptions = computed(() => {
   return [...new Set(store.employees.map(item => item.area).filter(Boolean))];
 });
@@ -68,11 +70,11 @@ const jobPositionOptions = computed(() => {
   return [...new Set(store.employees.map(item => item.jobPosition).filter(Boolean))];
 });
 
+// Listado filtrado usando las Entidades
 const filteredEmployees = computed(() => {
   return store.employees.filter(item => {
     const matchesArea = !filters.value.area || item.area === filters.value.area;
     const matchesJobPosition = !filters.value.jobPosition || item.jobPosition === filters.value.jobPosition;
-
     return matchesArea && matchesJobPosition;
   });
 });
@@ -80,6 +82,7 @@ const filteredEmployees = computed(() => {
 const selectEmployee = (item) => {
   selectedEmployee.value = item;
 
+  // Mapeamos los datos de la Entidad al objeto reactivo del formulario
   employee.value = {
     id: item.id,
     code: item.code || '',
@@ -123,12 +126,13 @@ const saveChanges = async () => {
   isSaving.value = true;
 
   try {
+    // El Store llamará al Assembler.toApi para transformar estos datos antes de enviarlos
     await store.updateEmployee(employee.value.id, employee.value);
     alert('¡Información del colaborador actualizada con éxito!');
     selectedEmployee.value = null;
-    await store.fetchEmployees();
+    await store.fetchEmployees(); // Refrescamos la lista de entidades
   } catch (error) {
-    alert('Ocurrió un error. Revisa que json-server esté encendido.');
+    alert('Ocurrió un error al actualizar. Revisa que json-server esté encendido.');
   } finally {
     isSaving.value = false;
   }
@@ -142,7 +146,7 @@ onMounted(async () => {
 <template>
   <div class="p-4 md:p-5">
     <div class="flex align-items-center gap-3 mb-5">
-      <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="goBack" />
+      <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="selectedEmployee ? backToList() : goBack()" />
       <i class="pi pi-sync text-primary text-4xl"></i>
       <h1 class="m-0 text-primary font-bold text-3xl">Actualizar información</h1>
     </div>
@@ -155,7 +159,7 @@ onMounted(async () => {
             <pv-select
               v-model="filters.area"
               :options="areaOptions"
-              placeholder="Selecciona opción"
+              placeholder="Selecciona área"
               class="w-full"
             />
           </div>
@@ -167,7 +171,7 @@ onMounted(async () => {
             <pv-select
               v-model="filters.jobPosition"
               :options="jobPositionOptions"
-              placeholder="Selecciona opción"
+              placeholder="Selecciona posición"
               class="w-full"
             />
           </div>
@@ -176,14 +180,7 @@ onMounted(async () => {
 
       <div class="flex justify-content-between align-items-center mb-3">
         <h2 class="text-900 font-bold text-base m-0">Listado de colaboradores</h2>
-
-        <pv-button
-          label="Limpiar filtros"
-          outlined
-          severity="secondary"
-          size="small"
-          @click="clearFilters"
-        />
+        <pv-button label="Limpiar filtros" outlined severity="secondary" size="small" @click="clearFilters" />
       </div>
 
       <div class="border-1 surface-border border-round p-3">
@@ -333,7 +330,7 @@ onMounted(async () => {
           </div>
 
           <div class="flex justify-content-end gap-3 mt-5 pt-4 border-top-1 surface-border">
-            <pv-button label="Volver" outlined severity="secondary" @click="backToList" />
+            <pv-button label="Volver al listado" outlined severity="secondary" @click="backToList" />
             <pv-button
               label="Guardar cambios"
               icon="pi pi-save"
@@ -349,7 +346,6 @@ onMounted(async () => {
         <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center">
           <i class="pi pi-user text-white" style="font-size: 5rem;"></i>
         </div>
-
         <pv-button label="Adjuntar foto" icon="pi pi-paperclip" size="small" class="bg-primary border-none" />
       </div>
     </div>
