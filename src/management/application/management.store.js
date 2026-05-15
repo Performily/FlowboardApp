@@ -105,6 +105,52 @@ export const useManagementStore = defineStore('management', {
         console.error('Error al dar de baja al colaborador:', error);
         throw error;
       }
+    },
+
+    async reactivateEmployee(id, reactivationForm) {
+      try {
+        const employee = this.employees.find(employee => {
+          return String(employee.id) === String(id);
+        });
+
+        if (!employee) {
+          throw new Error('Colaborador no encontrado.');
+        }
+
+        if (employee.status !== 'Cesado' && employee.status !== 'TERMINATED') {
+          throw new Error('Solo se pueden reactivar colaboradores dados de baja.');
+        }
+
+        const reactivationData = {
+          status: 'Activo',
+          reentryDate: reactivationForm.reentryDate,
+          area: reactivationForm.area,
+          jobPosition: reactivationForm.jobPosition,
+          contractType: reactivationForm.contractType,
+          reactivatedAt: new Date().toISOString(),
+
+          terminationReason: '',
+          terminationObservation: '',
+          terminationDocuments: '',
+          terminationDate: '',
+          terminatedAt: ''
+        };
+
+        const updatedEmployee = await ManagementApi.reactivateEmployee(id, reactivationData);
+
+        const index = this.employees.findIndex(employee => {
+          return String(employee.id) === String(id);
+        });
+
+        if (index !== -1) {
+          this.employees[index] = updatedEmployee;
+        }
+
+        return updatedEmployee;
+      } catch (error) {
+        console.error('Error al reactivar colaborador:', error);
+        throw error;
+      }
     }
   }
 });

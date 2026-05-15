@@ -22,4 +22,9 @@ export class ManagementApi {
     const response = await axios.patch(`${API_URL}/${id}`, terminationData);
     return response.data;
   }
+
+  static async reactivateEmployee(id, reactivationData) {
+    const response = await axios.patch(`${API_URL}/${id}`, reactivationData);
+    return response.data;
+  }
 }

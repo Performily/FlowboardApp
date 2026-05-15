@@ -15,6 +15,7 @@ import EmployeeProfileMenu from './management/presentation/views/employee-profil
 import EmployeeSelection from './management/presentation/views/employee-selection.vue';
 import EmployeePersonalProfile from './management/presentation/views/employee-personal-profile.vue';
 import EmployeeTermination from './management/presentation/views/employee-termination.vue';
+import EmployeeReactivation from './management/presentation/views/employee-reactivation.vue';
 
 
 const routes = [
@@ -87,6 +88,12 @@ const routes = [
         name: 'employee-termination',
         component: EmployeeTermination,
         meta: { title: 'Dar de baja a colaborador' }
+    },
+    {
+        path: '/management/reactivation',
+        name: 'employee-reactivation',
+        component: EmployeeReactivation,
+        meta: { title: 'Reactivar colaborador' }
     },
     {
         path: '/requests/registration',
