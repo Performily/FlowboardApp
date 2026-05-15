@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
 import useAttendanceStore from '../../application/attendance.store.js';
 import { useI18n } from 'vue-i18n';
+const router = useRouter();
 
 const { t } = useI18n();
 const store = useAttendanceStore();
 
-// Extraemos estado y propiedades computadas
 const { 
   attendances, 
   attendancesLoaded, 
@@ -19,13 +20,11 @@ const {
 } = toRefs(store);
 const { fetchAttendances } = store;
 
-// Variables para filtros
 const selectedArea = ref(null);
 const selectedStatus = ref(null);
 const startDate = ref(null);
 const endDate = ref(null);
 
-// Opciones de filtros (mock de ejemplo, pueden venir de un catálogo)
 const areas = ref(['IT', 'Recursos Humanos', 'Ventas', 'Marketing', 'Operaciones']);
 const statuses = ref([
   { label: 'Asistencia normal', value: 'attendance' },
@@ -73,18 +72,22 @@ const getStatusLabel = (status) => {
   if (normalized === 'absence') return 'Falta';
   return status || 'Pendiente';
 };
+
+const goBack = () => {
+  router.push({ name: 'attendance' }); 
+};
+
 </script>
 
 <template>
   <div class="p-4">
     
-    <!-- Título de la página -->
     <div class="flex align-items-center gap-3 mb-4">
+      <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="goBack" />
       <i class="pi pi-calendar-times text-3xl text-primary"></i>
       <h1 class="m-0 text-3xl font-bold text-primary">  {{ t('attendance.list.title') }}</h1>
     </div>
 
-    <!-- Panel de Resumen (Métricas del Store) -->
     <div class="grid mb-4">
       <div class="col-12 md:col-3">
         <pv-card class="border-left-3 border-primary shadow-2 h-full">
@@ -148,7 +151,6 @@ const getStatusLabel = (status) => {
       </div>
     </div>
 
-    <!-- Filtros -->
     <pv-card class="mb-4">
       <template #content>
         <div class="formgrid grid align-items-end gap-2">
@@ -182,12 +184,10 @@ const getStatusLabel = (status) => {
       </template>
     </pv-card>
 
-    <!-- Errores -->
     <div v-if="errors.length" class="text-red-500 mb-3">
       <strong>{{ t('attendance.list.errorLoading') }}</strong> {{ errors.map(e => e.message).join(', ') }}
     </div>
 
-    <!-- Tabla de Asistencias -->
     <pv-card>
       <template #title>{{ t('attendance.list.dailyRecord') }}</template>
       <template #content>
@@ -249,5 +249,5 @@ const getStatusLabel = (status) => {
 </template>
 
 <style scoped>
-/* Estilos vacíos intencionalmente, PrimeFlex maneja todo el layout */
+
 </style>
