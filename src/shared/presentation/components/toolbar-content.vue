@@ -1,3 +1,12 @@
+<script setup>
+  import { computed } from 'vue';
+  import useIamStore from '../../../iam/application/iam.store.js';
+
+  const iamStore = useIamStore();
+
+  const currentUser = computed(() => iamStore.currentUser);
+</script>
+
 <template>
   <div class="flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom-1 surface-border">
     
@@ -13,7 +22,9 @@
       <div class="flex align-items-center gap-2 cursor-pointer border-left-1 surface-border pl-4">
         <i class="pi pi-user text-3xl text-700"></i>
         <div class="flex flex-column text-sm">
-          <span class="font-semibold text-700">Usuario</span>
+          <span class="font-semibold text-700">
+            {{ currentUser?.fullName || 'Usuario' }}
+          </span>
           <span class="text-500">Puesto</span>
         </div>
       </div>

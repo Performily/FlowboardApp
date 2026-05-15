@@ -13,9 +13,7 @@ const isSignedIn = computed(() => {
   return store.isSignedIn;
 });
 
-const currentUser = computed(() => {
-  return store.currentUser;
-});
+const currentUser = computed(() => store.currentUser);
 
 function performSignOut() {
 
@@ -31,7 +29,7 @@ function performSignOut() {
     <template v-if="isSignedIn">
 
             <span>
-                {{ currentUser?.fullName }}
+                {{ currentUser?.fullName || 'Usuario' }}
             </span>
 
       <pv-button

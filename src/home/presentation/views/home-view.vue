@@ -1,7 +1,10 @@
 <script setup>
 import { onMounted, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+
 import useHomeStore from '../../application/home.store.js';
+import useIamStore from '../../../iam/application/iam.store.js';
 
 const router = useRouter();
 const store = useHomeStore();
@@ -16,13 +19,17 @@ onMounted(() => {
 const goTo = (routeName) => {
   if (router.hasRoute(routeName)) router.push({ name: routeName });
 };
+
+const iamStore = useIamStore();
+
+const currentUser = computed(() => iamStore.currentUser);
 </script>
 
 <template>
   <div class="p-4 md:p-5">
     
     <div class="mb-5">
-      <h1 class="m-0 text-900 font-bold text-3xl mb-2">¡Hola, Administrador! 👋</h1>
+      <h1 class="m-0 text-900 font-bold text-3xl mb-2">¡Hola, {{ currentUser?.fullName || 'Administrador' }}! 👋</h1>
       <p class="m-0 text-600">Este es el resumen de tu empresa al día de hoy.</p>
     </div>
 
