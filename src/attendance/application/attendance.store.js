@@ -7,14 +7,12 @@ const attendanceApi = new AttendanceApi();
 
 const useAttendanceStore = defineStore('attendance', () => {
 
-    //states
     const attendances = ref([]);
     const errors = ref([]);
     const attendancesLoaded = ref(false);
     const loading = ref(false);
 
 
-    //computed
     const attendancesCount = computed(() => {
         return attendancesLoaded.value ? attendances.value.length : 0;
     });
@@ -33,7 +31,6 @@ const useAttendanceStore = defineStore('attendance', () => {
         ).length;
     });
 
-    //functions
     function fetchAttendances(filters = {}) {
         attendanceApi.getAttendances(filters).then(response => {
             attendances.value = AttendanceAssembler.toEntitiesFromResponse(response);
@@ -108,27 +105,22 @@ const useAttendanceStore = defineStore('attendance', () => {
 
     return {
 
-        // state
         attendances,
         errors,
         loading,
         attendancesLoaded,
 
-        // computed
         attendancesCount,
         totalWorkedHours,
         totalLate,
         totalAbsence,
 
-        // actions
         fetchAttendances,
 
-        // filters
         getAttendanceByEmployee,
         getAttendanceByArea,
         getAttendanceByStatus,
 
-        // summaries
         getEmployeeSummary
     };
 });

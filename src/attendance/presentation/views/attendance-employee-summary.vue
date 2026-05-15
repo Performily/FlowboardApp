@@ -1,14 +1,17 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import useAttendanceStore from '../../application/attendance.store.js';
 
+const router = useRouter();
 const store = useAttendanceStore();
 
-// Variables para los filtros
-const searchQuery = ref(''); // Input de texto manual
+const searchQuery = ref(''); 
 const startDate = ref(null);
 const endDate = ref(null);
 const selectedStatus = ref(null);
+
+const appliedSearchQuery = ref(''); 
 
 const statuses = ref([
   { label: 'Asistencia normal', value: 'attendance' },
@@ -22,11 +25,11 @@ onMounted(() => {
   }
 });
 
-// Filtramos la data en el backend/store
 const applyFilters = () => {
-  const filters = {};
+
+  appliedSearchQuery.value = searchQuery.value.trim();
   
-  // Enviamos lo que el usuario escribió (nombre o ID)
+  const filters = {};
   if (searchQuery.value) filters.q = searchQuery.value; 
   if (startDate.value) filters.startDate = startDate.value;
   if (endDate.value) filters.endDate = endDate.value;
@@ -37,6 +40,7 @@ const applyFilters = () => {
 
 const clearFilters = () => {
   searchQuery.value = '';
+  appliedSearchQuery.value = '';
   startDate.value = null;
   endDate.value = null;
   selectedStatus.value = null;
@@ -44,20 +48,31 @@ const clearFilters = () => {
   store.fetchAttendances();
 };
 
-// Como ya no es un "ID" estricto, calculamos el resumen sobre la data filtrada que hay en el store.
-// Si el usuario buscó "Juan", attendances ya tendrá solo las de Juan.
+
+const displayedAttendances = computed(() => {
+  if (!appliedSearchQuery.value) return []; 
+  
+  const queryLowerCase = appliedSearchQuery.value.toLowerCase();
+  
+  return store.attendances.filter(a => {
+    const matchName = a.employeeName?.toLowerCase().includes(queryLowerCase);
+    const matchId = a.employeeId?.toLowerCase().includes(queryLowerCase);
+    return matchName || matchId;
+  });
+});
+
+
 const summary = computed(() => {
-  if (!store.attendancesLoaded || store.attendances.length === 0) return null;
+  if (displayedAttendances.value.length === 0) return null;
   
   return {
-    attendance: store.attendances.filter(a => a.status === 'attendance').length,
-    late: store.attendances.filter(a => a.status === 'late').length,
-    absence: store.attendances.filter(a => a.status === 'absence').length,
-    totalHours: store.attendances.reduce((sum, a) => sum + (a.workedHours || 0), 0)
+    attendance: displayedAttendances.value.filter(a => a.status === 'attendance').length,
+    late: displayedAttendances.value.filter(a => a.status === 'late').length,
+    absence: displayedAttendances.value.filter(a => a.status === 'absence').length,
+    totalHours: displayedAttendances.value.reduce((sum, a) => sum + (a.workedHours || 0), 0)
   };
 });
 
-// Utilidades para la tabla
 const getStatusSeverity = (status) => {
   const normalized = status?.toLowerCase();
   if (normalized === 'attendance') return 'success';
@@ -73,24 +88,27 @@ const getStatusLabel = (status) => {
   if (normalized === 'absence') return 'Falta';
   return status || 'Pendiente';
 };
+
+const goBack = () => {
+  router.push({ name: 'attendance' }); 
+};
 </script>
 
 <template>
   <div class="p-4">
-    <!-- Título -->
     <div class="flex align-items-center gap-3 mb-4">
+      <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="goBack" />
       <i class="pi pi-id-card text-3xl text-primary"></i>
       <h1 class="m-0 text-3xl font-bold text-primary">Resumen por Colaborador</h1>
     </div>
 
-    <!-- Panel de Filtros -->
+   
     <pv-card class="mb-4 border-top-3 border-primary shadow-2">
       <template #content>
         <div class="formgrid grid align-items-end gap-2">
           
           <div class="field col-12 md:col-3">
             <label class="block mb-2 font-medium text-700">Colaborador</label>
-            <!-- Input de texto manual -->
             <pv-input-text 
               v-model="searchQuery" 
               placeholder="Escribe el nombre o ID..." 
@@ -115,6 +133,7 @@ const getStatusLabel = (status) => {
           </div>
 
           <div class="field col-12 md:col-2 flex gap-2">
+        
             <pv-button icon="pi pi-search" label="Filtrar" @click="applyFilters" class="w-full" />
             <pv-button icon="pi pi-filter-slash" severity="secondary" outlined @click="clearFilters" class="w-full" />
           </div>
@@ -123,56 +142,84 @@ const getStatusLabel = (status) => {
       </template>
     </pv-card>
 
-    <!-- Errores -->
     <div v-if="store.errors.length" class="text-red-500 mb-3">
       <strong>Error al cargar datos:</strong> {{ store.errors.map(e => e.message).join(', ') }}
     </div>
 
-    <!-- Si hay resultados en la búsqueda, mostramos la data -->
-    <div v-if="store.attendances.length > 0 && searchQuery">
-      
-      <!-- Panel de KPIs -->
+    <div v-if="appliedSearchQuery && displayedAttendances.length > 0">
+   
       <div class="grid mb-4">
         <div class="col-12 md:col-3">
-          <pv-card class="shadow-2 h-full bg-primary text-white">
+          <pv-card class="border-left-3 border-primary shadow-2 h-full">
             <template #content>
-              <span class="block font-medium mb-2">Asistencias Regulares</span>
-              <div class="font-bold text-4xl">{{ summary?.attendance || 0 }}</div>
+              <div class="flex justify-content-between align-items-center">
+                <div>
+                  <span class="block text-500 font-medium mb-2">Asistencias Regulares</span>
+                  <div class="text-900 font-bold text-2xl">{{ summary?.attendance || 0 }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-primary-100 border-round" style="width:2.5rem;height:2.5rem">
+                  <i class="pi pi-check-circle text-primary text-xl"></i>
+                </div>
+              </div>
             </template>
           </pv-card>
         </div>
+        
         <div class="col-12 md:col-3">
-          <pv-card class="shadow-2 h-full bg-orange-500 text-white">
+          <pv-card class="border-left-3 border-orange-500 shadow-2 h-full">
             <template #content>
-              <span class="block font-medium mb-2">Total Tardanzas</span>
-              <div class="font-bold text-4xl">{{ summary?.late || 0 }}</div>
+              <div class="flex justify-content-between align-items-center">
+                <div>
+                  <span class="block text-500 font-medium mb-2">Total Tardanzas</span>
+                  <div class="text-900 font-bold text-2xl">{{ summary?.late || 0 }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-orange-100 border-round" style="width:2.5rem;height:2.5rem">
+                  <i class="pi pi-exclamation-circle text-orange-500 text-xl"></i>
+                </div>
+              </div>
             </template>
           </pv-card>
         </div>
+        
         <div class="col-12 md:col-3">
-          <pv-card class="shadow-2 h-full bg-red-500 text-white">
+          <pv-card class="border-left-3 border-red-500 shadow-2 h-full">
             <template #content>
-              <span class="block font-medium mb-2">Total Faltas</span>
-              <div class="font-bold text-4xl">{{ summary?.absence || 0 }}</div>
+              <div class="flex justify-content-between align-items-center">
+                <div>
+                  <span class="block text-500 font-medium mb-2">Total Faltas</span>
+                  <div class="text-900 font-bold text-2xl">{{ summary?.absence || 0 }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width:2.5rem;height:2.5rem">
+                  <i class="pi pi-times-circle text-red-500 text-xl"></i>
+                </div>
+              </div>
             </template>
           </pv-card>
         </div>
+        
         <div class="col-12 md:col-3">
-          <pv-card class="shadow-2 h-full bg-green-500 text-white">
+          <pv-card class="border-left-3 border-green-500 shadow-2 h-full">
             <template #content>
-              <span class="block font-medium mb-2">Horas Acumuladas</span>
-              <div class="font-bold text-4xl">{{ summary?.totalHours || 0 }}h</div>
+              <div class="flex justify-content-between align-items-center">
+                <div>
+                  <span class="block text-500 font-medium mb-2">Horas Acumuladas</span>
+                  <div class="text-900 font-bold text-2xl">{{ summary?.totalHours || 0 }}h</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round" style="width:2.5rem;height:2.5rem">
+                  <i class="pi pi-clock text-green-500 text-xl"></i>
+                </div>
+              </div>
             </template>
           </pv-card>
         </div>
       </div>
 
-      <!-- Tabla Histórica (Usamos la data directa del store) -->
+    
       <pv-card>
         <template #title>Historial de Registros</template>
         <template #content>
           <pv-data-table 
-            :value="store.attendances" 
+            :value="displayedAttendances" 
             :loading="store.loading"
             striped-rows 
             paginator 
@@ -222,8 +269,7 @@ const getStatusLabel = (status) => {
       </pv-card>
     </div>
 
-    <!-- Estado vacío (Cuando no ha buscado a nadie) -->
-    <div v-else-if="!searchQuery" class="flex flex-column align-items-center justify-content-center p-6 surface-100 border-round mt-4 border-dashed border-2 surface-border">
+    <div v-else-if="!appliedSearchQuery" class="flex flex-column align-items-center justify-content-center p-6 surface-100 border-round mt-4 border-dashed border-2 surface-border">
       <div class="bg-white p-4 border-circle shadow-1 mb-4">
         <i class="pi pi-search text-500 text-5xl"></i>
       </div>
@@ -231,7 +277,6 @@ const getStatusLabel = (status) => {
       <p class="text-500 m-0 text-lg">Escribe un nombre y presiona Filtrar para ver sus métricas.</p>
     </div>
 
-    <!-- Estado cuando buscó, pero no hay resultados -->
     <div v-else class="flex flex-column align-items-center justify-content-center p-6 surface-100 border-round mt-4">
       <i class="pi pi-inbox text-500 text-5xl mb-3"></i>
       <h3 class="text-600 m-0">No se encontraron registros para esta búsqueda.</h3>
