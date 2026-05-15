@@ -7,6 +7,8 @@ import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
+
+
 import {
     Button,
     Card,
@@ -65,5 +67,7 @@ app.component('pv-input-text',  InputText);
 app.component('pv-tag',         Tag);
 app.component('pv-textarea',    Textarea);
 app.component('pv-password', Password);
-app.component('pv-checkbox', Checkbox)
+app.component('pv-checkbox', Checkbox);
+
+
 app.mount('#app');
