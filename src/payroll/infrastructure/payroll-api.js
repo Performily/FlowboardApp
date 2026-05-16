@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/paySlips'; 
+const API_BASE_URL = 'https://flowboard-api-zmju.onrender.com/payslips'; 
 
 export class PayrollApi {
   

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const http = axios.create({ baseURL: '/api/v1' });
+const http = axios.create({ baseURL: 'https://flowboard-api-zmju.onrender.com' });
 
 export const requestsApi = {
   async getAll() {
