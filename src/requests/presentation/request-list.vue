@@ -12,25 +12,21 @@ function goToRegistration() {
 
 <template>
   <div class="p-4">
-    <div class="flex align-items-center gap-2 mb-4">
-      <i class="pi pi-file-edit text-2xl" style="color: #3b4cb8"></i>
-      <h1 class="text-3xl font-bold m-0" style="color: #3b4cb8">{{ t('requests.dashboard.title') }}</h1>
+    <div class="flex align-items-center gap-2 mb-5">
+      <i class="pi pi-file-edit text-primary text-3xl font-bold"></i>
+      <h1 class="m-0 text-primary font-bold text-3xl">{{ t('requests.dashboard.title') }}</h1>
     </div>
 
-    <div class="grid">
-      <div class="col-12 md:col-4">
+    <div class="grid gap-4 md:gap-5 m-0">
+      <div class="col-12 md:col-6 lg:col-4 p-0">
         <div
-          class="request-card flex flex-column align-items-center justify-content-center p-4 border-round-lg cursor-pointer bg-white"
-          style="border: 1px solid #e5e7eb; min-height: 180px;"
+          class="bg-white border-round-2xl p-5 h-full flex flex-column align-items-center justify-content-center cursor-pointer shadow-1 hover:shadow-4 transition-all transition-duration-200"
           @click="goToRegistration"
         >
-          <div
-            class="flex align-items-center justify-content-center border-circle mb-3"
-            style="width: 72px; height: 72px; background-color: #3b4cb8;"
-          >
-            <i class="pi pi-plus-circle text-3xl text-white"></i>
+          <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center mb-4">
+            <i class="pi pi-plus-circle text-white text-5xl"></i>
           </div>
-          <span class="text-sm font-medium text-center text-700">
+          <span class="text-900 font-bold text-lg text-center">
             {{ t('requests.dashboard.requestRegistration') }}
           </span>
         </div>
@@ -39,14 +35,5 @@ function goToRegistration() {
   </div>
 </template>
 
-
-
 <style scoped>
-.request-card {
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
-}
-.request-card:hover {
-  box-shadow: 0 4px 16px rgba(59, 76, 184, 0.18);
-  transform: translateY(-2px);
-}
 </style>
