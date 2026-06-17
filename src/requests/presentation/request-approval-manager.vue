@@ -40,13 +40,12 @@ onMounted(() => store.fetchAll());
 
 <template>
   <div class="p-4">
-    <!-- Encabezado -->
-    <div class="flex align-items-center gap-2 mb-4">
+    <div class="flex align-items-center gap-3 mb-4">
+      <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="$router.back()" />
       <i class="pi pi-sort-alt text-2xl" style="color: #3b4cb8"></i>
       <h1 class="text-3xl font-bold m-0" style="color: #3b4cb8">{{ t('requests.approval.title') }}</h1>
     </div>
 
-    <!-- Subtítulo -->
     <div class="mb-3">
       <span class="text-lg text-600 font-medium">{{ t('requests.approval.mainList') }}</span>
     </div>

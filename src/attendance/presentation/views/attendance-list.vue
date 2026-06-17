@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted, toRefs } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router'; 
 import useAttendanceStore from '../../application/attendance.store.js';
 import { useI18n } from 'vue-i18n';
+
 const router = useRouter();
+const route = useRoute(); 
 
 const { t } = useI18n();
 const store = useAttendanceStore();
@@ -33,7 +35,34 @@ const statuses = ref([
 ]);
 
 onMounted(() => {
-  if (!attendancesLoaded.value) {
+  let hasFiltersFromUrl = false;
+
+  // 1. Revisar si la URL pide un filtro de Estado (ej: 'Tardanza')
+  if (route.query.status) {
+    const matchedStatus = statuses.value.find(s => s.label === route.query.status || s.value === route.query.status);
+    if (matchedStatus) {
+      selectedStatus.value = matchedStatus;
+      hasFiltersFromUrl = true;
+    }
+  }
+
+  // 2. Revisar si la URL pide filtrar por la semana actual
+  if (route.query.period === 'currentWeek') {
+    const currentDate = new Date();
+    const startOfWeek = new Date(currentDate);
+    const day = currentDate.getDay();
+    const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1);
+    startOfWeek.setDate(diff);
+    startOfWeek.setHours(0,0,0,0);
+
+    startDate.value = startOfWeek;
+    endDate.value = currentDate; 
+    hasFiltersFromUrl = true;
+  }
+
+  if (hasFiltersFromUrl) {
+    applyFilters();
+  } else if (!attendancesLoaded.value) {
     fetchAttendances();
   }
 });
@@ -53,6 +82,8 @@ const clearFilters = () => {
   selectedStatus.value = null;
   startDate.value = null;
   endDate.value = null;
+  
+  router.replace({ name: 'attendance-list', query: {} });
   
   fetchAttendances();
 };
@@ -74,7 +105,7 @@ const getStatusLabel = (status) => {
 };
 
 const goBack = () => {
-  router.push({ name: 'attendance' }); 
+  router.push({ name: 'home' }); 
 };
 
 </script>

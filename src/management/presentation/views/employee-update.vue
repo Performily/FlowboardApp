@@ -343,13 +343,6 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-
-      <div class="col-12 lg:col-2 flex flex-column align-items-center gap-3 pt-4">
-        <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center">
-          <i class="pi pi-user text-white" style="font-size: 5rem;"></i>
-        </div>
-        <pv-button :label="t('management.update.attachPhoto')" icon="pi pi-paperclip" size="small" class="bg-primary border-none" />
-      </div>
     </div>
   </div>
 </template>

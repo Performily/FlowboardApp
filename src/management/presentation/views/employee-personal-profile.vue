@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+
 const employee = ref(null);
 const isLoading = ref(true);
 
@@ -39,7 +40,7 @@ onMounted(async () => {
 <template>
   <div class="p-4 md:p-5">
     <div class="flex align-items-center gap-3 mb-5">
-      <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="router.push({name:'employee-selection'})" />
+      <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="router.back()" />
       <i class="pi pi-user text-primary text-4xl"></i>
       <h1 class="m-0 text-primary font-bold text-3xl">  {{ t('management.profile.personalProfile') }}</h1>
     </div>
