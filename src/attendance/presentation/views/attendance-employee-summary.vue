@@ -2,11 +2,16 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import useAttendanceStore from '../../application/attendance.store.js';
+import useIamStore from '../../../iam/application/iam.store.js'; // 1. Importamos la sesión
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const router = useRouter();
 const store = useAttendanceStore();
+const iamStore = useIamStore();
+
+const currentUser = computed(() => iamStore.currentUser);
+const isHR = computed(() => currentUser.value?.role === 'RRHH'); // 2. Verificamos el rol
 
 const searchQuery = ref(''); 
 const startDate = ref(null);
@@ -25,10 +30,12 @@ onMounted(() => {
   if (!store.attendancesLoaded) {
     store.fetchAttendances();
   }
+  if (!isHR.value) {
+    appliedSearchQuery.value = 'auto-load-colaborador';
+  }
 });
 
 const applyFilters = () => {
-
   appliedSearchQuery.value = searchQuery.value.trim();
   
   const filters = {};
@@ -42,7 +49,9 @@ const applyFilters = () => {
 
 const clearFilters = () => {
   searchQuery.value = '';
-  appliedSearchQuery.value = '';
+  if (isHR.value) {
+    appliedSearchQuery.value = ''; 
+  }
   startDate.value = null;
   endDate.value = null;
   selectedStatus.value = null;
@@ -50,19 +59,29 @@ const clearFilters = () => {
   store.fetchAttendances();
 };
 
-
 const displayedAttendances = computed(() => {
-  if (!appliedSearchQuery.value) return []; 
+  if (isHR.value && !appliedSearchQuery.value) return []; 
   
-  const queryLowerCase = appliedSearchQuery.value.toLowerCase();
-  
-  return store.attendances.filter(a => {
-    const matchName = a.employeeName?.toLowerCase().includes(queryLowerCase);
-    const matchId = a.employeeId?.toLowerCase().includes(queryLowerCase);
-    return matchName || matchId;
-  });
-});
+  let filtered = store.attendances;
 
+  if (!isHR.value) {
+    const currentId = currentUser.value?.id || 1;
+    filtered = filtered.filter(a => String(a.employeeId) === String(currentId));
+  } else {
+    const queryLowerCase = appliedSearchQuery.value.toLowerCase();
+    filtered = filtered.filter(a => {
+      const matchName = String(a.employeeName || '').toLowerCase().includes(queryLowerCase);
+      const matchId = String(a.employeeId || '').toLowerCase().includes(queryLowerCase);
+      return matchName || matchId;
+    });
+  }
+
+  if (selectedStatus.value) {
+    filtered = filtered.filter(a => a.status === selectedStatus.value.value);
+  }
+
+  return filtered;
+});
 
 const summary = computed(() => {
   if (displayedAttendances.value.length === 0) return null;
@@ -71,7 +90,7 @@ const summary = computed(() => {
     attendance: displayedAttendances.value.filter(a => a.status === 'attendance').length,
     late: displayedAttendances.value.filter(a => a.status === 'late').length,
     absence: displayedAttendances.value.filter(a => a.status === 'absence').length,
-    totalHours: displayedAttendances.value.reduce((sum, a) => sum + (a.workedHours || 0), 0)
+    totalHours: displayedAttendances.value.reduce((sum, a) => sum + (Number(a.workedHours) || 0), 0)
   };
 });
 
@@ -101,17 +120,15 @@ const goBack = () => {
     <div class="flex align-items-center gap-3 mb-4">
       <pv-button icon="pi pi-arrow-left" rounded text severity="secondary" @click="goBack" />
       <i class="pi pi-id-card text-3xl text-primary"></i>
-      <h1 class="m-0 text-3xl font-bold text-primary">{{ t('attendance.summary.title') }}</h1>
+      <h1 class="m-0 text-3xl font-bold text-primary">{{ isHR ? t('attendance.summary.title') : 'Mi Resumen de Asistencia' }}</h1>
     </div>
 
-   
     <pv-card class="mb-4 border-top-3 border-primary shadow-2">
       <template #content>
         <div class="formgrid grid align-items-end gap-2">
           
-          <div class="field col-12 md:col-3">
+          <div v-if="isHR" class="field col-12 md:col-3">
             <label class="block mb-2 font-medium text-700">{{ t('attendance.summary.employee') }}</label>
-            <!-- Input de texto manual -->
             <pv-input-text 
               v-model="searchQuery" 
               :placeholder="t('attendance.summary.employeePlaceholder')" 
@@ -216,18 +233,10 @@ const goBack = () => {
         </div>
       </div>
 
-    
       <pv-card>
         <template #title>{{ t('attendance.summary.recordHistory') }}</template>
         <template #content>
-          <pv-data-table 
-            :value="displayedAttendances" 
-            :loading="store.loading"
-            striped-rows 
-            paginator 
-            :rows="5"
-            :rows-per-page-options="[5, 10, 20]"
-          >
+          <pv-data-table :value="displayedAttendances" :loading="store.loading" striped-rows paginator :rows="5" :rows-per-page-options="[5, 10, 20]">
             <pv-column field="date" :header="t('attendance.summary.date')" sortable></pv-column>
             
             <pv-column field="employeeName" :header="t('attendance.summary.employee')">
@@ -259,19 +268,15 @@ const goBack = () => {
             
             <pv-column :header="t('attendance.summary.status')" sortable field="status">
               <template #body="slotProps">
-                <pv-tag 
-                  :value="getStatusLabel(slotProps.data.status)" 
-                  :severity="getStatusSeverity(slotProps.data.status)" 
-                />
+                <pv-tag :value="getStatusLabel(slotProps.data.status)" :severity="getStatusSeverity(slotProps.data.status)" />
               </template>
             </pv-column>
-
           </pv-data-table>
         </template>
       </pv-card>
     </div>
 
-    <div v-else-if="!appliedSearchQuery" class="flex flex-column align-items-center justify-content-center p-6 surface-100 border-round mt-4 border-dashed border-2 surface-border">
+    <div v-else-if="!appliedSearchQuery && isHR" class="flex flex-column align-items-center justify-content-center p-6 surface-100 border-round mt-4 border-dashed border-2 surface-border">
       <div class="bg-white p-4 border-circle shadow-1 mb-4">
         <i class="pi pi-search text-500 text-5xl"></i>
       </div>

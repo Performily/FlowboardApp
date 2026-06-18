@@ -6,14 +6,13 @@ export class IamApi {
 
     signIn(signInCommand) {
 
-        // MOCK TEMPORAL TB1
         return Promise.resolve({
             status: 200,
             data: {
                 id: 1,
                 fullName: 'Administrador',
                 email: signInCommand.email,
-                role: 'RRHH',
+                role: 'RRHH',   
                 token: 'jwt-demo-token',
                 temporaryPassword: false
             }

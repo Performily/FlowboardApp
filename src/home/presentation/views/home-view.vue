@@ -17,10 +17,23 @@ const attendanceStore = useAttendanceStore();
 const vacationsStore = useVacationsStore();
 
 const { totalEmployees, pendingRequests, pendingRequestsCount, isLoading } = toRefs(store);
-const { totalLate } = toRefs(attendanceStore);
-const { scheduledVacations } = toRefs(vacationsStore);
+const { totalLate, attendances } = toRefs(attendanceStore);
+const { scheduledVacations, employeesList } = toRefs(vacationsStore);
 
 const currentUser = computed(() => iamStore.currentUser);
+
+const isHR = computed(() => currentUser.value?.role === 'RRHH');
+
+const myPendingRequestsCount = computed(() => 
+  pendingRequests.value.filter(req => req.employeeId === currentUser.value?.id).length
+);
+const myLatesCount = computed(() => 
+  attendances.value.filter(att => att.employeeId === currentUser.value?.id && att.status === 'late').length
+);
+const myVacationsCount = computed(() => {
+  const myData = employeesList.value.find(emp => emp.id === currentUser.value?.id);
+  return myData && myData.status === 'Aprobado' ? 1 : 0;
+});
 
 const dateRangeText = computed(() => {
   const currentDate = new Date();
@@ -32,10 +45,7 @@ const dateRangeText = computed(() => {
   const optionsDayMonth = { day: '2-digit', month: 'long' };
   const optionsFull = { day: '2-digit', month: 'long', year: 'numeric' };
 
-  const formattedStart = startOfWeek.toLocaleDateString('es-ES', optionsDayMonth);
-  const formattedToday = currentDate.toLocaleDateString('es-ES', optionsFull);
-
-  return `del ${formattedStart} hasta el ${formattedToday}`;
+  return `del ${startOfWeek.toLocaleDateString('es-ES', optionsDayMonth)} hasta el ${currentDate.toLocaleDateString('es-ES', optionsFull)}`;
 });
 
 onMounted(() => {
@@ -57,9 +67,10 @@ const goTo = (routeName) => {
         <h1 class="m-0 text-900 font-bold text-3xl mb-2">
           {{ t('home.welcome', { name: currentUser?.fullName || t('home.administrator') }) }} 👋
         </h1>
-        <p class="m-0 text-600">Este es el resumen de tu empresa al día de hoy, {{ dateRangeText }}</p>
+        <p class="m-0 text-600">Este es el resumen de tu actividad al día de hoy, {{ dateRangeText }}</p>
       </div>
-      <div class="mt-3 md:mt-0 flex gap-2">
+      
+      <div v-if="isHR" class="mt-3 md:mt-0 flex gap-2">
         <pv-button icon="pi pi-user-plus" label="Nuevo Empleado" @click="goTo('employee-registration')" />
         <pv-button icon="pi pi-calendar-times" label="Ver Asistencias" severity="secondary" @click="goTo('attendance-list')" />
       </div>
@@ -72,7 +83,8 @@ const goTo = (routeName) => {
     <div v-else>
       
       <div class="grid mb-5">
-        <div class="col-12 md:col-6 lg:col-3">
+        
+        <div v-if="isHR" class="col-12 md:col-6 lg:col-3">
           <div class="surface-card shadow-1 p-4 border-round-2xl flex justify-content-between align-items-center h-full">
             <div>
               <span class="block text-500 font-medium mb-2">{{ t('home.totalEmployees') }}</span>
@@ -84,12 +96,12 @@ const goTo = (routeName) => {
           </div>
         </div>
 
-        <div class="col-12 md:col-6 lg:col-3">
+        <div class="col-12 md:col-6" :class="isHR ? 'lg:col-3' : 'lg:col-4'">
           <div class="surface-card shadow-1 p-4 border-round-2xl flex justify-content-between align-items-center h-full cursor-pointer hover:shadow-4 transition-all transition-duration-200" @click="goTo('requests')">
             <div>
-              <span class="block text-500 font-medium mb-1">Solicitudes pendientes</span>
+              <span class="block text-500 font-medium mb-1">{{ isHR ? 'Solicitudes pendientes' : 'Mis Solicitudes' }}</span>
               <span class="block text-400 text-xs mb-2">({{ dateRangeText }})</span>
-              <div class="text-900 font-bold text-4xl text-orange-500">{{ pendingRequestsCount }}</div>
+              <div class="text-900 font-bold text-4xl text-orange-500">{{ isHR ? pendingRequestsCount : myPendingRequestsCount }}</div>
             </div>
             <div class="flex align-items-center justify-content-center border-round w-4rem h-4rem bg-orange-100 text-orange-500">
               <i class="pi pi-envelope text-2xl"></i>
@@ -97,12 +109,12 @@ const goTo = (routeName) => {
           </div>
         </div>
 
-        <div class="col-12 md:col-6 lg:col-3">
+        <div class="col-12 md:col-6" :class="isHR ? 'lg:col-3' : 'lg:col-4'">
           <div class="surface-card shadow-1 p-4 border-round-2xl flex justify-content-between align-items-center h-full cursor-pointer hover:shadow-4 transition-all transition-duration-200" @click="router.push({ name: 'attendance-list', query: { status: 'Tardanza', period: 'currentWeek' } })">
             <div>
-              <span class="block text-500 font-medium mb-1">Tardanzas Registradas</span>
+              <span class="block text-500 font-medium mb-1">{{ isHR ? 'Tardanzas Registradas' : 'Mis Tardanzas' }}</span>
               <span class="block text-400 text-xs mb-2">({{ dateRangeText }})</span>
-              <div class="text-900 font-bold text-4xl text-red-500">{{ totalLate }}</div>
+              <div class="text-900 font-bold text-4xl text-red-500">{{ isHR ? totalLate : myLatesCount }}</div>
             </div>
             <div class="flex align-items-center justify-content-center border-round w-4rem h-4rem bg-red-100 text-red-500">
               <i class="pi pi-clock text-2xl"></i>
@@ -110,11 +122,11 @@ const goTo = (routeName) => {
           </div>
         </div>
 
-        <div class="col-12 md:col-6 lg:col-3">
+        <div class="col-12 md:col-6" :class="isHR ? 'lg:col-3' : 'lg:col-4'">
           <div class="surface-card shadow-1 p-4 border-round-2xl flex justify-content-between align-items-center h-full cursor-pointer hover:shadow-4 transition-all transition-duration-200" @click="goTo('vacations')">
             <div>
-              <span class="block text-500 font-medium mb-2">Vacaciones Programadas</span>
-              <div class="text-900 font-bold text-4xl text-green-500">{{ scheduledVacations }}</div>
+              <span class="block text-500 font-medium mb-2">{{ isHR ? 'Vacaciones Programadas' : 'Mis Vacaciones' }}</span>
+              <div class="text-900 font-bold text-4xl text-green-500">{{ isHR ? scheduledVacations : myVacationsCount }}</div>
             </div>
             <div class="flex align-items-center justify-content-center border-round w-4rem h-4rem bg-green-100 text-green-500">
               <i class="pi pi-sun text-2xl"></i>
@@ -148,40 +160,41 @@ const goTo = (routeName) => {
             <h2 class="m-0 text-xl font-bold mb-4">Accesos Rápidos</h2>
             
             <div class="flex flex-column gap-3">
+              
               <div class="flex align-items-center p-3 border-round border-1 surface-border cursor-pointer hover:surface-100 transition-all" @click="goTo('pay-slip-list')">
                 <div class="w-3rem h-3rem flex justify-content-center align-items-center bg-green-100 border-circle mr-3">
                   <i class="pi pi-money-bill text-green-500 text-xl"></i>
                 </div>
                 <div class="flex flex-column">
-                  <span class="text-900 font-medium">Estado de Pagos</span>
-                  <span class="text-500 text-sm">Gestionar boletas del personal</span>
+                  <span class="text-900 font-medium">{{ isHR ? 'Estado de Pagos' : 'Mis Pagos' }}</span>
+                  <span class="text-500 text-sm">{{ isHR ? 'Gestionar boletas del personal' : 'Ver mis boletas de pago' }}</span>
                 </div>
                 <i class="pi pi-chevron-right text-500 ml-auto"></i>
               </div>
 
-              <div class="flex align-items-center p-3 border-round border-1 surface-border cursor-pointer hover:surface-100 transition-all" @click="goTo('vacation-creation')">
+              <div class="flex align-items-center p-3 border-round border-1 surface-border cursor-pointer hover:surface-100 transition-all" @click="goTo('requests')">
                 <div class="w-3rem h-3rem flex justify-content-center align-items-center bg-purple-100 border-circle mr-3">
                   <i class="pi pi-calendar-plus text-purple-500 text-xl"></i>
                 </div>
                 <div class="flex flex-column">
-                  <span class="text-900 font-medium">Asignar Vacaciones</span>
-                  <span class="text-500 text-sm">Programar descansos de empleados</span>
+                  <span class="text-900 font-medium">{{ isHR ? 'Asignar Vacaciones' : 'Solicitar Vacaciones' }}</span>
+                  <span class="text-500 text-sm">{{ isHR ? 'Programar descansos de empleados' : 'Enviar formulario de descanso' }}</span>
                 </div>
                 <i class="pi pi-chevron-right text-500 ml-auto"></i>
               </div>
 
-              <div class="flex align-items-center p-3 border-round border-1 surface-border cursor-pointer hover:surface-100 transition-all" @click="goTo('employee-update')">
+              <div class="flex align-items-center p-3 border-round border-1 surface-border cursor-pointer hover:surface-100 transition-all" @click="goTo('requests')">
                 <div class="w-3rem h-3rem flex justify-content-center align-items-center bg-blue-100 border-circle mr-3">
                   <i class="pi pi-sync text-blue-500 text-xl"></i>
                 </div>
                 <div class="flex flex-column">
-                  <span class="text-900 font-medium">Actualizar Empleados</span>
-                  <span class="text-500 text-sm">Modificar legajos e información</span>
+                  <span class="text-900 font-medium">{{ isHR ? 'Actualizar Empleados' : 'Solicitar Actualizar Datos' }}</span>
+                  <span class="text-500 text-sm">{{ isHR ? 'Modificar legajos e información' : 'Actualiza tus datos personales' }}</span>
                 </div>
                 <i class="pi pi-chevron-right text-500 ml-auto"></i>
               </div>
-            </div>
 
+            </div>
           </div>
         </div>
 
