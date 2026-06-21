@@ -12,7 +12,7 @@ const iamApi = new IamApi();
 const useIamStore = defineStore('iam', () => {
 
     const currentUser = ref(
-        JSON.parse(localStorage.getItem('user')) || null
+        JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user')) || null
     );
 
     const isSignedIn = ref(
@@ -63,23 +63,11 @@ const useIamStore = defineStore('iam', () => {
             currentUser.value = user;
 
             if (staySignedIn) {
-
-                localStorage.setItem(
-                    'token',
-                    user.token
-                );
-
-                localStorage.setItem(
-                    'user',
-                    JSON.stringify(user)
-                );
-
+                localStorage.setItem('token', user.token);
+                localStorage.setItem('user', JSON.stringify(user));
             } else {
-
-                sessionStorage.setItem(
-                    'token',
-                    user.token
-                );
+                sessionStorage.setItem('token', user.token);
+                sessionStorage.setItem('user', JSON.stringify(user));
             }
 
             isSignedIn.value = true;
