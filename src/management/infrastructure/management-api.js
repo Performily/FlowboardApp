@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://flowboard-api-zmju.onrender.com/employees';
+const API_URL = 'https://flowboardwebservice.onrender.com/api/v1/employees';
 
 export class ManagementApi {
   static async getAllEmployees() {
