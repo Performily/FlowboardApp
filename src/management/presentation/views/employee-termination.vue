@@ -35,7 +35,7 @@ const getEmployeePosition = (employee) => {
 
 const activeEmployees = computed(() => {
   return store.employees.filter(employee => {
-    return employee.status !== 'Cesado' && employee.status !== 'TERMINATED';
+    return employee.status !== 'Inactivo' && employee.status !== 'TERMINATED';
   });
 });
 
