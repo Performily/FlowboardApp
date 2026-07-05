@@ -1,35 +1,37 @@
 <script setup>
 import { reactive, defineEmits } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
 import useIamStore from "../../application/iam.store.js";
-import { ResetPasswordCommand } from "../../domain/reset-password.command.js";
 
 const { t } = useI18n();
-
-const route = useRoute();
+const router = useRouter();
 const store = useIamStore();
 const emit = defineEmits(["success"]);
 
 const form = reactive({
+  temporaryPassword: '', // 🔥 Capturamos la clave temporal directo del usuario
   newPassword: '',
   confirmPassword: ''
 });
 
 async function performResetPassword() {
   if (form.newPassword !== form.confirmPassword) {
-    // Aquí podrías usar un pv-toast para mostrar el error de coincidencia
+    console.error("Las contraseñas no coinciden");
     return;
   }
 
-  const command = new ResetPasswordCommand({
-    token: route.query.token, // Obtenemos el token de la URL
+  const command = {
+    email: store.currentUser?.email,              // El correo de la sesión actual
+    temporaryPassword: form.temporaryPassword,    // 🔥 Ahora sí viaja el string tipeado
     newPassword: form.newPassword
-  });
+  };
+
+  console.log("Enviando comando de reseteo corregido:", command);
 
   try {
-    await store.resetPassword(command);
+    await store.resetPassword(command, router);
     emit("success");
   } catch (error) {
     console.error("Error al restablecer:", error);
@@ -41,6 +43,20 @@ async function performResetPassword() {
   <form @submit.prevent="performResetPassword" class="w-full text-left">
 
     <div class="flex flex-column gap-2 mb-4">
+      <label for="temporaryPassword" class="text-lg font-bold">{{ t('iam.resetPassword.temporaryPassword') }}</label>
+      <pv-password
+          id="temporaryPassword"
+          v-model="form.temporaryPassword"
+          toggle-mask
+          :feedback="false"
+          :placeholder="t('iam.resetPassword.temporaryPasswordPlaceholder')"
+          class="w-full"
+          input-class="w-full py-3 px-3 border-round-md text-lg"
+          required
+      />
+    </div>
+
+    <div class="flex flex-column gap-2 mb-4">
       <label for="newPassword" class="text-lg font-bold">{{ t('iam.resetPassword.newPassword') }}</label>
       <pv-password
           id="newPassword"
@@ -50,7 +66,6 @@ async function performResetPassword() {
           :placeholder="t('iam.resetPassword.newPasswordPlaceholder')"
           class="w-full"
           input-class="w-full py-3 px-3 border-round-md text-lg"
-          style="background-color: #FFFFFF;"
           required
       />
     </div>
@@ -65,7 +80,6 @@ async function performResetPassword() {
           :placeholder="t('iam.resetPassword.confirmPasswordPlaceholder')"
           class="w-full"
           input-class="w-full py-3 px-3 border-round-md text-lg"
-          style="background-color: #FFFFFF;"
           required
       />
     </div>

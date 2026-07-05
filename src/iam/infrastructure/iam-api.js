@@ -19,17 +19,27 @@ export class IamApi {
     }
 
     // Mantenemos estos simulados temporalmente porque tu Swagger no expone estos endpoints aún
-    forgotPassword(forgotPasswordCommand) {
-        return Promise.resolve({
-            status: 200,
-            data: { message: 'Correo enviado correctamente' }
+    async forgotPassword(forgotPasswordCommand) {
+        const response = await axios.post(`${API_BASE_URL}/forgot-password`, {
+            email: forgotPasswordCommand.email // Enviamos el correo ingresado en el input
         });
+
+        return {
+            status: response.status,
+            data: response.data
+        };
     }
 
-    resetPassword(resetPasswordCommand) {
-        return Promise.resolve({
-            status: 200,
-            data: { message: 'Contraseña actualizada' }
+    async resetPassword(resetPasswordCommand) {
+        const response = await axios.post(`${API_BASE_URL}/reset-password`, {
+            email: resetPasswordCommand.email,
+            temporaryPassword: resetPasswordCommand.temporaryPassword,
+            newPassword: resetPasswordCommand.newPassword
         });
+
+        return {
+            status: response.status,
+            data: response.data
+        };
     }
 }

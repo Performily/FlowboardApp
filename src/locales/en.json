@@ -42,7 +42,9 @@
       "confirmPassword": "Confirm password",
       "newPasswordPlaceholder": "Enter your new password",
       "confirmPasswordPlaceholder": "Repeat your new password",
-      "button": "Reset password"
+      "button": "Reset password",
+      "temporaryPassword": "Previous Temporary Password",
+      "temporaryPasswordPlaceholder": "Enter your temporary password"
     }
   },
 

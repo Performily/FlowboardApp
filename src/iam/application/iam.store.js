@@ -32,36 +32,31 @@ const useIamStore = defineStore('iam', () => {
     });
 
     async function signIn(signInCommand, router, staySignedIn = false) {
-
         loading.value = true;
 
         try {
+            const response = await iamApi.signIn(signInCommand);
+            console.log("Respuesta cruda del backend:", response.data); // 👈 Revisa esto en la consola F12
 
-            const response =
-                await iamApi.signIn(signInCommand);
-
-            console.log(response.data);
-
-            const signInResource =
-                SignInAssembler.toResourceFromResponse(response);
+            const signInResource = SignInAssembler.toResourceFromResponse(response);
 
             if (!signInResource) {
-
-                errors.value.push(
-                    new Error('Authentication failed')
-                );
-
+                errors.value.push(new Error('Authentication failed'));
                 return;
             }
 
-            const user =
-                SignInAssembler.toEntityFromResource({
-                     ...signInResource,
-                     fullName: signInResource.fullName || response.data.fullName
-                 });
+            // Armamos el usuario unificando lo que venga del Assembler y la respuesta directa
+            const user = SignInAssembler.toEntityFromResource({
+                ...signInResource,
+                fullName: signInResource.fullName || response.data.fullName,
+                temporaryPassword: signInResource.temporaryPassword ?? response.data.temporaryPassword ?? false
+            });
+
+            console.log("Usuario mapeado final en Vue:", user); // 👈 Aquí debes ver si 'temporaryPassword' es true o false
 
             currentUser.value = user;
 
+            // Guardamos los tokens y credenciales en el storage
             if (staySignedIn) {
                 localStorage.setItem('token', user.token);
                 localStorage.setItem('user', JSON.stringify(user));
@@ -71,36 +66,25 @@ const useIamStore = defineStore('iam', () => {
             }
 
             isSignedIn.value = true;
-
             errors.value = [];
 
-            if (user.temporaryPassword) {
-
-                router.push({
-                    name: 'iam-reset-password'
-                });
-
-                return;
+            // ─── FILTRO DE REDIRECCIÓN INTERNA ───
+            if (user.temporaryPassword === true || user.temporaryPassword === 1) {
+                console.log("⚠️ Contraseña temporal detectada. Desviando hacia reset-password.");
+                router.push({ name: 'iam-reset-password' });
+                return; 
             }
 
-            router.push({
-                name: 'home'
-            });
+            // Si no es temporal, va directo al Home normal
+            console.log("✅ Contraseña definitiva. Redirigiendo a home.");
+            router.push({ name: 'home' });
 
         } catch (error) {
-
             console.error(error);
-
             isSignedIn.value = false;
-
             errors.value.push(error);
-
-            router.push({
-                name: 'iam-sign-in'
-            });
-
+            router.push({ name: 'iam-sign-in' });
         } finally {
-
             loading.value = false;
         }
     }
