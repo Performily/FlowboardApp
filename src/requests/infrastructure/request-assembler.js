@@ -4,17 +4,23 @@ export const requestAssembler = {
   toDomain(raw, employees = []) {
     const employee = employees.find((e) => e.id === raw.employeeId);
     return new RequestEntity({
-      id:                   raw.id,
-      employeeId:           raw.employeeId,
-      employeeName:         employee?.name ?? '—',
-      type:                 raw.type,
-      title:                raw.title,
-      startDate:            raw.startDate,
-      endDate:              raw.endDate,
-      status:               raw.status,
-      collaboratorComments: raw.collaboratorComments ?? null,
-      otherDetails:         raw.otherDetails ?? null,
-      rejectionReason:      raw.rejectionReason ?? null,
+      id:              raw.id,
+      employeeId:      raw.employeeId,
+      employeeName:    employee?.name ?? '—',
+      type:            raw.type,
+      justification:   raw.justification ?? null,
+      startDate:       raw.startDate ?? null,
+      endDate:         raw.endDate ?? null,
+      totalDays:       raw.totalDays ?? 0,
+      timeFrameDate:   raw.timeFrameDate ?? null,
+      startTime:       raw.startTime ?? null,
+      endTime:         raw.endTime ?? null,
+      totalHours:      raw.totalHours ?? 0,
+      evidenceUrl:     raw.evidenceUrl ?? null,
+      status:          raw.status,
+      reviewerId:      raw.reviewerId ?? null,
+      rejectionReason: raw.rejectionReason ?? null,
+      createdAt:       raw.createdAt ?? null,
     });
   },
 
@@ -24,15 +30,17 @@ export const requestAssembler = {
 
   toApi(entity) {
     return {
-      employeeId:           entity.employeeId,
-      type:                 entity.type,
-      title:                entity.title,
-      startDate:            entity.startDate,
-      endDate:              entity.endDate,
-      status:               entity.status ?? 'Pendiente',
-      collaboratorComments: entity.collaboratorComments ?? null,
-      otherDetails:         entity.otherDetails ?? null,
-      rejectionReason:      entity.rejectionReason ?? null,
+      employeeId:    entity.employeeId,
+      type:          entity.type,
+      justification: entity.justification,
+      startDate:     entity.startDate,
+      endDate:       entity.endDate,
+      totalDays:     entity.totalDays ?? 0,
+      timeFrameDate: entity.timeFrameDate ?? null,
+      startTime:     entity.startTime ?? null,
+      endTime:       entity.endTime ?? null,
+      totalHours:    entity.totalHours ?? 0,
+      evidenceUrl:   entity.evidenceUrl,
     };
   },
 };

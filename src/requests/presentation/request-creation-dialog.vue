@@ -1,69 +1,45 @@
 <script setup>
 import { ref } from 'vue';
 import { useRequestsStore } from '../application/requests.store.js';
-import useIamStore from '../../iam/application/iam.store.js'; // 1. Importamos la memoria del usuario
+import useIamStore from '../../iam/application/iam.store.js';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const store = useRequestsStore();
-const iamStore = useIamStore(); // 2. Traemos al usuario que inició sesión
+const iamStore = useIamStore();
 const visible = ref(false);
 
-// 3. Añadimos 'title' al estado inicial
-const form = ref({ type: null, title: '', startDate: null, endDate: null, employeeId: null });
+const form = ref({ type: null, justification: '', startDate: null, endDate: null, evidenceUrl: '', employeeId: null });
 
 const requestTypes = [
   {
     label: 'Tiempo y Asistencia',
     items: [
-      { label: 'Solicitud de vacaciones', value: 'vacaciones' },
-      { label: 'Solicitud de permisos (personales, médicos, estudios)', value: 'permisos' },
-      { label: 'Solicitud de licencias (maternidad, paternidad, enfermedad)', value: 'licencias' },
-      { label: 'Regularización de tardanzas o faltas', value: 'regularizacion' }
+      { label: 'Solicitud de vacaciones', value: 'Vacation' },
+      { label: 'Permiso personal', value: 'PersonalPermit' },
+      { label: 'Permiso por horas', value: 'HourlyPermit' },
+      { label: 'Justificación de falta', value: 'AbsenceJustification' }
     ]
   },
   {
-    label: 'Pagos y Beneficios',
+    label: 'Licencias',
     items: [
-      { label: 'Solicitud de adelanto de sueldo', value: 'adelanto' },
-      { label: 'Solicitud de compensación de horas', value: 'compensacion' },
-      { label: 'Solicitud de certificados laborales o boletas', value: 'certificados' },
-      { label: 'Solicitud de información sobre beneficios', value: 'beneficios' }
+      { label: 'Licencia médica', value: 'MedicalLeave' },
+      { label: 'Licencia de maternidad', value: 'MaternityLeave' },
+      { label: 'Licencia de paternidad', value: 'PaternityLeave' }
     ]
   },
   {
-    label: 'Administrativas / Datos Personales',
+    label: 'Otros',
     items: [
-      { label: 'Actualización de datos personales', value: 'datos_personales' },
-      { label: 'Cambio de cuenta bancaria', value: 'cuenta_bancaria' },
-      { label: 'Actualización de contacto de emergencia', value: 'contacto_emergencia' },
-      { label: 'Constancia de trabajo', value: 'constancia' },
-      { label: 'Documentos para trámites externos', value: 'tramites_externos' }
-    ]
-  },
-  {
-    label: 'Desarrollo y Talento',
-    items: [
-      { label: 'Capacitación', value: 'capacitacion' },
-      { label: 'Evaluación de desempeño', value: 'desempeno' },
-      { label: 'Movilidad interna (postular a otra área)', value: 'movilidad' },
-      { label: 'Mentoría o coaching', value: 'mentoria' }
-    ]
-  },
-  {
-    label: 'Bienestar o Clima Laboral',
-    items: [
-      { label: 'Apoyo psicológico o bienestar', value: 'psicologico' },
-      { label: 'Reporte de incidentes o conflictos', value: 'incidentes' },
-      { label: 'Atención por acoso o denuncias internas', value: 'denuncias' }
+      { label: 'Otro', value: 'Other' }
     ]
   }
 ];
 
 function open(employeeId = null) {
-  // 4. Asignamos el ID del usuario conectado (si no hay, usa 1)
   const currentId = employeeId || iamStore.currentUser?.id || 1;
-  form.value = { type: null, title: '', startDate: null, endDate: null, employeeId: currentId };
+  form.value = { type: null, justification: '', startDate: null, endDate: null, evidenceUrl: '', employeeId: currentId };
   visible.value = true;
 }
 
@@ -71,37 +47,41 @@ function close() {
   visible.value = false;
 }
 
-// 5. Función manual para formatear la fecha a formato "03 Jun 2026"
-const formatDate = (dateObj) => {
-  if (!dateObj) return '';
-  const day = String(dateObj.getDate()).padStart(2, '0');
-  const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-  const month = monthNames[dateObj.getMonth()];
-  const year = dateObj.getFullYear();
-  return `${day} ${month} ${year}`;
+const formatDateISO = (dateObj) => {
+  if (!dateObj) return null;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())}T00:00:00`;
 };
 
+function calcTotalDays(start, end) {
+  if (!start || !end) return 0;
+  const diff = Math.abs(end.getTime() - start.getTime());
+  return Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+}
+
 async function submit() {
-  // Validamos que ningún campo esté vacío
-  if (!form.value.type || !form.value.title || !form.value.startDate || !form.value.endDate) {
+  if (!form.value.type || !form.value.justification || !form.value.startDate || !form.value.endDate) {
     alert("Por favor completa todos los campos.");
     return;
   }
 
-  // 6. Armamos los datos limpiamente para la Base de Datos
   const payload = {
     employeeId: form.value.employeeId,
-    type: form.value.type.label,  // Extraemos SOLO el texto
-    title: form.value.title,      // Enviamos el título
-    startDate: formatDate(form.value.startDate), // Formateamos la fecha
-    endDate: formatDate(form.value.endDate)
+    type: form.value.type.value,
+    justification: form.value.justification,
+    startDate: formatDateISO(form.value.startDate),
+    endDate: formatDateISO(form.value.endDate),
+    totalDays: calcTotalDays(form.value.startDate, form.value.endDate),
+    timeFrameDate: null,
+    startTime: null,
+    endTime: null,
+    totalHours: 0,
+    evidenceUrl: form.value.evidenceUrl || ''
   };
 
   await store.createRequest(payload);
-  
-  // 7. Refrescamos la tabla para que busque el nombre del Colaborador
   await store.fetchAll();
-  
+
   close();
 }
 
@@ -116,8 +96,7 @@ defineExpose({ open });
     :style="{ width: '550px' }"
   >
     <div class="flex flex-column gap-3 pt-2">
-      
-      <!-- Tipo de Solicitud -->
+
       <div class="flex flex-column gap-1">
         <label class="font-medium text-sm">{{ t('requests.creation.requestType') }}</label>
         <pv-select
@@ -132,13 +111,11 @@ defineExpose({ open });
         />
       </div>
 
-      <!-- Título de Solicitud (NUEVO) -->
       <div class="flex flex-column gap-1">
-        <label class="font-medium text-sm">Título de la solicitud</label>
-        <pv-input-text v-model="form.title" placeholder="Ej. Consulta médica urgente" class="w-full" />
+        <label class="font-medium text-sm">Justificación</label>
+        <pv-input-text v-model="form.justification" placeholder="Ej. Consulta médica urgente" class="w-full" />
       </div>
 
-      <!-- Fechas -->
       <div class="flex gap-3">
         <div class="flex flex-column gap-1 flex-1">
           <label class="font-medium text-sm">{{ t('requests.creation.startDate') }}</label>
@@ -149,6 +126,11 @@ defineExpose({ open });
           <label class="font-medium text-sm">{{ t('requests.creation.endDate') }}</label>
           <pv-date-picker v-model="form.endDate" class="w-full" date-format="dd/mm/yy" showIcon />
         </div>
+      </div>
+
+      <div class="flex flex-column gap-1">
+        <label class="font-medium text-sm">URL de evidencia</label>
+        <pv-input-text v-model="form.evidenceUrl" placeholder="https://..." class="w-full" />
       </div>
 
     </div>
