@@ -57,7 +57,7 @@ const useIamStore = defineStore('iam', () => {
             const user =
                 SignInAssembler.toEntityFromResource({
                      ...signInResource,
-                    fullName: signInCommand.email
+                     fullName: signInResource.fullName || response.data.fullName
                  });
 
             currentUser.value = user;
