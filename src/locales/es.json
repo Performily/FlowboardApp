@@ -17,7 +17,7 @@
     "signIn": {
       "title": "Performily",
       "forgotPassword": "¿Olvidaste tu contraseña?",
-      "user": "Usuario",
+      "user": "Correo de usuario",
       "password": "Contraseña",
       "keepSession": "No cerrar sesión",
       "button": "Iniciar sesión"
@@ -51,11 +51,21 @@
   "home": {
     "welcome": "¡Hola, {name}!",
     "administrator": "Administrador",
-    "summary": "Este es el resumen de tu empresa al día de hoy.",
+    "summary": "Este es el resumen de tu actividad al día de hoy. ",
     "totalEmployees": "Total Empleados",
     "pendingRequests": "Trámites Pendientes",
     "latestRequests": "Últimas Solicitudes",
-    
+    "myRequests":"Mis Solicitudes",
+    "myTardiness":"Mis Tardanzas",
+    "myVacation":"Mis Vacaciones",
+    "quickAccess":"Accesos Rapidos",
+    "myPayments":"Mis Pagos", 
+    "viewPay":"Ver mis boletas de pago",
+    "requestVacation":"Solicitar Vacaciones",
+    "submitRequest":"Enviar formulario de descanso",
+    "requestUpdate":"Solicitar Actualizar Datos",
+    "updateInformation":"Actualiza tus datos personales",
+
     "table": {
       "procedure": "Trámite",  
       "startDate": "Fecha de Inicio", 
@@ -68,6 +78,7 @@
       "personalProfile": "Perfil Personal",
       "workInformation": "Información Laboral",
       "viewPersonalProfile": "Ver Perfil Personal",
+      "directoryColabs":"Directorio de colaboradores",
       "personalData": "Datos Personales",
       "workData": "Datos Laborales",
       "fullName": "Nombre Completo",
@@ -376,7 +387,9 @@
   "requests": {
   "dashboard": {
     "title": "Solicitudes",
-    "requestRegistration": "Registro de Solicitudes"
+    "requestRegistration": "Registro de Solicitudes",
+    "newRequest": "Nueva solicitud",
+    "listRequest":"Lista de registro de solicitudes"
   },
 
   "creation": {

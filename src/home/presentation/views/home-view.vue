@@ -67,7 +67,7 @@ const goTo = (routeName) => {
         <h1 class="m-0 text-900 font-bold text-3xl mb-2">
           {{ t('home.welcome', { name: currentUser?.fullName || t('home.administrator') }) }} 👋
         </h1>
-        <p class="m-0 text-600">Este es el resumen de tu actividad al día de hoy, {{ dateRangeText }}</p>
+        <p class="m-0 text-600">{{t('home.summary')}}</p>
       </div>
       
       <div v-if="isHR" class="mt-3 md:mt-0 flex gap-2">
@@ -99,7 +99,7 @@ const goTo = (routeName) => {
         <div class="col-12 md:col-6" :class="isHR ? 'lg:col-3' : 'lg:col-4'">
           <div class="surface-card shadow-1 p-4 border-round-2xl flex justify-content-between align-items-center h-full cursor-pointer hover:shadow-4 transition-all transition-duration-200" @click="goTo('requests')">
             <div>
-              <span class="block text-500 font-medium mb-1">{{ isHR ? 'Solicitudes pendientes' : 'Mis Solicitudes' }}</span>
+              <span class="block text-500 font-medium mb-1">{{ isHR ? 'Solicitudes pendientes' : t('home.myRequests') }}</span>
               <span class="block text-400 text-xs mb-2">({{ dateRangeText }})</span>
               <div class="text-900 font-bold text-4xl text-orange-500">{{ isHR ? pendingRequestsCount : myPendingRequestsCount }}</div>
             </div>
@@ -112,7 +112,7 @@ const goTo = (routeName) => {
         <div class="col-12 md:col-6" :class="isHR ? 'lg:col-3' : 'lg:col-4'">
           <div class="surface-card shadow-1 p-4 border-round-2xl flex justify-content-between align-items-center h-full cursor-pointer hover:shadow-4 transition-all transition-duration-200" @click="router.push({ name: 'attendance-list', query: { status: 'Tardanza', period: 'currentWeek' } })">
             <div>
-              <span class="block text-500 font-medium mb-1">{{ isHR ? 'Tardanzas Registradas' : 'Mis Tardanzas' }}</span>
+              <span class="block text-500 font-medium mb-1">{{ isHR ? 'Tardanzas Registradas' : t('home.myTardiness') }}</span>
               <span class="block text-400 text-xs mb-2">({{ dateRangeText }})</span>
               <div class="text-900 font-bold text-4xl text-red-500">{{ isHR ? totalLate : myLatesCount }}</div>
             </div>
@@ -125,7 +125,7 @@ const goTo = (routeName) => {
         <div class="col-12 md:col-6" :class="isHR ? 'lg:col-3' : 'lg:col-4'">
           <div class="surface-card shadow-1 p-4 border-round-2xl flex justify-content-between align-items-center h-full cursor-pointer hover:shadow-4 transition-all transition-duration-200" @click="goTo('vacations')">
             <div>
-              <span class="block text-500 font-medium mb-2">{{ isHR ? 'Vacaciones Programadas' : 'Mis Vacaciones' }}</span>
+              <span class="block text-500 font-medium mb-2">{{ isHR ? 'Vacaciones Programadas' : t('home.myVacation') }}</span>
               <div class="text-900 font-bold text-4xl text-green-500">{{ isHR ? scheduledVacations : myVacationsCount }}</div>
             </div>
             <div class="flex align-items-center justify-content-center border-round w-4rem h-4rem bg-green-100 text-green-500">
@@ -157,7 +157,7 @@ const goTo = (routeName) => {
 
         <div class="col-12 lg:col-5">
           <div class="surface-card shadow-1 border-round-2xl p-4 h-full">
-            <h2 class="m-0 text-xl font-bold mb-4">Accesos Rápidos</h2>
+            <h2 class="m-0 text-xl font-bold mb-4">{{ t('home.quickAccess') }}</h2>
             
             <div class="flex flex-column gap-3">
               
@@ -166,8 +166,8 @@ const goTo = (routeName) => {
                   <i class="pi pi-money-bill text-green-500 text-xl"></i>
                 </div>
                 <div class="flex flex-column">
-                  <span class="text-900 font-medium">{{ isHR ? 'Estado de Pagos' : 'Mis Pagos' }}</span>
-                  <span class="text-500 text-sm">{{ isHR ? 'Gestionar boletas del personal' : 'Ver mis boletas de pago' }}</span>
+                  <span class="text-900 font-medium">{{ isHR ? 'Estado de Pagos' : t('home.myPayments') }}</span>
+                  <span class="text-500 text-sm">{{ isHR ? 'Gestionar boletas del personal' : t('home.viewPay') }}</span>
                 </div>
                 <i class="pi pi-chevron-right text-500 ml-auto"></i>
               </div>
@@ -177,8 +177,8 @@ const goTo = (routeName) => {
                   <i class="pi pi-calendar-plus text-purple-500 text-xl"></i>
                 </div>
                 <div class="flex flex-column">
-                  <span class="text-900 font-medium">{{ isHR ? 'Asignar Vacaciones' : 'Solicitar Vacaciones' }}</span>
-                  <span class="text-500 text-sm">{{ isHR ? 'Programar descansos de empleados' : 'Enviar formulario de descanso' }}</span>
+                  <span class="text-900 font-medium">{{ isHR ? 'Asignar Vacaciones' : t('home.requestVacation') }}</span>
+                  <span class="text-500 text-sm">{{ isHR ? 'Programar descansos de empleados' : t('home.submitRequest') }}</span>
                 </div>
                 <i class="pi pi-chevron-right text-500 ml-auto"></i>
               </div>
@@ -188,8 +188,8 @@ const goTo = (routeName) => {
                   <i class="pi pi-sync text-blue-500 text-xl"></i>
                 </div>
                 <div class="flex flex-column">
-                  <span class="text-900 font-medium">{{ isHR ? 'Actualizar Empleados' : 'Solicitar Actualizar Datos' }}</span>
-                  <span class="text-500 text-sm">{{ isHR ? 'Modificar legajos e información' : 'Actualiza tus datos personales' }}</span>
+                  <span class="text-900 font-medium">{{ isHR ? 'Actualizar Empleados' : t('home.requestUpdate') }}</span>
+                  <span class="text-500 text-sm">{{ isHR ? 'Modificar legajos e información' : t('home.updateInformation') }}</span>
                 </div>
                 <i class="pi pi-chevron-right text-500 ml-auto"></i>
               </div>

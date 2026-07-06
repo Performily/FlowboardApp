@@ -17,7 +17,7 @@
     "signIn": {
       "title": "Performily",
       "forgotPassword": "Forgot your password?",
-      "user": "User",
+      "user": "User email",
       "password": "Password",
       "keepSession": "Keep session active",
       "button": "Sign In"
@@ -51,11 +51,21 @@
   "home": {
     "welcome": "Hello, {name}!",
     "administrator": "Administrator",
-    "summary": "This is your company summary for today.",
+    "summary": "This is a summary of your activity to date. ",
     "totalEmployees": "Total Employees",
     "pendingRequests": "Pending Requests",
     "latestRequests": "Latest Requests",
-
+    "myRequests":"My requests",
+    "myTardiness":"My Tardiness",
+    "myVacation":"My Vacation",
+    "quickAccess":"Quick Access",
+    "myPayments":"My Payments", 
+    "viewPay":"View my pay stubs",
+    "requestVacation":"Request Vacation",
+    "submitRequest":"Submit leave request form",
+    "requestUpdate":"Request to Update Information",
+    "updateInformation":"Update your personal information",
+    
     "table": {
       "procedure": "Procedure",
       "startDate": "Start Date",
@@ -68,6 +78,7 @@
       "personalProfile": "Personal Profile",
       "workInformation": "Work Information",
       "viewPersonalProfile": "View Personal Profile",
+      "directoryColabs":"Directory of contributors",
       "personalData": "Personal Data",
       "workData": "Work Data",
       "fullName": "Full Name",
@@ -377,7 +388,9 @@
 "requests": {
   "dashboard": {
     "title": "Requests",
-    "requestRegistration": "Request Registration"
+    "requestRegistration": "Request Registration",
+    "newRequest": "New application",
+    "listRequest":"List of application registration"
   },
 
   "creation": {

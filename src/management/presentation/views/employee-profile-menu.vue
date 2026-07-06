@@ -38,7 +38,7 @@ const goToPersonalProfile = () => {
           <div class="w-8rem h-8rem border-circle bg-primary flex justify-content-center align-items-center mb-4">
             <i class="pi pi-users text-white text-6xl"></i>
           </div>
-          <span class="text-900 font-bold text-lg text-center">Directorio de colaboradores</span>
+          <span class="text-900 font-bold text-lg text-center">{{ t('management.profile.directoryColabs') }}</span>
         </div>
       </div>
 
