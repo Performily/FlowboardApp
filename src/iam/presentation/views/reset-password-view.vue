@@ -2,12 +2,26 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import ResetPasswordForm from "../components/reset-password-form.vue";
+import useIamStore from "../../application/iam.store.js"; // 🔥 Importamos tu Store de IAM
 
 const router = useRouter();
+const store = useIamStore(); // 🔥 Instanciamos el store
 const isResetSuccessful = ref(false);
 
 const handleSuccess = () => {
   isResetSuccessful.value = true;
+  
+  // 🔥 CRUCIAL: Limpiamos los tokens y estados viejos del localStorage/sessionStorage.
+  // Así el guardián del Router sabrá que ya no hay una sesión activa con bandera temporal.
+  localStorage.removeItem('token');
+  sessionStorage.removeItem('token');
+  localStorage.removeItem('user');
+  sessionStorage.removeItem('user');
+  
+  if (store.currentUser) {
+    store.currentUser.temporaryPassword = false; // Desactivamos la bandera en memoria
+  }
+  store.isSignedIn = false; // El usuario ya no está logueado formalmente
 };
 
 const goToLogin = () => {
@@ -43,7 +57,7 @@ const goToLogin = () => {
             </p>
 
             <pv-button
-                label="$t('iam.resetPassword.backToLogin')"
+                :label="$t('iam.resetPassword.backToLogin')"
                 class="w-full py-3 text-xl font-normal border-none shadow-1"
                 style="background-color: #4355B9; color: white;"
                 @click="goToLogin"
