@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://flowboard-api-zmju.onrender.com/attendance';
+const API_BASE_URL = 'http://localhost:5046/api/v1/attendance';
 
 export class AttendanceApi {
 
