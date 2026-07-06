@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://flowboardwebservice.onrender.com';
+const API_BASE_URL = 'https://flowboardwebservice.onrender.com/api/v1/auth';
 
 export class IamApi {
 
