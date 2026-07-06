@@ -32,8 +32,8 @@
           <span class="font-semibold text-700">
             {{ currentUser?.fullName || t('toolbar.user') }}
           </span>
-          <span class="text-500">
-            {{ $t('toolbar.position') }}
+          <span class="text-500 font-medium text-xs capitalize">
+            {{ currentUser?.role || 'Colaborador' }}
           </span>
         </div>
       </div>

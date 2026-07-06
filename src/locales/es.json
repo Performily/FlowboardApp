@@ -42,7 +42,9 @@
       "confirmPassword": "Confirmar contraseña",
       "newPasswordPlaceholder": "Escribe tu nueva contraseña",
       "confirmPasswordPlaceholder": "Repite tu nueva contraseña",
-      "button": "Restablecer contraseña"
+      "button": "Restablecer contraseña",
+      "temporaryPassword": "Contraseña Temporal Anterior",
+      "temporaryPasswordPlaceholder": "Escribe tu constraseña temporal"
     }
   },
 

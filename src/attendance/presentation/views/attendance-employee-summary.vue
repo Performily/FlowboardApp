@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import useAttendanceStore from '../../application/attendance.store.js';
-import useIamStore from '../../../iam/application/iam.store.js'; // 1. Importamos la sesión
+import useIamStore from '../../../iam/application/iam.store.js';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -11,7 +11,7 @@ const store = useAttendanceStore();
 const iamStore = useIamStore();
 
 const currentUser = computed(() => iamStore.currentUser);
-const isHR = computed(() => currentUser.value?.role === 'RRHH'); // 2. Verificamos el rol
+const isHR = computed(() => currentUser.value?.role === 'RRHH');
 
 const searchQuery = ref(''); 
 const startDate = ref(null);
@@ -21,18 +21,19 @@ const selectedStatus = ref(null);
 const appliedSearchQuery = ref(''); 
 
 const statuses = ref([
-  { label: 'Asistencia normal', value: 'attendance' },
-  { label: 'Tardanza', value: 'late' },
-  { label: 'Falta', value: 'absence' }
+  { label: 'Asistencia normal', value: 'Asistencia' },
+  { label: 'Tardanza', value: 'Tardanza' },
+  { label: 'Falta', value: 'Falta' }
 ]);
 
-onMounted(() => {
+onMounted(async () => {
   if (!store.attendancesLoaded) {
-    store.fetchAttendances();
+    await store.fetchAttendances();
   }
   if (!isHR.value) {
     appliedSearchQuery.value = 'auto-load-colaborador';
   }
+  
 });
 
 const applyFilters = () => {
@@ -62,7 +63,7 @@ const clearFilters = () => {
 const displayedAttendances = computed(() => {
   if (isHR.value && !appliedSearchQuery.value) return []; 
   
-  let filtered = store.attendances;
+  let filtered = [...store.attendances];
 
   if (!isHR.value) {
     const currentId = currentUser.value?.id || 1;
@@ -80,33 +81,45 @@ const displayedAttendances = computed(() => {
     filtered = filtered.filter(a => a.status === selectedStatus.value.value);
   }
 
+  filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
   return filtered;
 });
 
 const summary = computed(() => {
   if (displayedAttendances.value.length === 0) return null;
   
+  const countAttendance = displayedAttendances.value.filter(a => a.status === 'Asistencia').length;
+  const countLate = displayedAttendances.value.filter(a => a.status === 'Tardanza').length;
+  const countAbsence = displayedAttendances.value.filter(a => a.status === 'Falta').length;
+  
+  const totalHours = displayedAttendances.value.reduce((sum, a) => sum + (Number(a.workedHours) || 0), 0);
+  const presentDays = countAttendance + countLate; 
+  const avgDailyHours = presentDays > 0 ? (totalHours / presentDays).toFixed(1) : 0;
+
+  const timestamps = displayedAttendances.value.map(a => new Date(a.date).getTime());
+  
+  const minDate = new Date(Math.min(...timestamps)).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+  const maxDate = new Date(Math.max(...timestamps)).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+
   return {
-    attendance: displayedAttendances.value.filter(a => a.status === 'attendance').length,
-    late: displayedAttendances.value.filter(a => a.status === 'late').length,
-    absence: displayedAttendances.value.filter(a => a.status === 'absence').length,
-    totalHours: displayedAttendances.value.reduce((sum, a) => sum + (Number(a.workedHours) || 0), 0)
+    attendance: countAttendance,
+    late: countLate,
+    absence: countAbsence,
+    avgDailyHours: avgDailyHours,
+    dateRange: `${minDate} - ${maxDate}`
   };
 });
 
 const getStatusSeverity = (status) => {
   const normalized = status?.toLowerCase();
-  if (normalized === 'attendance') return 'success';
-  if (normalized === 'late') return 'warning';
-  if (normalized === 'absence') return 'danger';
+  if (normalized === 'asistencia') return 'success';
+  if (normalized === 'tardanza') return 'warning';
+  if (normalized === 'falta') return 'danger';
   return 'secondary'; 
 };
 
 const getStatusLabel = (status) => {
-  const normalized = status?.toLowerCase();
-  if (normalized === 'attendance') return 'Asistió';
-  if (normalized === 'late') return 'Tardanza';
-  if (normalized === 'absence') return 'Falta';
   return status || 'Pendiente';
 };
 
@@ -221,8 +234,10 @@ const goBack = () => {
             <template #content>
               <div class="flex justify-content-between align-items-center">
                 <div>
-                  <span class="block text-500 font-medium mb-2">{{ t('attendance.summary.accumulatedHours') }}</span>
-                  <div class="text-900 font-bold text-2xl">{{ summary?.totalHours || 0 }}h</div>
+                  <span class="block text-500 font-medium mb-2">Promedio Hrs/Día</span>
+                  <div class="text-900 font-bold text-2xl">{{ summary?.avgDailyHours || 0 }}h</div>
+          
+                  <span class="text-400 text-sm block mt-2">{{ summary?.dateRange }}</span>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-green-100 border-round" style="width:2.5rem;height:2.5rem">
                   <i class="pi pi-clock text-green-500 text-xl"></i>

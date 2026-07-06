@@ -1,4 +1,3 @@
-
 import { createRouter, createWebHistory } from 'vue-router';
 import payrollRoutes from './payroll/presentation/payroll-routes.js';
 import PayrollDashboard from './payroll/presentation/views/payroll-dashboard.vue';

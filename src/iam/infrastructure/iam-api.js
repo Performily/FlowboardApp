@@ -1,41 +1,45 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://flowboard-api-zmju.onrender.com';
+const API_BASE_URL = 'https://flowboardwebservice.onrender.com/api/v1/auth';
 
 export class IamApi {
 
-    signIn(signInCommand) {
-
-        return Promise.resolve({
-            status: 200,
-            data: {
-                id: 1,
-                fullName: 'Administrador',
-                email: signInCommand.email,
-                role: 'RRHH',   
-                token: 'jwt-demo-token',
-                temporaryPassword: false
-            }
+    async signIn(signInCommand) {
+        // Hacemos la petición real por POST enviando el objeto con email y password
+        const response = await axios.post(`${API_BASE_URL}/sign-in`, {
+            email: signInCommand.email,
+            password: signInCommand.password
         });
+        
+        // Retornamos el formato exacto que tu Store y tus Assemblers esperan recibir
+        return {
+            status: response.status,
+            data: response.data
+        };
     }
 
-    forgotPassword(forgotPasswordCommand) {
-
-        return Promise.resolve({
-            status: 200,
-            data: {
-                message: 'Correo enviado correctamente'
-            }
+    // Mantenemos estos simulados temporalmente porque tu Swagger no expone estos endpoints aún
+    async forgotPassword(forgotPasswordCommand) {
+        const response = await axios.post(`${API_BASE_URL}/forgot-password`, {
+            email: forgotPasswordCommand.email // Enviamos el correo ingresado en el input
         });
+
+        return {
+            status: response.status,
+            data: response.data
+        };
     }
 
-    resetPassword(resetPasswordCommand) {
-
-        return Promise.resolve({
-            status: 200,
-            data: {
-                message: 'Contraseña actualizada'
-            }
+    async resetPassword(resetPasswordCommand) {
+        const response = await axios.post(`${API_BASE_URL}/reset-password`, {
+            email: resetPasswordCommand.email,
+            temporaryPassword: resetPasswordCommand.temporaryPassword,
+            newPassword: resetPasswordCommand.newPassword
         });
+
+        return {
+            status: response.status,
+            data: response.data
+        };
     }
 }

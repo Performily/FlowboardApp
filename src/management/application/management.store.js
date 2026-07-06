@@ -77,12 +77,12 @@ export const useManagementStore = defineStore('management', {
           throw new Error('Colaborador no encontrado.');
         }
 
-        if (employee.status === 'Cesado' || employee.status === 'TERMINATED') {
+        if (employee.status === 'Inactivo' || employee.status === 'TERMINATED') {
           throw new Error('El colaborador ya se encuentra dado de baja.');
         }
 
         const terminationData = {
-          status: 'Cesado',
+          status: 'Inactivo',
           terminationReason: terminationForm.terminationReason,
           terminationObservation: terminationForm.terminationObservation,
           terminationDocuments: terminationForm.terminationDocuments,
@@ -117,7 +117,7 @@ export const useManagementStore = defineStore('management', {
           throw new Error('Colaborador no encontrado.');
         }
 
-        if (employee.status !== 'Cesado' && employee.status !== 'TERMINATED') {
+        if (employee.status !== 'Inactivo' && employee.status !== 'TERMINATED') {
           throw new Error('Solo se pueden reactivar colaboradores dados de baja.');
         }
 

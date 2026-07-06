@@ -38,7 +38,7 @@ const getEmployeePosition = (employee) => {
 
 const terminatedEmployees = computed(() => {
   return store.employees.filter(employee => {
-    return employee.status === 'Cesado' || employee.status === 'TERMINATED';
+    return employee.status === 'Inactivo' || employee.status === 'TERMINATED';
   });
 });
 
@@ -302,7 +302,7 @@ onMounted(async () => {
           <div class="text-left employee-data">
             <p>
               <strong>{{ t('management.reactivation.status') }}:</strong>
-              <span>{{ selectedEmployee.status || 'Cesado' }}</span>
+              <span>{{ selectedEmployee.status || 'Inactivo' }}</span>
             </p>
 
             <p>
